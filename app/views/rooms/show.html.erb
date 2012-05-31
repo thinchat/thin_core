@@ -1,0 +1,11 @@
+<% content_for :faye do %>
+  <%= render "faye", :locals => { :room => @room } %>
+<% end %>
+
+<h1><%= @room.name %></h1>
+
+<div id="chat">
+  <%= render @messages %>
+</div>
+
+<%= render "form", :locals => { :room => @room } %>
