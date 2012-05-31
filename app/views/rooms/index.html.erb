@@ -1,0 +1,7 @@
+<h1>Room list</h1>
+<%= link_to "Create a room", rooms_path, :method => :post %>
+<ul>
+<% @rooms.each do |room| %>
+  <li><%= link_to room.name, room_path(room) %></li>
+<% end %>
+</ul>
