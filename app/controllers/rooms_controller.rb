@@ -5,7 +5,8 @@ class RoomsController < ApplicationController
   end
 
   def create
-    number = Room.order("id DESC").first.id + 1
+    last_room = Room.order("id DESC").first
+    number = last_room ? last_room.id + 1 : 1
     Room.create(name: "Room #{number}")
     redirect_to rooms_path
   end
