@@ -1,17 +1,11 @@
 class MessagesController < ApplicationController
 
-  respond_to :json, :js
-
-  def index
-    @messages = Message.all
-    render :json => @messages
-  end
-
-  def new
-    @message = Message.new
-  end
+  respond_to :html, :json, :js
 
   def create
-    @message = Message.create!(params[:message])
+    if @message = Message.create!(params[:message])
+    else
+      render :json => @message.errors, :status => 500
+    end
   end
 end

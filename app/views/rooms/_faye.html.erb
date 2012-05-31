@@ -1,0 +1,8 @@
+<script type="text/javascript">
+  $(function() {
+    var faye = new Faye.Client('http://localhost:9292/faye');
+    faye.subscribe('/messages/<%= @room.id %>', function (data) {
+      eval(data);
+    });
+  });
+</script>
