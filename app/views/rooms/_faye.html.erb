@@ -1,8 +1,23 @@
 <script type="text/javascript">
   $(function() {
     var faye = new Faye.Client('http://localhost:9292/faye');
+
+    if faye.publish.channel == '/meta/subscribe'
+      data.append('username': user_name)
+      send(data)
+    end
+    
     faye.subscribe('/messages/<%= @room.id %>', function (data) {
-      eval(data);
+      console.log(data);
+
+      if(data.type == "message") {
+        $("#chat").append('<div>' + data.object.body + '</div>')
+        $("#new_message")[0].reset(); // NEEDS TO BE MOVED
+      };
+
+      if(data.type == "subscribe" || data.type == "unsubscribe") {
+        $("#chat").append('<div>' + data.body + '</div>')
+      };
     });
   });
 </script>
