@@ -15,7 +15,7 @@ set :branch, "master"
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-after "deploy", "deploy:cleanup" # keep only the last 5 releases
+after "deploy", "deploy:nginx_config", "deploy:cleanup" # keep only the last 5 releases
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -26,13 +26,18 @@ namespace :deploy do
   end
 
   task :setup_config, roles: :app do
-    sudo "ln -nfs #{shared_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
+    sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
     put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
     puts "Now edit the config files in #{shared_path}."
   end
   after "deploy:setup", "deploy:setup_config"
+
+  task :nginx_config, roles: :app do
+    sudo "mv #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/"
+    sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
+  end
 
   task :symlink_config, roles: :app do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
