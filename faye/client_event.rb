@@ -1,11 +1,12 @@
 require 'hashie'
 
 class Client
-  attr_accessor :display_name, :room
+  attr_accessor :display_name, :room, :id
 
-  def initialize(display_name, room)
-    @display_name = display_name
-    @room = room
+  def initialize(message)
+    @display_name = message.display_name
+    @room = message.room
+    @client_id = message.client_id
   end
 end
 
@@ -14,23 +15,38 @@ class FayeMessage
 
   def initialize(message)
     @message = Hashie::Mash.new(message)
-    @client = Client.new(display_name, room)
   end
 
-  def id
+  def client_id
     message.clientId
   end
 
   def action
-    message.channel.split('/').last
+    message.channel.split('/').last if message.channel
   end
 
   def display_name
-    message.ext.display_name
+    message.ext.display_name if message.ext
   end
 
   def room
     message.subscription
+  end
+
+  def client
+    @client ||= Client.new(self)
+  end
+
+  def build_hash(client=nil)
+    message_hash = { 'type' => action }
+
+    if action == 'subscribe'
+      message_hash['object'] = { 'body' => "#{client.display_name} entered."}
+    elsif action == 'disconnect'
+      message_hash['object'] = { 'body' => "#{client.display_name} left." }
+    end
+
+    message_hash
   end
 end
 
@@ -40,53 +56,28 @@ class ClientEvent
   def incoming(message, callback)
     return callback.call(message) unless MONITORED_CHANNELS.include? message['channel']
 
-    fayemessage = FayeMessage.new(message)
-    puts fayemessage.inspect
+    faye_message = FayeMessage.new(message)
 
-    if client = get_client(message)
-      message_hash = build_message_hash(client, message)
-      faye_client.publish(client.room, message_hash)
+    if client = get_client(faye_message)
+      faye_client.publish(client.room, faye_message.build_hash(client))
     end
     callback.call(message)
   end
 
   def get_client(message)
-    id = get_id(message)
-    action = get_action(message)
-
-    if action == 'subscribe'
-      push_client(id, message)
-    elsif action == 'disconnect'
-      pop_client(id)
+    if message.action == 'subscribe'
+      push_client(message.client)
+    elsif message.action == 'disconnect'
+      pop_client(message.client)
     end
   end
 
-  def get_id(message)
-    message['clientId']
+  def push_client(client)
+    connected_clients[client.id] = client
   end
 
-  def get_action(message)
-    message['channel'].split('/').last
-  end
-
-  def push_client(client_id, message)
-    client = Client.new(message['ext']['display_name'], message['subscription'])
-    connected_clients[client_id] = client
-  end
-
-  def pop_client(client_id)
-    connected_clients.delete(client_id)
-  end
-
-  def build_message_hash(client, message)
-    type = get_action(message)
-    message_hash = { 'type' => type }
-    if type == 'subscribe'
-      message_hash['object'] = {'body' => "#{client.display_name} entered."}
-    elsif type == 'disconnect'
-      message_hash['object'] = {'body' => "#{client.display_name} left."}
-    end
-    message_hash
+  def pop_client(client)
+    connected_clients.delete(client.id)
   end
 
   def connected_clients
