@@ -3,8 +3,7 @@ class MessagesController < ApplicationController
   respond_to :html, :json, :js
 
   def create
-    if @message = Message.create!(params[:message])
-    else
+    unless @message = Message.create!(params[:message])
       render :json => @message.errors, :status => 500
     end
   end
