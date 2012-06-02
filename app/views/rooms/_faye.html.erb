@@ -2,22 +2,25 @@
   $(function() {
     var faye = new Faye.Client('http://localhost:9292/faye');
 
-    if faye.publish.channel == '/meta/subscribe'
-      data.append('username': user_name)
-      send(data)
-    end
-    
+    faye.addExtension({
+      outgoing: function(message, callback) {
+        if (message.channel === '/meta/subscribe') {
+          message.ext = message.ext || {};
+          message.ext.display_name = '<%= @display_name %>';
+          console.log(message);
+        }
+        callback(message);
+      }
+    });
+
     faye.subscribe('/messages/<%= @room.id %>', function (data) {
       console.log(data);
-
-      if(data.type == "message") {
-        $("#chat").append('<div>' + data.object.body + '</div>')
-        $("#new_message")[0].reset(); // NEEDS TO BE MOVED
-      };
-
-      if(data.type == "subscribe" || data.type == "unsubscribe") {
-        $("#chat").append('<div>' + data.body + '</div>')
-      };
+      $("#chat").append('<div>' + data.object.body + '</div>')
     });
+
+    $("#new_message").live("ajax:complete", function(event,xhr,status){
+      $('#new_message')[0].reset();
+    });
+
   });
 </script>

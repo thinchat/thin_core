@@ -14,6 +14,13 @@ class RoomsController < ApplicationController
   def show
     @room = Room.where(id: params[:id]).first
     @messages = @room.messages
+    @display_name = current_user ? current_user.display_name : "Guest #{params[:id]}"
+  end
+
+  private
+
+  def current_user
+    @current_user ||= session["user"]
   end
 
 end

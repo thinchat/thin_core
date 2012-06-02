@@ -1,5 +1,5 @@
 <%= simple_form_for Message.new, :remote => true, :class => "new_message" do |f|  %>
   <%= f.input :body %>
   <%= f.input :room_id, :as => :hidden, :input_html => { :value => @room.id } %>
-  <%= f.button :submit %>
+  <%= f.button :submit, :id => "send_btn" %>
 <% end %>
