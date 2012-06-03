@@ -2,6 +2,7 @@ class RoomsController < ApplicationController
 
   def index
     @rooms = Room.all
+    @session = session
   end
 
   def create
