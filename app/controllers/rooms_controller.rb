@@ -13,7 +13,7 @@ class RoomsController < ApplicationController
 
   def show
     @room = Room.where(id: params[:id]).first
-    @messages = @room.messages.last(15)
+    @messages = @room.messages.last(MESSAGE_DISPLAY_COUNT)
   end
 
 end

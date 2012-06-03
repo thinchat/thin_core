@@ -1,6 +1,6 @@
 <% broadcast "/messages/#{@message.room_id}" do %>
 messages = $("#messages").find(".message");
-if (messages.length >= 15) {
+if (messages.length >= <%= MESSAGE_DISPLAY_COUNT %>) {
   messages.first().remove();
 }
 messages.parent().append("<%= escape_javascript render(@message) %>");
