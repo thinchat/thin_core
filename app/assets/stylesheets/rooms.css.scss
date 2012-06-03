@@ -1,3 +1,25 @@
 // Place all the styles related to the rooms controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+div#room {
+  width: 960px;
+  margin: 50px auto 0;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 30px;
+}
+
+div#room div.message {
+  color: #777;
+  padding: 5px 3px;
+  border-bottom: 1px solid #ddd;
+}
+
+div#room div#messages {
+  margin-bottom: 20px;
+}
+
+div#room input#message_body {
+  width: 900px;
+}

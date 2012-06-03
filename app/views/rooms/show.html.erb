@@ -2,10 +2,11 @@
   <%= render "faye", :locals => { :room => @room } %>
 <% end %>
 
-<h1><%= @room.name %></h1>
+<div id="room">
+  <h1><%= @room.name %></h1>
+  <div id="messages">
+    <%= render @messages %>
+  </div>
 
-<div id="chat">
-  <%= render @messages %>
+  <%= render "form", :locals => { :room => @room } %>
 </div>
-
-<%= render "form", :locals => { :room => @room } %>
