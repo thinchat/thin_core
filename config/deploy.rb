@@ -26,6 +26,7 @@ namespace :deploy do
   end
 
   task :setup_config, roles: :app do
+    sudo "cp #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/nginx.conf"
     sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/default"
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
