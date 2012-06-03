@@ -2,7 +2,7 @@ class RoomsController < ApplicationController
 
   def index
     @rooms = Room.all
-    @session = session
+    @session = cookies[:user]
   end
 
   def create
