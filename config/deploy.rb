@@ -26,8 +26,6 @@ namespace :deploy do
   end
 
   task :setup_config, roles: :app do
-    sudo "cp #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/nginx.conf"
-    sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/default"
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
     put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
@@ -36,8 +34,8 @@ namespace :deploy do
   after "deploy:setup", "deploy:setup_config"
 
   task :nginx_config, roles: :app do
-    sudo "mv #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/"
-    sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
+    sudo "cp #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/"
+    sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/default"
   end
 
   task :symlink_config, roles: :app do
