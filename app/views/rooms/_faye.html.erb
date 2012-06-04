@@ -15,7 +15,7 @@
 
     faye.subscribe('/messages/<%= @room.id %>', function (data) {
       console.log(data);
-      $("#chat").append('<div>' + data.object.body + '</div>')
+      $("#room").append('<div class="message">' + data.object.body + '</div>')
     });
 
     $("#new_message").live("ajax:complete", function(event,xhr,status){
