@@ -15,7 +15,11 @@
 
     faye.subscribe('/messages/<%= @room.id %>', function (data) {
       console.log(data);
-      $("#room").append('<div class="message">' + data.object.body + '</div>')
+      messages = $("#messages").find(".message");
+      if (messages.length >= 15 ) {
+        messages.first().remove();
+      }
+      messages.parent().append('<div class="message">' + data.object.body + '</div>');
     });
 
     $("#new_message").live("ajax:complete", function(event,xhr,status){
