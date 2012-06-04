@@ -1,8 +1,26 @@
 <script type="text/javascript">
   $(function() {
     var faye = new Faye.Client('http://thinchat.com:9292/faye');
-    faye.subscribe('/messages/<%= @room.id %>', function (data) {
-      eval(data);
+
+    faye.addExtension({
+      outgoing: function(message, callback) {
+        if (message.channel === '/meta/subscribe') {
+          message.ext = message.ext || {};
+          message.ext.display_name = '<%= @display_name %>';
+          console.log(message);
+        }
+        callback(message);
+      }
     });
+
+    faye.subscribe('/messages/<%= @room.id %>', function (data) {
+      console.log(data);
+      $("#chat").append('<div>' + data.object.body + '</div>')
+    });
+
+    $("#new_message").live("ajax:complete", function(event,xhr,status){
+      $('#new_message')[0].reset();
+    });
+
   });
 </script>

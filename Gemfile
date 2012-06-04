@@ -9,6 +9,7 @@ gem 'mysql2'
 gem 'simple_form'
 gem 'faye'
 gem 'thin'
+gem 'hashie'
 
 # Gems used only for assets and not required
 # in production environments by default.
