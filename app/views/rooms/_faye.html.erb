@@ -1,6 +1,6 @@
 <script type="text/javascript">
   $(function() {
-    var faye = new Faye.Client('<%= faye_url %>' + '/faye');
+    var faye = new Faye.Client('<%= FAYE_URL %>' + '/faye');
 
     faye.addExtension({
       outgoing: function(message, callback) {
