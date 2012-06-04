@@ -1,8 +1,30 @@
 <script type="text/javascript">
   $(function() {
-      var faye = new Faye.Client('<%= faye_url %>' + '/faye');
-    faye.subscribe('/messages/<%= @room.id %>', function (data) {
-      eval(data);
+    var faye = new Faye.Client('<%= faye_url %>' + '/faye');
+
+    faye.addExtension({
+      outgoing: function(message, callback) {
+        if (message.channel === '/meta/subscribe') {
+          message.ext = message.ext || {};
+          message.ext.display_name = '<%= @display_name %>';
+          console.log(message);
+        }
+        callback(message);
+      }
     });
+
+    faye.subscribe('/messages/<%= @room.id %>', function (data) {
+      console.log(data);
+      messages = $("#messages").find(".message");
+      if (messages.length >= 15 ) {
+        messages.first().remove();
+      }
+      messages.parent().append('<div class="message">' + data.object.body + '</div>');
+    });
+
+    $("#new_message").live("ajax:complete", function(event,xhr,status){
+      $('#new_message')[0].reset();
+    });
+
   });
 </script>

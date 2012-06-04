@@ -94,6 +94,7 @@ GEM
     guard-spork (0.8.0)
       guard (>= 0.10.0)
       spork (>= 0.8.4)
+    hashie (1.2.0)
     highline (1.6.12)
     hike (1.2.1)
     http_parser.rb (0.5.3)
@@ -217,6 +218,7 @@ DEPENDENCIES
   growl
   guard-rspec
   guard-spork
+  hashie
   jquery-rails
   launchy
   mysql2
