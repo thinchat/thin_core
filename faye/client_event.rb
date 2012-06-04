@@ -54,6 +54,8 @@ class ClientEvent
   MONITORED_CHANNELS = [ '/meta/subscribe', '/meta/disconnect' ]
 
   def incoming(message, callback)
+    faye_client.publish('/messages/8', "A message is being received by client event.")
+
     return callback.call(message) unless MONITORED_CHANNELS.include? message['channel']
 
     faye_message = FayeMessage.new(message)
