@@ -1,6 +1,6 @@
 <script type="text/javascript">
   $(function() {
-    var faye = new Faye.Client('http://thinchat.com:9292/faye');
+      var faye = new Faye.Client('<%= faye_url %>' + '/faye');
     faye.subscribe('/messages/<%= @room.id %>', function (data) {
       eval(data);
     });

@@ -3,7 +3,7 @@
 <head>
   <title>ThinCore</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application", "http://thinchat.com:9292/faye.js" %>
+  <%= javascript_include_tag "application", "#{faye_url}/faye.js" %>
   <%= csrf_meta_tags %>
   <%= yield :faye %>
 </head>
