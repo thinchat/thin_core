@@ -15,7 +15,7 @@ class MessagesController < ApplicationController
 
   def broadcast(channel, object)
     message = {:channel => channel, :data => { :object => object, :type => "message" } }
-    uri = URI.parse("http://localhost:9292/faye")
+    uri = URI.parse("http://thinchat.com:9292/faye")
     Net::HTTP.post_form(uri, :message => message.to_json)
   end
 
