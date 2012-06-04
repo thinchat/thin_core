@@ -6,7 +6,7 @@
       outgoing: function(message, callback) {
         if (message.channel === '/meta/subscribe') {
           message.ext = message.ext || {};
-          message.ext.display_name = '<%= @display_name %>';
+          message.ext.display_name = '<%= @user.name %>';
           console.log(message);
         }
         callback(message);

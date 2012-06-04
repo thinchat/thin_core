@@ -2,8 +2,6 @@ class RoomsController < ApplicationController
 
   def index
     @rooms = Room.all
-    @session = cookies.signed[:user]
-
   end
 
   def create
@@ -16,13 +14,6 @@ class RoomsController < ApplicationController
   def show
     @room = Room.where(id: params[:id]).first
     @messages = @room.messages.last(MESSAGE_DISPLAY_COUNT)
-    @display_name = current_user ? current_user.display_name : "Guest #{params[:id]}"
+    @user = current_user ? current_user : Guest.create
   end
-
-  private
-
-  def current_user
-    @current_user ||= session["user"]
-  end
-
 end
