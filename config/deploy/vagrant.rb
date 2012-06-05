@@ -9,7 +9,7 @@ set :use_sudo, false
 
 set :scm, "git"
 set :repository, "git@github.com:thinchat/#{application}.git"
-set :branch, "master"
+set :branch, "vagrant"
 
 set :default_environment, {
   'PATH' => "/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:$PATH"
