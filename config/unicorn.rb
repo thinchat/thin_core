@@ -1,4 +1,4 @@
-root = "/home/deployer/apps/thin_core/current"
+root = "/home/vagrant/apps/thin_core/current"
 working_directory root
 pid "#{root}/tmp/pids/unicorn.pid"
 stderr_path "#{root}/log/unicorn.log"
