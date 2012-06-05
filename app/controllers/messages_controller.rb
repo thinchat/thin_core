@@ -16,7 +16,7 @@ class MessagesController < ApplicationController
   def broadcast(channel, object)
     message = {:channel => channel, :data => { :object => object, :type => "message" } }
     uri = URI.parse("#{FAYE_URL}/faye")
-    puts uri.inspect
+    raise uri.inspect
     Net::HTTP.post_form(uri, :message => message.to_json)
   end
 
