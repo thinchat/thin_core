@@ -26,7 +26,7 @@ class RoomsController < ApplicationController
   private
 
   def create_room_agent
-    return if @room.room_agents.where(thin_auth_id: current_user.thin_auth_id)
+    return if @room.room_agents.where(thin_auth_id: current_user.thin_auth_id).first
     @room.room_agents.create(thin_auth_id: current_user.thin_auth_id)
   end
 end

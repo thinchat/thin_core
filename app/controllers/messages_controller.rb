@@ -2,8 +2,9 @@ class MessagesController < ApplicationController
 
   respond_to :html, :json, :js
 
-  def create
-    if @message = Message.create!(params[:message])
+  def create    
+    attrs = params[:message].merge(:thin_auth_id => current_user.thin_auth_id) if current_user
+    if @message = Message.create!(attrs)
       broadcast("/messages/#{@message.room_id}", @message)
       render :json => @message
     else
@@ -14,7 +15,7 @@ class MessagesController < ApplicationController
   private
 
   def broadcast(channel, object)
-    message = {:channel => channel, :data => { :object => object, :type => "message" } }
+    message = {:channel => channel, :data => { :display_name => object.display_name, :object => object, :type => "message" } }
     uri = URI.parse("#{FAYE_URL}/faye")
     Net::HTTP.post_form(uri, :message => message.to_json)
   end
