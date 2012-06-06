@@ -15,7 +15,12 @@ class RoomsController < ApplicationController
   def show
     @room = Room.where(id: params[:id]).first
     @messages = @room.messages.last(MESSAGE_DISPLAY_COUNT)
-    @user = current_user ? create_room_agent : Guest.create
+    if current_user
+      create_room_agent
+      @user = current_user
+    else
+      @user = Guest.create
+    end
   end
 
   private
