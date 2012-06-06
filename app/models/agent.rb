@@ -5,6 +5,6 @@ class Agent < ActiveRecord::Base
     unless agent = Agent.where(thin_auth_id: params["id"]).first
       agent = Agent.create(thin_auth_id: params["id"], name: params["name"])
     end
-    @agent
+    agent
   end
 end
