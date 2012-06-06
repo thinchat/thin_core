@@ -6,6 +6,6 @@
 <% end %>
 </ul>
 
-<% if @user.class == 'Guest' %>
-  <%= You are a guest: @user.name %>
+<% unless @user.class == 'Guest' %>
+  <%= "#{@user.inspect}" %>
 <% end %>

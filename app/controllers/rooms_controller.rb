@@ -2,6 +2,7 @@ class RoomsController < ApplicationController
 
   def index
     @rooms = Room.all
+    @user = current_user
   end
 
   def create
@@ -14,6 +15,12 @@ class RoomsController < ApplicationController
   def show
     @room = Room.where(id: params[:id]).first
     @messages = @room.messages.last(MESSAGE_DISPLAY_COUNT)
-    @user = current_user ? current_user : Guest.create
+    @user = current_user ? create_room_agent : Guest.create
+  end
+
+  private
+
+  def create_room_agent
+    @room.room_agents.create(thin_auth_id: current_user.thin_auth_id)
   end
 end
