@@ -3,8 +3,9 @@ class MessagesController < ApplicationController
   respond_to :html, :json, :js
 
   def create    
-    attrs = params[:message].merge(:thin_auth_id => current_user.thin_auth_id) if current_user
-    if @message = Message.create!(attrs)
+    params[:message].merge!(:thin_auth_id => current_user.thin_auth_id) if current_user
+
+    if @message = Message.create!(params[:message])
       broadcast("/messages/#{@message.room_id}", @message)
       render :json => @message
     else
