@@ -6,7 +6,7 @@
       outgoing: function(message, callback) {
         if (message.channel === '/meta/subscribe') {
           message.ext = message.ext || {};
-          message.ext.display_name = '<%= @display_name %>';
+          message.ext.user_name = "<%= @user.name %>"
           console.log(message);
         }
         callback(message);
@@ -19,7 +19,14 @@
       if (messages.length >= 15 ) {
         messages.first().remove();
       }
-      messages.parent().append('<div class="message">' + data.object.body + '</div>');
+
+      if (data.chat_message.message_type == "Message") {
+        $("#messages").append('<div class="message">' + data.chat_message.user_name + ": " + data.chat_message.message_body + '</div>');
+      }
+      else {
+        $("#messages").append('<div class="message">' + data.chat_message.message_body + '</div>');
+        //messages.parent().append('<div class="message">' + data.chat_message.message_body + '</div>');
+      }
     });
 
     $("#new_message").live("ajax:complete", function(event,xhr,status){
