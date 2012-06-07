@@ -1,3 +1,3 @@
 REDIS = Redis.new(:host => 'localhost', :port => 6379)
-require 'secret.rb'
+require "#{Rails.root}/config/initializers/secret.rb"
 REDIS.auth(REDIS_PASSWORD)
