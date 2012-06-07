@@ -27,8 +27,8 @@ end
 #             "object"=> { "user_name"=>"Jonan", 
 #                          "user_id"=>1, 
 #                          "user_type"=>"Guest", 
-#                          "message_id"=>44, 
+#                          "message_id"=>1, 
 #                          "message_type"=>"Message", 
-#                          "message_body"=>"I'm a jona.", 
+#                          "message_body"=>"I'm a whale.", 
 #                          "metadata"=>{}, 
 #                          "created_at"=>"2012-06-07T17:49:57Z" } } }
