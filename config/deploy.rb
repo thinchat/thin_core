@@ -15,7 +15,7 @@ set :branch, "master"
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-after "deploy", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
+after "deploy", "deploy:migrate", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -23,6 +23,12 @@ namespace :deploy do
     task command, roles: :app, except: {no_release: true} do
       run "/etc/init.d/unicorn_#{application} #{command}"
     end
+  end
+
+  desc "Push secret.rb"
+  task :secret, roles: :app do
+    ENV['FILES'] = "config/initializers/secret.rb"
+    upload
   end
 
   desc "Copy database.example.yml to shared/database.yml"
