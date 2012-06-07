@@ -6,7 +6,7 @@
       outgoing: function(message, callback) {
         if (message.channel === '/meta/subscribe') {
           message.ext = message.ext || {};
-          message.ext.display_name = '<%= @user.name %>';
+          message.ext.user_name = "<%= @user.name %>"
           console.log(message);
         }
         callback(message);
@@ -21,10 +21,11 @@
       }
 
       if (data.type == "message") {
-        messages.parent().append('<div class="message">' + data.display_name + ": " + data.object.body + '</div>');
+        $("#messages").append('<div class="message">' + data.user_name + ": " + data.object.body + '</div>');
       }
       else {
-        messages.parent().append('<div class="message">' + data.object.body + '</div>');
+        $("#messages").append('<div class="message">' + data.object.body + '</div>');
+        //messages.parent().append('<div class="message">' + data.object.body + '</div>');
       }
     });
 

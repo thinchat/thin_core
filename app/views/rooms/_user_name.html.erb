@@ -1,0 +1,9 @@
+<% if @user.class == Guest %>
+  <%= form_for @user, :remote => true do |f| %>
+    <%= f.label :user_name %>
+    <%= f.text_field :name %>
+    <%= f.submit "Update" %>
+  <% end %>
+<% end %>
+
+<%= @session.inspect %>

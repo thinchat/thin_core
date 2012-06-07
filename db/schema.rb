@@ -11,21 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120605235446) do
-
-  create_table "agent_rooms", :force => true do |t|
-    t.integer  "room_id"
-    t.integer  "agent_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "agents", :force => true do |t|
-    t.string   "name"
-    t.integer  "thin_auth_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
+ActiveRecord::Schema.define(:version => 20120606214917) do
 
   create_table "guests", :force => true do |t|
     t.string   "name"
@@ -36,23 +22,19 @@ ActiveRecord::Schema.define(:version => 20120605235446) do
 
   create_table "messages", :force => true do |t|
     t.text     "body"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "room_id"
-    t.integer  "thin_auth_id"
-  end
-
-  create_table "room_agents", :force => true do |t|
-    t.integer  "room_id"
-    t.integer  "thin_auth_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "user_name"
   end
 
   create_table "rooms", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "guest_id"
   end
 
 end

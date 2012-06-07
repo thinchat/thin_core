@@ -1,12 +1,12 @@
 class Agent < ActiveRecord::Base
   attr_accessible :name, :thin_auth_id
-  has_many :room_agents, :foreign_key => :thin_auth_id
-  has_many :rooms, :through => :room_agents
 
-  def self.find_or_create_by_thin_auth_id(params)
-    unless agent = Agent.where(thin_auth_id: params["id"]).first
-      agent = Agent.create(thin_auth_id: params["id"], name: params["name"])
-    end
-    agent
+  def self.new_from_cookie(cookie)
+    params = JSON.parse(cookies.signed[:user])
+    Agent.new(thin_auth_id: params["id"], name: params["name"])
+  end
+
+  def user_hash
+    { user_id: thin_auth_id, user_type: 'Agent', user_name: name }
   end
 end
