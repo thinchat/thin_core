@@ -5,4 +5,18 @@ class Message < ActiveRecord::Base
 
   belongs_to :room
 
+  def to_hash
+    {
+      room_id: room_id,
+      user_name: user_name,
+      user_id: user_id,
+      user_type: user_type,
+      message_id: id,
+      message_type: self.class.name,
+      message_body: body,
+      metadata: { },
+      created_at: created_at,
+    }
+  end
+
 end

@@ -20,12 +20,12 @@
         messages.first().remove();
       }
 
-      if (data.type == "message") {
-        $("#messages").append('<div class="message">' + data.user_name + ": " + data.object.body + '</div>');
+      if (data.chat_message.message_type == "Message") {
+        $("#messages").append('<div class="message">' + data.chat_message.user_name + ": " + data.chat_message.message_body + '</div>');
       }
       else {
-        $("#messages").append('<div class="message">' + data.object.body + '</div>');
-        //messages.parent().append('<div class="message">' + data.object.body + '</div>');
+        $("#messages").append('<div class="message">' + data.chat_message.message_body + '</div>');
+        //messages.parent().append('<div class="message">' + data.chat_message.message_body + '</div>');
       }
     });
 
