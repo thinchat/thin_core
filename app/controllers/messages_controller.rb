@@ -11,9 +11,14 @@ class MessagesController < ApplicationController
   private
 
   def broadcast(channel, object)
-    message = {:channel => channel, :data => { :user_name => object.user_name, :object => object, :type => "message" } }
+    message = {:channel => channel, 
+               :data => { :user_name => object.user_name, 
+                          :object => object, 
+                          :type => "message" } }
+                          
     uri = URI.parse("#{FAYE_URL}/faye")
     Net::HTTP.post_form(uri, :message => message.to_json)
+    REDIS.publish 'thinchat', message.to_json
     render :nothing => true, :status => 201
   end
 
