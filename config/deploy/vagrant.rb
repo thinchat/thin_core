@@ -1,4 +1,4 @@
-server "127.0.0.1", :web, :app, :db, primary: true
+server "27.27.27.27", :web, :app, :db, primary: true
 set :port, 2222
 
 set :application, "thin_core"
@@ -10,7 +10,3 @@ set :use_sudo, false
 set :scm, "git"
 set :repository, "git@github.com:thinchat/#{application}.git"
 set :branch, "vagrant"
-
-set :default_environment, {
-  'PATH' => "/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:$PATH"
-}
