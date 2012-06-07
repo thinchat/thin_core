@@ -26,8 +26,8 @@ namespace :deploy do
   after "deploy:setup", "deploy:setup_config"
 
   task :nginx_config, roles: :app do
-    sudo "cp #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/nginx.conf"
-    sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/default"
+    sudo "cp #{current_path}/config/nginx.conf #{shared_path}/config/nginx.conf"
+    sudo "ln -nfs #{shared_path}/config/nginx.conf /etc/nginx/sites-enabled/default"
   end
 
   task :symlink_config, roles: :app do
