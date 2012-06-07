@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-jQuery ->
+$ ->
   ChangeLinks()
 
 ChangeLinks = ->
@@ -13,5 +13,13 @@ ChangeLinks = ->
     
 
 replaceLinks = (original) ->
-  original = linkify(original)
+  matchedHttp = original.match /(https?:\/\/.*\.(?:png|jpg|jpeg))/i
+  if matchedHttp
+    original = original.replace matchedHttp[0], ""
+    original = linkify(original)
+    original = original + "<img src='#{matchedHttp[0]}' height=200 width=200></img>"
+  else
+    linkify(original)
+  
+  
 
