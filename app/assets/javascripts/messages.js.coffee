@@ -8,9 +8,10 @@ jQuery ->
 ChangeLinks = ->
   messages = $(".message")
   for message in messages
-    html = $(message).html()    
+    html = $(message).html()
+    $(message).html(replaceLinks(html))
+    
 
 replaceLinks = (original) ->
   original = linkify(original)
-  matchedHttp = original.match /.*/
-  original.replace matchedHttp, "test"
+
