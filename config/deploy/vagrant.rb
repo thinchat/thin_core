@@ -9,4 +9,4 @@ set :use_sudo, false
 
 set :scm, "git"
 set :repository, "git@github.com:thinchat/#{application}.git"
-set :branch, "vagrant"
+set :branch, "chris_vagrant"
