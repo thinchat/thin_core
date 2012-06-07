@@ -15,7 +15,7 @@ set :branch, "master"
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-after "deploy", "deploy:nginx_config", "deploy:cleanup" # keep only the last 5 releases
+after "deploy", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -25,6 +25,7 @@ namespace :deploy do
     end
   end
 
+  desc "Copy database.example.yml to shared/database.yml"
   task :setup_config, roles: :app do
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
@@ -33,11 +34,7 @@ namespace :deploy do
   end
   after "deploy:setup", "deploy:setup_config"
 
-  task :nginx_config, roles: :app do
-    sudo "cp #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/"
-    sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/default"
-  end
-
+  desc "Symlink shared/database.yml to config/database.yml"
   task :symlink_config, roles: :app do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
   end
@@ -52,4 +49,17 @@ namespace :deploy do
     end
   end
   before "deploy", "deploy:check_revision"
+
+  namespace :nginx do
+    desc "Restart Nginx"
+    task :restart, roles: :app do
+      sudo "service nginx restart"
+    end
+
+    desc "Copy nginx.conf to thinchat/config and symlink to /etc/nginx/sites-enabled/default "
+    task :config, roles: :app do
+      sudo "cp #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/"
+      sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/default"
+    end
+  end
 end
