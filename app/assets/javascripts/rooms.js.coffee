@@ -5,13 +5,8 @@
 
 jQuery ->
   $.faye = new Faye.Client(faye_url + '/faye')
-  runHeartbeat(jQuery.faye, getUserhash())
+  runHeartbeat(jQuery.faye, getUser())
 
 runHeartbeat = (client, user) ->
   client.publish('/heart_beat', user)
   setTimeout((-> runHeartbeat(client, user)), 10000)
-
-getUserhash = ->
-  user_hash = JSON.parse(user)
-  user_hash.room = room if typeof room isnt "undefined"
-  user_hash

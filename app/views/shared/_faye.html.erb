@@ -1,13 +1,20 @@
 <script type="text/javascript">
   faye_url = '<%= FAYE_URL %>'
   user     = '<%= current_user.user_json.html_safe %>'
-  room     = '<%= @room.id %>'
+  room_id  = '<%= @room.id %>'
+
+  function getUser() {
+    user_hash = JSON.parse(user)
+    user_hash.room_id = room_id
+    return user_hash
+  }
 
   $(function() {    
+
     $.faye.addExtension({
       outgoing: function(message, callback) {
         if (message.channel === '/meta/subscribe') {
-          message.data = message.data || $.getUserHash();
+          message.data = message.data || getUser()
           console.log(message);
         }
         callback(message);
