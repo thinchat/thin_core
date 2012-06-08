@@ -7,6 +7,7 @@ set :user, "deployer"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
+set :ssh_options, { :forward_agent => true }
 
 set :scm, "git"
 set :repository, "git@github.com:thinchat/#{application}.git"
@@ -27,9 +28,9 @@ namespace :deploy do
 
   desc "Push secret.rb"
   task :secret, roles: :app do
-    ENV['FILES'] = "config/initializers/secret.rb"
-    upload
+    transfer(:up, "config/initializers/secret.rb", "#{release_path}/config/initializers/secret.rb", :scp => true)
   end
+  before "deploy:assets:precompile", "deploy:secret"
 
   desc "Copy database.example.yml to shared/database.yml"
   task :setup_config, roles: :app do
