@@ -1,6 +1,8 @@
 require "bundler/capistrano"
+require 'capistrano/ext/multistage'
 
-server "50.116.34.44", :web, :app, :db, primary: true
+set :stages, %w(production development)
+set :default_stage, "development"
 
 set :application, "thin_core"
 set :user, "deployer"
@@ -39,7 +41,11 @@ namespace :deploy do
     put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
     puts "Now edit the config files in #{shared_path}."
   end
-  after "deploy:setup", "deploy:setup_config"
+  after "deploy:setup", "deploy:create_release_dir", "deploy:setup_config"
+
+  task :create_release_dir, :except => {:no_release => true} do
+    run "mkdir -p #{fetch :releases_path}"
+  end
 
   desc "Symlink shared/database.yml to config/database.yml"
   task :symlink_config, roles: :app do
