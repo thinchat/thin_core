@@ -1,13 +1,11 @@
+<div id="users">
+  <% @users.each do |user| %>
+  <div class="user"><%= user.user_name %> in Room <%= user.room_id %></div>
+  <% end %>
+</div>
+
 <script type="text/javascript">
   faye_url = '<%= FAYE_URL %>'
-  user     = '<%= current_user.user_json.html_safe %>'
-  room_id  = '<%= @room.id %>'
-
-  function getUser() {
-    user_hash = JSON.parse(user)
-    user_hash.room_id = room_id
-    return user_hash
-  }
 
   $(function() {    
 
@@ -21,10 +19,9 @@
       }
     });
 
-    $.faye.subscribe('/messages/<%= @room.id %>', function (data) {
-      alert("HI")
+    $.faye.subscribe('/online_users %>', function (data) {
       console.log(data);
-      messages = $("#messages").find(".message");
+      messages = $("#users").find(".message");
       if (messages.length >= 15 ) {
         messages.first().remove();
       }
@@ -41,5 +38,6 @@
     $("#new_message").live("ajax:complete", function(event,xhr,status){
       $('#new_message')[0].reset();
     });
+    
   });
 </script>

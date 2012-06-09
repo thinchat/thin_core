@@ -1,23 +1,10 @@
 class MessagesController < ApplicationController
-
   respond_to :html, :json, :js
 
-  def create    
+  def create
     params[:message].merge!(current_user.user_hash)
     message = Message.create!(params[:message])
-    broadcast("/messages/#{message.room_id}", message.to_hash)
-  end
-
-  private
-
-  def broadcast(channel, object)
-    message = {:channel => channel, 
-               :data => { :chat_message => object } }
-                          
-    uri = URI.parse("#{FAYE_URL}/faye")
-    Net::HTTP.post_form(uri, :message => message.to_json)
-    REDIS.publish 'thinchat', message.to_json
-    render :nothing => true, :status => 201
+    render :nothing => true, :status => 201 if message.broadcast
   end
 
 end
@@ -29,6 +16,6 @@ end
 #                          "user_type"=>"Guest", 
 #                          "message_id"=>1, 
 #                          "message_type"=>"Message", 
-#                          "message_body"=>"I'm a whale.", 
+#                          "message_body"=>"I'm a farmer.", 
 #                          "metadata"=>{}, 
 #                          "created_at"=>"2012-06-07T17:49:57Z" } } }
