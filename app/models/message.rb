@@ -30,5 +30,4 @@ class Message < ActiveRecord::Base
     Net::HTTP.post_form(uri, :message => message_hash.to_json)
     REDIS.publish 'thinchat', message_hash.to_json
   end
-
 end

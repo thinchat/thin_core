@@ -22,7 +22,6 @@
     });
 
     $.faye.subscribe('/messages/<%= @room.id %>', function (data) {
-      alert("HI")
       console.log(data);
       messages = $("#messages").find(".message");
       if (messages.length >= 15 ) {
