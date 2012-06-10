@@ -28,16 +28,23 @@ namespace :deploy do
     end
   end
 
+  desc "Deploy to Vagrant (assumes you've run 'rake vagrant:setup')"
+  task :vagrant, roles: :app do
+    puts "Deploying to Vagrant..."
+  end
+  after "deploy:vagrant", "deploy:setup", "deploy"
+
   desc "Push secret files"
   task :secret, roles: :app do
     run "pwd"
-    transfer(:up, "config/initializers/secret.rb", "#{release_path}/config/initializers/secret.rb", :scp => true)
-    transfer(:up, "config/redis.conf", "/home/deployer/redis.conf", :scp => true)
-    transfer(:up, "config/database.production.yml", "#{shared_path}/config/database.yml", :scp => true)
+    transfer(:up, "config/secret/redis_password.rb", "#{release_path}/config/secret/redis_password.rb", :scp => true)
+    transfer(:up, "config/secret/redis.conf", "/home/deployer/redis.conf", :scp => true)
+    transfer(:up, "config/secret/database.production.yml", "#{shared_path}/config/database.yml", :scp => true)
     sudo "mv /home/deployer/redis.conf /etc/redis/redis.conf"
-    sudo "service redis-server restart &"
+    require "config/secret/redis_password.rb"
+    sudo "/usr/bin/redis-cli config set requirepass #{REDIS_PASSWORD}"
   end
-  before "deploy:assets:precompile", "deploy:secret"
+  before "deploy:symlink_config", "deploy:secret"
 
   desc "Create the production database"
   task :create_database, roles: :app do
