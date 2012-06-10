@@ -32,7 +32,7 @@ namespace :deploy do
   task :vagrant, roles: :app do
     puts "Deploying to Vagrant..."
   end
-  after "deploy:vagrant", "deploy:setup", "deploy"
+  after "deploy:vagrant", "deploy:setup", "deploy", "deploy:nginx:restart"
 
   desc "Push secret files"
   task :secret, roles: :app do
