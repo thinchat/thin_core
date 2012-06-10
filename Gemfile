@@ -34,6 +34,7 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'faker'
   gem 'growl'
+  gem 'vagrant', '~> 1.0.3'
 end
 
 group :test do

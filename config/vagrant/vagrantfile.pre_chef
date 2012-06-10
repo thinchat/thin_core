@@ -1,0 +1,9 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant::Config.run do |config|
+  # config.ssh.username = "deployer"
+  config.vm.network :hostonly, "27.27.27.27"
+  config.vm.provision :shell, :path => "config/vagrant/setup.sh"
+  config.vm.box = "development"
+end

@@ -18,7 +18,7 @@ set :branch, "master"
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-after "deploy", "deploy:migrate", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
+after "deploy", "deploy:create_database", "deploy:migrate", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -28,13 +28,23 @@ namespace :deploy do
     end
   end
 
-  desc "Push secret.rb"
+  desc "Push secret files"
   task :secret, roles: :app do
+    run "pwd"
     transfer(:up, "config/initializers/secret.rb", "#{release_path}/config/initializers/secret.rb", :scp => true)
+    transfer(:up, "config/redis.conf", "/home/deployer/redis.conf", :scp => true)
+    transfer(:up, "config/database.production.yml", "#{shared_path}/config/database.yml", :scp => true)
+    sudo "mv /home/deployer/redis.conf /etc/redis/redis.conf"
+    sudo "service redis-server restart &"
   end
   before "deploy:assets:precompile", "deploy:secret"
 
-  desc "Copy database.example.yml to shared/database.yml"
+  desc "Create the production database"
+  task :create_database, roles: :app do
+    run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:create"
+  end
+
+  desc "Setup database and unicorn configuration"
   task :setup_config, roles: :app do
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
@@ -71,8 +81,7 @@ namespace :deploy do
 
     desc "Copy nginx.conf to thinchat/config and symlink to /etc/nginx/sites-enabled/default "
     task :config, roles: :app do
-      sudo "cp #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/"
-      sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/default"
+      sudo "ln -nfs #{release_path}/config/nginx.conf /etc/nginx/sites-enabled/default"
     end
   end
 end
