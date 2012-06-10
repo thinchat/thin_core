@@ -36,12 +36,12 @@ namespace :deploy do
 
   desc "Push secret files"
   task :secret, roles: :app do
-    run "pwd"
+    run "mkdir #{release_path}/config/secret"
     transfer(:up, "config/secret/redis_password.rb", "#{release_path}/config/secret/redis_password.rb", :scp => true)
     transfer(:up, "config/secret/redis.conf", "/home/deployer/redis.conf", :scp => true)
     transfer(:up, "config/secret/database.production.yml", "#{shared_path}/config/database.yml", :scp => true)
     sudo "mv /home/deployer/redis.conf /etc/redis/redis.conf"
-    require "config/secret/redis_password.rb"
+    require "./config/secret/redis_password.rb"
     sudo "/usr/bin/redis-cli config set requirepass #{REDIS_PASSWORD}"
   end
   before "deploy:symlink_config", "deploy:secret"
