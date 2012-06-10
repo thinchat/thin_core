@@ -1,11 +1,17 @@
 <div id="users">
   <% @users.each do |user| %>
-  <div class="user"><%= user.user_name %> in Room <%= user.room_id %></div>
+  <div class="user <%= user.client_id %>"><%= user.user_name %> in Room <%= user.room_id %></div>
   <% end %>
 </div>
 
 <script type="text/javascript">
-  faye_url = '<%= FAYE_URL %>'
+  var faye_url = '<%= FAYE_URL %>';
+  var user     = '<%= current_user.user_json.html_safe %>';
+
+  function getUser() {
+    var user_hash = JSON.parse(user)
+    return user_hash
+  };
 
   $(function() {    
 
@@ -19,20 +25,17 @@
       }
     });
 
-    $.faye.subscribe('/online_users %>', function (data) {
+    $.faye.subscribe('/online_users', function (data) {
       console.log(data);
-      messages = $("#users").find(".message");
-      if (messages.length >= 15 ) {
-        messages.first().remove();
+      messages = $("#users").find(".user");
+
+      if (data.chat_message.message_type == "Subscribe") {
+        $("#users").append('<div class="user ' + data.chat_message.client_id + '">' + data.chat_message.user_name + " in room " + data.chat_message.room_id + '</div>');
+      }
+      else if (data.chat_message.message_type == "Disconnect") {
+        $("#users").find("." + data.chat_message.client_id).remove();
       }
 
-      if (data.chat_message.message_type == "Message") {
-        $("#messages").append('<div class="message">' + data.chat_message.user_name + ": " + data.chat_message.message_body + '</div>');
-      }
-      else {
-        $("#messages").append('<div class="message">' + data.chat_message.message_body + '</div>');
-        //messages.parent().append('<div class="message">' + data.chat_message.message_body + '</div>');
-      }
     });
 
     $("#new_message").live("ajax:complete", function(event,xhr,status){

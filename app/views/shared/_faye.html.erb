@@ -1,44 +1,58 @@
-<script type="text/javascript">
-  faye_url = '<%= FAYE_URL %>'
-  user     = '<%= current_user.user_json.html_safe %>'
-  room_id  = '<%= @room.id %>'
+<%= coffee_script_tag do %>
+  window.faye_url = '<%= FAYE_URL %>'
+  window.user     = '<%= current_user.user_json.html_safe %>'
+  window.room_id  = '<%= @room.id %>'
 
-  function getUser() {
-    user_hash = JSON.parse(user)
-    user_hash.room_id = room_id
-    return user_hash
-  }
+  class ChatHandler
+    @getMessages: (room_id) ->
+      $.getJSON("http://localhost:3000/api/v1/messages?room_id=#{room_id}", ChatHandler.renderMessages)
 
-  $(function() {    
+    @renderMessages: (messages) =>
+      for message in messages
+        ChatHandler.addOneMessage(message)
 
-    $.faye.addExtension({
-      outgoing: function(message, callback) {
-        if (message.channel === '/meta/subscribe') {
-          message.data = message.data || getUser()
-          console.log(message);
-        }
-        callback(message);
-      }
-    });
+    @addMessage: (data) =>
+      if (data.chat_message.message_type == "Message")
+        ChatHandler.addOneMessage(data.chat_message)
+      else
+        ChatHandler.addOneEvent(data.chat_message)
 
-    $.faye.subscribe('/messages/<%= @room.id %>', function (data) {
-      console.log(data);
-      messages = $("#messages").find(".message");
-      if (messages.length >= 15 ) {
-        messages.first().remove();
-      }
+    @addOneMessage: (message) =>
+      $('#messages').append Mustache.to_html($('#message_template').html(), message)
 
-      if (data.chat_message.message_type == "Message") {
-        $("#messages").append('<div class="message">' + data.chat_message.user_name + ": " + data.chat_message.message_body + '</div>');
-      }
-      else {
-        $("#messages").append('<div class="message">' + data.chat_message.message_body + '</div>');
-        //messages.parent().append('<div class="message">' + data.chat_message.message_body + '</div>');
-      }
-    });
+    @addOneEvent: (message) =>
+      $('#messages').append Mustache.to_html($('#event_template').html(), message)
 
-    $("#new_message").live("ajax:complete", function(event,xhr,status){
-      $('#new_message')[0].reset();
-    });
-  });
-</script>
+  class FayeHandler
+    constructor: (faye_url) ->
+      @client = new Faye.Client(faye_url + '/faye')
+
+    subscribe: (room_id) =>
+      @client.subscribe("/messages/#{room_id}", (data) ->
+        console.log(data)
+        ChatHandler.addMessage(data)
+      )
+
+    addExtensions: (room_id) =>
+      @client.addExtension outgoing: (message, callback) ->
+        if message.channel is "/meta/subscribe"
+          message.data = message.data or $.namespace.getUser(room_id)
+          console.log message
+        callback message
+
+  class Heartbeat
+    @pulse: (client, user) ->
+      client.publish('/heart_beat', user)
+      setTimeout((-> Heartbeat.pulse(client, user)), 10000)
+
+
+  jQuery ->
+    chatHandler = ChatHandler.getMessages(room_id)
+    faye = new FayeHandler(faye_url)
+    faye.subscribe(room_id)
+    faye.addExtensions(room_id)
+    heartbeat = Heartbeat.pulse(faye.client, $.namespace.getUser(room_id))
+
+    $("#new_message").live("ajax:complete", (event,xhr,status) ->
+      $('#new_message')[0].reset())
+<% end %>

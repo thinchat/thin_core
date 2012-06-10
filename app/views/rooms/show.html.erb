@@ -4,9 +4,7 @@
 
 <div id="room">
   <h1><%= @room.name %></h1>
-  <div id="messages">
-    <%= render @messages %>
-  </div>
+  <div id="messages" style="overflow: scroll; max-height: 400px"></div>
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
@@ -14,4 +12,14 @@
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
 
+<script type="text/html" id="message_template">
+  <div class="message">
+    {{user_name}}: {{message_body}}
+  </div>
+</script>
 
+<script type="text/html" id="event_template">
+  <div class="message">
+    {{message_body}}
+  </div>
+</script>

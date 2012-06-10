@@ -11,7 +11,7 @@ end
 
 # {"channel"=>"/messages/5", 
 #  "data"=> { 
-#             "object"=> { "user_name"=>"Jonan", 
+#             "chat_message"=> { "user_name"=>"Jonan", 
 #                          "user_id"=>1, 
 #                          "user_type"=>"Guest", 
 #                          "message_id"=>1, 

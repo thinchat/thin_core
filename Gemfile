@@ -12,6 +12,9 @@ gem 'thin'
 gem 'hashie'
 gem 'redis'
 gem 'faker'
+gem 'mustache'
+gem 'jbuilder'
+gem 'coffeebeans'
 
 # Gems used only for assets and not required
 # in production environments by default.
