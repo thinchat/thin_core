@@ -3,23 +3,25 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $ ->
-  ChangeLinks()
+  changeLinks()
 
-ChangeLinks = ->
+changeLinks = ->
   messages = $(".message")
   for message in messages
     html = $(message).html()
     $(message).html(replaceLinks(html))
     
-
-replaceLinks = (original) ->
-  matchedHttp = original.match /(https?:\/\/.*\.(?:png|jpg|jpeg))/i
-  if matchedHttp
-    original = original.replace matchedHttp[0], ""
-    original = linkify(original)
-    original = original + "<img src='#{matchedHttp[0]}' height=200 width=200></img>"
+replaceLinks = (content) ->
+  images = content.match /(https?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png))/i
+  if images
+    replaceImages(images, content)
   else
-    linkify(original)
+    linkify(content)
   
-  
-
+replaceImages = (images, content) ->
+  for image in images
+    content = content.replace image, ""
+  content = linkify(content)
+  for image in images
+    content = content + "<img src='#{image}' height=200 width=200></img>"
+  content
