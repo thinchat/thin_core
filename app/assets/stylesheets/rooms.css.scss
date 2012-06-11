@@ -18,6 +18,8 @@ div#room div.message {
 
 div#room div#messages {
   margin-bottom: 20px;
+  overflow: scroll; 
+  max-height: 400px;
 }
 
 div#room input#message_body {

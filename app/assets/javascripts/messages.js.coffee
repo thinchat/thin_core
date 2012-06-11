@@ -24,4 +24,4 @@ replaceImages = (images, content) ->
   content = linkify(content)
   for image in images
     content = content + "<img src='#{image}' height=200 width=200></img>"
-  content
+

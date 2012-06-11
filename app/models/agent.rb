@@ -13,6 +13,10 @@ class Agent
   end
 
   def user_hash
-    { user_id: thin_auth_id, user_type: 'Agent', user_name: name }
+    { user_id: thin_auth_id.to_s, user_type: 'Agent', user_name: name }
+  end
+
+  def user_json
+    user_hash.to_json
   end
 end

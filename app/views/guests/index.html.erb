@@ -1,0 +1,25 @@
+<div id="users"></div>
+
+<script type="text/html" id="user_template">
+  <div class="{{client_id}}">{{user_name}} in Room {{room_id}}</div>
+</script>
+
+<% content_for :faye do %>
+  <%= render "shared/faye_handler", :locals => { :room => @room } %>
+  <%= render "shared/heartbeat" %>
+  <%= render "user_handler" %>
+<% end %>
+
+<%= coffee_script_tag do %>
+  window.faye_url = '<%= FAYE_URL %>'
+  window.user     = '<%= current_user.user_json.html_safe %>'
+  window.room_id  = 'Lobby'
+
+  jQuery ->
+    userHandler = UserHandler.getUsers()
+    user_hash = $.namespace.getUser(room_id)
+    faye_users = new FayeHandler(faye_url)
+    faye_users.subscribeUsers('/online_users')
+    faye_users.addSubscribeExtension(user_hash)
+    heartbeat = Heartbeat.pulse(faye_users.client, user_hash)
+<% end %>

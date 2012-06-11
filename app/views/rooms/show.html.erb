@@ -1,12 +1,8 @@
-<% content_for :faye do %>
-  <%= render "faye", :locals => { :room => @room } %>
-<% end %>
-
 <div id="room">
   <h1><%= @room.name %></h1>
-  <div id="messages">
-    <%= render @messages %>
-  </div>
+  
+  <%= content_tag "div", id: "messages", data: {room_id: @room.id } do %>
+  <% end %>
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
@@ -14,4 +10,36 @@
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
 
+<script type="text/html" id="message_template">
+  <div class="message">
+    {{user_name}}: {{message_body}}
+  </div>
+</script>
 
+<script type="text/html" id="event_template">
+  <div class="message">
+    {{message_body}}
+  </div>
+</script>
+
+<% content_for :faye do %>
+  <%= render "shared/faye_handler", :locals => { :room => @room } %>
+  <%= render "shared/heartbeat" %>
+  <%= render "chat_handler" %>
+<% end %>
+
+<%= coffee_script_tag do %>
+  window.faye_url = '<%= FAYE_URL %>'
+  window.user     = '<%= current_user.user_json.html_safe %>'
+
+  jQuery ->
+    room_id = $('#messages').data('room-id')
+    chatHandler = ChatHandler.getMessages(room_id)
+    user_hash = $.namespace.getUser(room_id)
+    faye_chat = new FayeHandler(faye_url)
+    faye_chat.subscribe('/messages/'+ room_id)
+    faye_chat.addSubscribeExtension(user_hash)
+    heartbeat = Heartbeat.pulse(faye_chat.client, user_hash)
+    $("#new_message").live("ajax:complete", (event,xhr,status) ->
+      $('#new_message')[0].reset())
+<% end %>

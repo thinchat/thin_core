@@ -9,3 +9,8 @@
 <% unless @user.class == 'Guest' %>
   <%= "#{@user.inspect}" %>
 <% end %>
+
+<script type="text/javascript">
+  faye_url = '<%= FAYE_URL %>'
+  user = '<%= current_user.user_json.html_safe %>'
+</script>
