@@ -6,6 +6,8 @@
     <title><%= content_for?(:title) ? yield(:title) : "ThinCore" %></title>
     <%= stylesheet_link_tag    "application", :media => "all" %>
     <%= javascript_include_tag "application", "#{FAYE_URL}/faye.js" %>
+    <script type="text/javascript" src="https://use.typekit.com/txe0iyw.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <%= csrf_meta_tags %>
     <%= yield :faye %>
 
@@ -24,7 +26,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">ThinCore</a>
+          <a class="brand" href="/">thin<span>Core</span></a>
           <div class="container nav-collapse">
             <ul class="nav">
               <li><%= link_to "Link1", "/path1"  %></li>
