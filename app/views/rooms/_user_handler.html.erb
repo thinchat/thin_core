@@ -13,6 +13,12 @@
       else if (data.chat_message.message_type == "Disconnect")
         UserHandler.removeUser(data.chat_message.client_id)
 
+    @addUserToRoom: (user) =>
+      $("#room-#{user.room}").append Mustache.to_html($('#user_template').html(), user)
+
+    @removeUser: (client_id) =>
+      $('#users').find(".#{client_id}").remove()
+
     @addUser: (user) =>
       $('#users').append Mustache.to_html($('#user_template').html(), user)
 
