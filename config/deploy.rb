@@ -104,6 +104,7 @@ task :provision do
     sudo "chmod 700 /home/deployer/.ssh"
     transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
     sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
+    sudo "chown -R deployer:admin /home/deployer"
   else
     puts "Phew. That was a close one eh?"
   end
