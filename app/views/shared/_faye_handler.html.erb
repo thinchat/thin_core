@@ -3,7 +3,7 @@
     constructor: (faye_url) ->
       @client = new Faye.Client(faye_url + '/faye')
 
-    subscribe: (channel, function) =>
+    subscribe: (channel) =>
       @client.subscribe(channel, (data) ->
         console.log(data)
         ChatHandler.handleMessage(data)
