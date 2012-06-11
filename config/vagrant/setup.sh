@@ -16,7 +16,7 @@ make
 make install
 gem install bundler
 gem install god
-gem install chef
+gem install chef ruby-shadow --no-ri --no-rdoc
 git clone git://github.com/thinchat/thin_chef.git /var/chef
 chef-solo -c /var/chef/solo.rb
 mkdir /usr/local/var
