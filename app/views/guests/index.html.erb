@@ -7,7 +7,7 @@
 <% content_for :faye do %>
   <%= render "shared/faye_handler", :locals => { :room => @room } %>
   <%= render "shared/heartbeat" %>
-  <%= render "user_handler" %>
+  <%= render "rooms/user_handler" %>
 <% end %>
 
 <%= coffee_script_tag do %>

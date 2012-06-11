@@ -3,15 +3,15 @@
     constructor: (faye_url) ->
       @client = new Faye.Client(faye_url + '/faye')
 
-    subscribe: (channel) =>
+    subscribe: (channel, function) =>
       @client.subscribe(channel, (data) ->
         console.log(data)
-        ChatHandler.addMessage(data)
+        ChatHandler.handleMessage(data)
       )
 
     subscribeUsers: (channel) =>
       @client.subscribe(channel, (data) ->
-        UserHandler.handleMessage(data)
+        UserHandler.handleUser(data)
       )
 
     addSubscribeExtension: (user_hash) =>

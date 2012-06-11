@@ -5,17 +5,17 @@
 
     @renderMessages: (messages) =>
       for message in messages
-        ChatHandler.addOneMessage(message)
+        ChatHandler.addMessage(message)
 
-    @addMessage: (data) =>
+    @handleMessage: (data) =>
       if (data.chat_message.message_type == "Message")
-        ChatHandler.addOneMessage(data.chat_message)
+        ChatHandler.addMessage(data.chat_message)
       else
-        ChatHandler.addOneEvent(data.chat_message)
+        ChatHandler.addEvent(data.chat_message)
 
-    @addOneMessage: (message) =>
+    @addMessage: (message) =>
       $('#messages').append Mustache.to_html($('#message_template').html(), message)
 
-    @addOneEvent: (message) =>
+    @addEvent: (message) =>
       $('#messages').append Mustache.to_html($('#event_template').html(), message)
 <% end %>
