@@ -9,6 +9,5 @@ class GuestsController < ApplicationController
   end
 
   def index
-    @users = ThinHeartbeat::Status.get_users
   end
 end

@@ -1,43 +1,25 @@
-<div id="users">
-  <% @users.each do |user| %>
-  <div class="user"><%= user.user_name %> in Room <%= user.room_id %></div>
-  <% end %>
-</div>
+<div id="users"></div>
 
-<script type="text/javascript">
-  faye_url = '<%= FAYE_URL %>'
-
-  $(function() {    
-
-    $.faye.addExtension({
-      outgoing: function(message, callback) {
-        if (message.channel === '/meta/subscribe') {
-          message.data = message.data || getUser()
-          console.log(message);
-        }
-        callback(message);
-      }
-    });
-
-    $.faye.subscribe('/online_users %>', function (data) {
-      console.log(data);
-      messages = $("#users").find(".message");
-      if (messages.length >= 15 ) {
-        messages.first().remove();
-      }
-
-      if (data.chat_message.message_type == "Message") {
-        $("#messages").append('<div class="message">' + data.chat_message.user_name + ": " + data.chat_message.message_body + '</div>');
-      }
-      else {
-        $("#messages").append('<div class="message">' + data.chat_message.message_body + '</div>');
-        //messages.parent().append('<div class="message">' + data.chat_message.message_body + '</div>');
-      }
-    });
-
-    $("#new_message").live("ajax:complete", function(event,xhr,status){
-      $('#new_message')[0].reset();
-    });
-    
-  });
+<script type="text/html" id="user_template">
+  <div class="{{client_id}}">{{user_name}} in Room {{room_id}}</div>
 </script>
+
+<% content_for :faye do %>
+  <%= render "shared/faye_handler", :locals => { :room => @room } %>
+  <%= render "shared/heartbeat" %>
+  <%= render "user_handler" %>
+<% end %>
+
+<%= coffee_script_tag do %>
+  window.faye_url = '<%= FAYE_URL %>'
+  window.user     = '<%= current_user.user_json.html_safe %>'
+  window.room_id  = 'Lobby'
+
+  jQuery ->
+    userHandler = UserHandler.getUsers()
+    user_hash = $.namespace.getUser(room_id)
+    faye_users = new FayeHandler(faye_url)
+    faye_users.subscribeUsers('/online_users')
+    faye_users.addSubscribeExtension(user_hash)
+    heartbeat = Heartbeat.pulse(faye_users.client, user_hash)
+<% end %>
