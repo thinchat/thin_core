@@ -14,8 +14,28 @@
         ChatHandler.addOneEvent(data.chat_message)
 
     @addOneMessage: (message) =>
-      $('#messages').append Mustache.to_html($('#message_template').html(), message)
+      mustache_message = Mustache.to_html($('#message_template').html(), message)
+      $('#messages').append ChatHandler.replaceLinks(mustache_message)
 
     @addOneEvent: (message) =>
       $('#messages').append Mustache.to_html($('#event_template').html(), message)
+
+    @replaceLinks: (content) ->
+      console.log content
+      images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png)/ig
+      console.log content
+      console.log images
+      if images
+        ChatHandler.replaceImages(images, content)
+      else
+        linkify(content)
+      
+    @replaceImages: (images, content) ->
+      for image in images
+        content = content.replace image, ""
+      content = linkify(content)
+      for image in images
+        content = content + "<a href='#{image}' target='_blank'><img src='#{image}' height=200</img></a>"
+      content
+
 <% end %>
