@@ -1,6 +1,8 @@
 require "bundler/capistrano"
+require 'capistrano/ext/multistage'
 
-server "50.116.34.44", :web, :app, :db, primary: true
+set :stages, %w(production development)
+set :default_stage, "development"
 
 set :application, "thin_core"
 set :user, "deployer"
@@ -16,7 +18,7 @@ set :branch, "master"
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-after "deploy", "deploy:migrate", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
+after "deploy", "deploy:create_database", "deploy:migrate", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -26,20 +28,41 @@ namespace :deploy do
     end
   end
 
-  desc "Push secret.rb"
-  task :secret, roles: :app do
-    transfer(:up, "config/initializers/secret.rb", "#{release_path}/config/initializers/secret.rb", :scp => true)
+  desc "Deploy to Vagrant (assumes you've run 'rake vagrant:setup')"
+  task :vagrant, roles: :app do
+    puts "Deploying to Vagrant..."
   end
-  before "deploy:assets:precompile", "deploy:secret"
+  after "deploy:vagrant", "deploy:setup", "deploy", "deploy:nginx:restart"
 
-  desc "Copy database.example.yml to shared/database.yml"
+  desc "Push secret files"
+  task :secret, roles: :app do
+    run "mkdir #{release_path}/config/secret"
+    transfer(:up, "config/secret/redis_password.rb", "#{release_path}/config/secret/redis_password.rb", :scp => true)
+    transfer(:up, "config/secret/redis.conf", "/home/deployer/redis.conf", :scp => true)
+    transfer(:up, "config/secret/database.production.yml", "#{shared_path}/config/database.yml", :scp => true)
+    sudo "mv /home/deployer/redis.conf /etc/redis/redis.conf"
+    require "./config/secret/redis_password.rb"
+    sudo "/usr/bin/redis-cli config set requirepass #{REDIS_PASSWORD}"
+  end
+  before "deploy:symlink_config", "deploy:secret"
+
+  desc "Create the production database"
+  task :create_database, roles: :app do
+    run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:create"
+  end
+
+  desc "Setup database and unicorn configuration"
   task :setup_config, roles: :app do
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
     put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
     puts "Now edit the config files in #{shared_path}."
   end
-  after "deploy:setup", "deploy:setup_config"
+  after "deploy:setup", "deploy:create_release_dir", "deploy:setup_config"
+
+  task :create_release_dir, :except => {:no_release => true} do
+    run "mkdir -p #{fetch :releases_path}"
+  end
 
   desc "Symlink shared/database.yml to config/database.yml"
   task :symlink_config, roles: :app do
@@ -65,8 +88,7 @@ namespace :deploy do
 
     desc "Copy nginx.conf to thinchat/config and symlink to /etc/nginx/sites-enabled/default "
     task :config, roles: :app do
-      sudo "cp #{current_path}/config/nginx.conf /home/#{user}/apps/thinchat/config/"
-      sudo "ln -nfs /home/#{user}/apps/thinchat/config/nginx.conf /etc/nginx/sites-enabled/default"
+      sudo "ln -nfs #{release_path}/config/nginx.conf /etc/nginx/sites-enabled/default"
     end
   end
 end
