@@ -102,7 +102,7 @@ task :provision do
     sudo "./setup.sh"
     sudo "mkdir /home/deployer/.ssh"
     sudo "chmod 700 /home/deployer/.ssh"
-    transfer(:up, "~/.ssh/id_rsa.pub", "/home/deployer/.ssh/authorized_keys", :scp => true)
+    transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
     sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
   else
     puts "Phew. That was a close one eh?"

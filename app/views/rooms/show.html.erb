@@ -42,4 +42,10 @@
     heartbeat = Heartbeat.pulse(faye_chat.client, user_hash)
     $("#new_message").live("ajax:complete", (event,xhr,status) ->
       $('#new_message')[0].reset())
+
+  jQuery ->
+    messages = $('#messages').size()
+    console.log(messages)
+
+
 <% end %>
