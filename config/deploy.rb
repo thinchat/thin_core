@@ -34,6 +34,12 @@ namespace :deploy do
   end
   after "deploy:vagrant", "deploy:setup", "deploy", "deploy:nginx:restart"
 
+  desc "Deploy to a server for the first time (assumes you've run 'cap stage-name provision')"
+  task :fresh, roles: :app do
+    puts "Deploying to fresh server..."
+  end
+  after "deploy:fresh", "deploy:setup", "deploy", "deploy:nginx:restart"
+
   desc "Push secret files"
   task :secret, roles: :app do
     run "mkdir #{release_path}/config/secret"
@@ -47,11 +53,21 @@ namespace :deploy do
   end
   before "deploy:symlink_config", "deploy:secret"
 
+  desc "Push ssh keys to authorized_keys"
+  task :keys, roles: :app do
+    run "mkdir /home/deployer/.ssh"
+    sudo "chmod 700 /home/deployer/.ssh"
+    transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
+    sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
+    sudo "chown -R deployer:admin /home/deployer"
+  end
+
   desc "Create the production database"
   task :create_database, roles: :app do
     run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:create"
   end
   after "deploy:symlink_config", "deploy:create_database"
+  after "deploy:create_database", "deploy:migrate"
 
   desc "Setup unicorn configuration"
   task :setup_config, roles: :app do
@@ -100,11 +116,8 @@ task :provision do
     transfer(:up, "config/vagrant/setup.sh", "setup.sh", :scp => true)
     sudo "chmod +x setup.sh"
     sudo "./setup.sh"
-    sudo "mkdir /home/deployer/.ssh"
-    sudo "chmod 700 /home/deployer/.ssh"
-    transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
-    sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
   else
     puts "Phew. That was a close one eh?"
   end
 end
+after "provision", "deploy:keys"
