@@ -1,7 +1,7 @@
 require "bundler/capistrano"
 require 'capistrano/ext/multistage'
 
-set :stages, %w(production development)
+set :stages, %w(production development staging)
 set :default_stage, "development"
 
 set :application, "thin_core"
@@ -18,7 +18,7 @@ set :branch, "master"
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-after "deploy", "deploy:create_database", "deploy:migrate", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
+after "deploy", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -37,6 +37,7 @@ namespace :deploy do
   desc "Push secret files"
   task :secret, roles: :app do
     run "mkdir #{release_path}/config/secret"
+    run "mkdir -p #{shared_path}/config"
     transfer(:up, "config/secret/redis_password.rb", "#{release_path}/config/secret/redis_password.rb", :scp => true)
     transfer(:up, "config/secret/redis.conf", "/home/deployer/redis.conf", :scp => true)
     transfer(:up, "config/secret/database.production.yml", "#{shared_path}/config/database.yml", :scp => true)
@@ -50,13 +51,11 @@ namespace :deploy do
   task :create_database, roles: :app do
     run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:create"
   end
+  after "deploy:symlink_config", "deploy:create_database"
 
-  desc "Setup database and unicorn configuration"
+  desc "Setup unicorn configuration"
   task :setup_config, roles: :app do
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
-    run "mkdir -p #{shared_path}/config"
-    put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
-    puts "Now edit the config files in #{shared_path}."
   end
   after "deploy:setup", "deploy:create_release_dir", "deploy:setup_config"
 
@@ -90,5 +89,22 @@ namespace :deploy do
     task :config, roles: :app do
       sudo "ln -nfs #{release_path}/config/nginx.conf /etc/nginx/sites-enabled/default"
     end
+  end
+end
+
+desc "Provision server"
+task :provision do
+  response = Capistrano::CLI.ui.ask "Are you sure you want to provision this server? [y/n]"
+  if response == 'y' || response == 'yes'
+    set :user, "root"
+    transfer(:up, "config/vagrant/setup.sh", "setup.sh", :scp => true)
+    sudo "chmod +x setup.sh"
+    sudo "./setup.sh"
+    sudo "mkdir /home/deployer/.ssh"
+    sudo "chmod 700 /home/deployer/.ssh"
+    transfer(:up, "~/.ssh/id_rsa.pub", "/home/deployer/.ssh/authorized_keys", :scp => true)
+    sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
+  else
+    puts "Phew. That was a close one eh?"
   end
 end

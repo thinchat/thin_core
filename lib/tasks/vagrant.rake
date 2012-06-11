@@ -6,6 +6,8 @@ namespace :vagrant do
     puts `vagrant box add development http://files.vagrantup.com/lucid32.box`
     puts `cp config/vagrant/vagrantfile.pre_chef Vagrantfile`
     puts `vagrant up`
+    env.primary_vm.channel.sudo("cp -R /home/vagrant/.ssh /home/deployer/.ssh")
+    env.primary_vm.channel.sudo("chown -R deployer:admin /home/deployer")
     puts `vagrant halt`
     puts `cp config/vagrant/vagrantfile.post_chef Vagrantfile`
     puts `vagrant up`
