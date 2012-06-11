@@ -1,33 +1,28 @@
-<h1>Room list</h1>
+<h1>Lobby</h1>
 <%= link_to "Create a room", rooms_path, :method => :post %>
-<div id="rooms"></div>
 
-<script type="text/javascript">
-  faye_url = '<%= FAYE_URL %>'
-  user = '<%= current_user.user_json.html_safe %>'
+<div id="rooms"></div>
+<div id="users"></div>
+
+<script type="text/html" id="user_template">
+  <div class="{{client_id}}">{{user_name}} in Room {{room_id}}</div>
 </script>
 
 <script type="text/html" id="room_template">
-  <div class="{{id}}">Room {{id}}</div>
+  <div class="{{id}}"><a href={{location}}>Room {{id}}</a></div>
 </script>
 
 <% content_for :faye do %>
   <%= render "shared/faye_handler" %>
-  <%= render "shared/heartbeat" %>
   <%= render "room_handler" %>
+  <%= render "rooms/user_handler" %>
 <% end %>
 
 <%= coffee_script_tag do %>
-  window.faye_url = '<%= FAYE_URL %>'
-  window.user     = '<%= current_user.user_json.html_safe %>'
-  window.room_id  = 'Lobby'
-
   jQuery ->
+    location = 'Lobby'
     roomHandler = RoomHandler.getRooms()
     userHandler = UserHandler.getUsers()
-    user_hash = $.namespace.getUser(room_id)
-    faye_users = new FayeHandler(faye_url)
-    faye_users.subscribeUsers('/online_users')
-    faye_users.addSubscribeExtension(user_hash)
-    heartbeat = Heartbeat.pulse(faye_users.client, user_hash)
+    user_hash = $.namespace.getUser(location)
+    faye_users = new FayeHandler(user_hash, '/online_users', UserHandler.handleUser)
 <% end %>

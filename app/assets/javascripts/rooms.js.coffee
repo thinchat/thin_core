@@ -3,8 +3,8 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $.namespace = {
-  getUser: (room_id) =>
-    user_hash = JSON.parse(user)
-    user_hash.room_id = room_id if room_id?
+  getUser: (location) =>
+    user_hash = $('#user').data('user')
+    user_hash.room_id = location if location?
     user_hash
 }

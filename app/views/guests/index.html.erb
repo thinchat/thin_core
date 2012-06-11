@@ -6,20 +6,14 @@
 
 <% content_for :faye do %>
   <%= render "shared/faye_handler", :locals => { :room => @room } %>
-  <%= render "shared/heartbeat" %>
   <%= render "rooms/user_handler" %>
 <% end %>
 
 <%= coffee_script_tag do %>
-  window.faye_url = '<%= FAYE_URL %>'
-  window.user     = '<%= current_user.user_json.html_safe %>'
-  window.room_id  = 'Lobby'
-
   jQuery ->
+    location = 'Lobby'
+    roomHandler = RoomHandler.getRooms()
     userHandler = UserHandler.getUsers()
-    user_hash = $.namespace.getUser(room_id)
-    faye_users = new FayeHandler(faye_url)
-    faye_users.subscribeUsers('/online_users')
-    faye_users.addSubscribeExtension(user_hash)
-    heartbeat = Heartbeat.pulse(faye_users.client, user_hash)
+    user_hash = $.namespace.getUser(location)
+    faye_users = new FayeHandler(user_hash, '/online_users', UserHandler.handleUser)
 <% end %>

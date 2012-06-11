@@ -13,7 +13,7 @@
       else
         ChatHandler.addEvent(data.chat_message)
 
-    @addOneMessage: (message) =>
+    @addMessage: (message) =>
       mustache_message = Mustache.to_html($('#message_template').html(), message)
       $('#messages').append ChatHandler.replaceLinks(mustache_message)
 
@@ -21,10 +21,7 @@
       $('#messages').append Mustache.to_html($('#event_template').html(), message)
 
     @replaceLinks: (content) ->
-      console.log content
       images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png)/ig
-      console.log content
-      console.log images
       if images
         ChatHandler.replaceImages(images, content)
       else
