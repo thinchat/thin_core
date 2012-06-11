@@ -11,7 +11,7 @@ dpkg-reconfigure --frontend noninteractive tzdata
 wget -N http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
 tar -xvf ruby-1.9.3-p194.tar.gz
 cd ruby-1.9.3-p194
-./configure
+./configure --prefix=/usr/local
 make
 make install
 gem install bundler
