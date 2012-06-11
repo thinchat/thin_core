@@ -34,6 +34,12 @@ namespace :deploy do
   end
   after "deploy:vagrant", "deploy:setup", "deploy", "deploy:nginx:restart"
 
+  desc "Deploy to a server for the first time (assumes you've run 'cap stage-name provision')"
+  task :fresh, roles: :app do
+    puts "Deploying to fresh server..."
+  end
+  after "deploy:fresh", "deploy:setup", "deploy", "deploy:nginx:restart"
+
   desc "Push secret files"
   task :secret, roles: :app do
     run "mkdir #{release_path}/config/secret"
@@ -109,3 +115,4 @@ task :provision do
     puts "Phew. That was a close one eh?"
   end
 end
+after "provision", "deploy:fresh"
