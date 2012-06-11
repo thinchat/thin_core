@@ -67,6 +67,7 @@ namespace :deploy do
     run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:create"
   end
   after "deploy:symlink_config", "deploy:create_database"
+  after "deploy:create_database", "deploy:migrate"
 
   desc "Setup unicorn configuration"
   task :setup_config, roles: :app do
