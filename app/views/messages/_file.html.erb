@@ -1,0 +1,8 @@
+<h2>Files</h2>
+<%= form_tag "file_upload", :class => "file_form", :multipart => true, :remote => true do %>
+<%= file_field_tag :file, :class=> "file" %>
+<a class="file_upload">Upload a file!</a>
+<ul class="files">
+</ul>
+
+<% end %>

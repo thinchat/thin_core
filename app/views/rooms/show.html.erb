@@ -6,6 +6,7 @@
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
+  <%= render "messages/file" %>
   <br />
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
@@ -47,5 +48,32 @@
     messages = $('#messages').size()
     console.log(messages)
 
+  jQuery ->
+    uploadHandler()
+    $(':file').change ->
+      file = this.files[0]
+      name = file.name
+      size = file.size
+      type = file.type
+
+  uploadHandler = ->
+    $('.file_upload').click ->
+      form = $('.file_form')
+      data = new FormData form
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3001/api/documents',
+        data: data,
+        cache: false,
+        contentType: false,
+        crossDomain: true,
+        processData: false,
+        success: (response) ->
+          insertLink(response.name, response.url)
+        })
+
+  insertLink = (name, url) ->
+    $('.files').append("<a href='#{url}'>#{name}</a>")
+      
 
 <% end %>
