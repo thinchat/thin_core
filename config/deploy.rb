@@ -53,6 +53,15 @@ namespace :deploy do
   end
   before "deploy:symlink_config", "deploy:secret"
 
+  desc "Push ssh keys to authorized_keys"
+  task :keys, roles: :app do
+    run "mkdir /home/deployer/.ssh"
+    sudo "chmod 700 /home/deployer/.ssh"
+    transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
+    sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
+    sudo "chown -R deployer:admin /home/deployer"
+  end
+
   desc "Create the production database"
   task :create_database, roles: :app do
     run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:create"
@@ -106,12 +115,8 @@ task :provision do
     transfer(:up, "config/vagrant/setup.sh", "setup.sh", :scp => true)
     sudo "chmod +x setup.sh"
     sudo "./setup.sh"
-    sudo "mkdir /home/deployer/.ssh"
-    sudo "chmod 700 /home/deployer/.ssh"
-    transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
-    sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
-    sudo "chown -R deployer:admin /home/deployer"
   else
     puts "Phew. That was a close one eh?"
   end
 end
+after "provision", "deploy:keys"
