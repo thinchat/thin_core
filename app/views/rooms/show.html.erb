@@ -1,10 +1,8 @@
-<% content_for :faye do %>
-  <%= render "shared/faye", :locals => { :room => @room } %>
-<% end %>
-
 <div id="room">
   <h1><%= @room.name %></h1>
-  <div id="messages" style="overflow: scroll; max-height: 400px"></div>
+  
+  <%= content_tag "div", id: "messages", data: {room_id: @room.id } do %>
+  <% end %>
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
@@ -23,3 +21,25 @@
     {{message_body}}
   </div>
 </script>
+
+<% content_for :faye do %>
+  <%= render "shared/faye_handler", :locals => { :room => @room } %>
+  <%= render "shared/heartbeat" %>
+  <%= render "chat_handler" %>
+<% end %>
+
+<%= coffee_script_tag do %>
+  window.faye_url = '<%= FAYE_URL %>'
+  window.user     = '<%= current_user.user_json.html_safe %>'
+
+  jQuery ->
+    room_id = $('#messages').data('room-id')
+    chatHandler = ChatHandler.getMessages(room_id)
+    user_hash = $.namespace.getUser(room_id)
+    faye_chat = new FayeHandler(faye_url)
+    faye_chat.subscribe('/messages/'+ room_id)
+    faye_chat.addSubscribeExtension(user_hash)
+    heartbeat = Heartbeat.pulse(faye_chat.client, user_hash)
+    $("#new_message").live("ajax:complete", (event,xhr,status) ->
+      $('#new_message')[0].reset())
+<% end %>

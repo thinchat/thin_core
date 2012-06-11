@@ -1,46 +1,25 @@
-<div id="users">
-  <% @users.each do |user| %>
-  <div class="user <%= user.client_id %>"><%= user.user_name %> in Room <%= user.room_id %></div>
-  <% end %>
-</div>
+<div id="users"></div>
 
-<script type="text/javascript">
-  var faye_url = '<%= FAYE_URL %>';
-  var user     = '<%= current_user.user_json.html_safe %>';
-
-  function getUser() {
-    var user_hash = JSON.parse(user)
-    return user_hash
-  };
-
-  $(function() {    
-
-    $.faye.addExtension({
-      outgoing: function(message, callback) {
-        if (message.channel === '/meta/subscribe') {
-          message.data = message.data || getUser()
-          console.log(message);
-        }
-        callback(message);
-      }
-    });
-
-    $.faye.subscribe('/online_users', function (data) {
-      console.log(data);
-      messages = $("#users").find(".user");
-
-      if (data.chat_message.message_type == "Subscribe") {
-        $("#users").append('<div class="user ' + data.chat_message.client_id + '">' + data.chat_message.user_name + " in room " + data.chat_message.room_id + '</div>');
-      }
-      else if (data.chat_message.message_type == "Disconnect") {
-        $("#users").find("." + data.chat_message.client_id).remove();
-      }
-
-    });
-
-    $("#new_message").live("ajax:complete", function(event,xhr,status){
-      $('#new_message')[0].reset();
-    });
-    
-  });
+<script type="text/html" id="user_template">
+  <div class="{{client_id}}">{{user_name}} in Room {{room_id}}</div>
 </script>
+
+<% content_for :faye do %>
+  <%= render "shared/faye_handler", :locals => { :room => @room } %>
+  <%= render "shared/heartbeat" %>
+  <%= render "user_handler" %>
+<% end %>
+
+<%= coffee_script_tag do %>
+  window.faye_url = '<%= FAYE_URL %>'
+  window.user     = '<%= current_user.user_json.html_safe %>'
+  window.room_id  = 'Lobby'
+
+  jQuery ->
+    userHandler = UserHandler.getUsers()
+    user_hash = $.namespace.getUser(room_id)
+    faye_users = new FayeHandler(faye_url)
+    faye_users.subscribeUsers('/online_users')
+    faye_users.addSubscribeExtension(user_hash)
+    heartbeat = Heartbeat.pulse(faye_users.client, user_hash)
+<% end %>

@@ -1,0 +1,23 @@
+<%= coffee_script_tag do %>
+  class @FayeHandler
+    constructor: (faye_url) ->
+      @client = new Faye.Client(faye_url + '/faye')
+
+    subscribe: (channel) =>
+      @client.subscribe(channel, (data) ->
+        console.log(data)
+        ChatHandler.addMessage(data)
+      )
+
+    subscribeUsers: (channel) =>
+      @client.subscribe(channel, (data) ->
+        UserHandler.handleMessage(data)
+      )
+
+    addSubscribeExtension: (user_hash) =>
+      @client.addExtension outgoing: (message, callback) ->
+        if message.channel is "/meta/subscribe"
+          message.data = message.data or user_hash
+          console.log message
+        callback message
+<% end %>
