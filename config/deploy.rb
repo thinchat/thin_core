@@ -24,7 +24,7 @@ namespace :deploy do
   %w[start stop restart].each do |command|
     desc "#{command} unicorn server"
     task command, roles: :app, except: {no_release: true} do
-      run "/etc/init.d/unicorn_#{application} #{command} -E #{rails_env}"
+      run "/etc/init.d/unicorn_#{application} #{command}"
     end
   end
 
@@ -84,7 +84,7 @@ namespace :deploy do
 
   desc "Setup unicorn configuration"
   task :setup_config, roles: :app do
-    sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
+    sudo "ln -nfs #{current_path}/config/unicorn/unicorn_#{rails_env}_init.sh /etc/init.d/unicorn_#{application}"
   end
   after "deploy:setup", "deploy:create_release_dir", "deploy:setup_config"
 
