@@ -77,7 +77,7 @@ namespace :deploy do
 
   desc "Create the production database"
   task :create_database, roles: :app do
-    run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:create"
+    run "cd #{release_path} && bundle exec rake RAILS_ENV=#{rails_env} db:create"
   end
   after "deploy:symlink_config", "deploy:create_database"
   after "deploy:create_database", "deploy:migrate"
