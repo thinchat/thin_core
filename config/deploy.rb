@@ -24,7 +24,7 @@ namespace :deploy do
   %w[start stop restart].each do |command|
     desc "#{command} unicorn server"
     task command, roles: :app, except: {no_release: true} do
-      run "/etc/init.d/unicorn_#{application} #{command}"
+      sudo "service god-service #{command} #{application}"
     end
   end
 
@@ -68,6 +68,15 @@ namespace :deploy do
   end
   after "provision", "deploy:god_dir"
 
+  desc "Set hostname for server"
+  task :hostname, roles: :app do
+    sudo "echo 'thinchat-#{rails_env}' > /home/deployer/hostname"
+    sudo "mv /home/deployer/hostname /etc/hostname"
+    sudo "hostname -F /etc/hostname"
+    sudo "awk -v \"n=2\" -v \"s=127.0.0.1       thinchat-#{rails_env}\" '(NR==n) { print s } 1' /etc/hosts > /home/deployer/new_hosts"
+    sudo "mv /home/deployer/new_hosts /etc/hosts"
+  end
+
   desc "Push god configuration"
   task :god, roles: :app do
     sudo "chown -R deployer:admin /var/log/god"
@@ -105,6 +114,12 @@ namespace :deploy do
   end
   after "deploy:finalize_update", "deploy:symlink_config"
 
+  desc "Install environment-specific god configuration"
+  task :god_config, roles: :app do
+    run "cp #{release_path}/config/god/thin_core.#{rails_env}.god #{release_path}/config/thin_core.god"
+  end
+  after "deploy:secret", "deploy:god_config"
+
   desc "Make sure local git is in sync with remote."
   task :check_revision, roles: :web do
     unless `git rev-parse HEAD` == `git rev-parse origin/master`
@@ -140,4 +155,4 @@ task :provision do
     puts "Phew. That was a close one eh?"
   end
 end
-after "provision", "deploy:keys"
+after "provision", "deploy:keys", "deploy:hostname"
