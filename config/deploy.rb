@@ -55,13 +55,11 @@ namespace :deploy do
 
   desc "Push ssh keys to authorized_keys"
   task :keys, roles: :app do
-    run "mkdir /home/deployer/.ssh"
-    sudo "chmod 700 /home/deployer/.ssh"
     transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
+    sudo "chmod 700 /home/deployer/.ssh"
     sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
     sudo "chown -R deployer:admin /home/deployer"
   end
-
 
   desc "Create god directories"
   task :god_dir, roles: :app do
@@ -69,6 +67,15 @@ namespace :deploy do
     sudo "mkdir /var/log/god"
   end
   after "provision", "deploy:god_dir"
+
+  desc "Set hostname for server"
+  task :hostname, roles: :app do
+    sudo "echo 'thinchat-#{rails_env}' > /home/deployer/hostname"
+    sudo "mv /home/deployer/hostname /etc/hostname"
+    sudo "hostname -F /etc/hostname"
+    sudo "awk -v \"n=2\" -v \"s=127.0.0.1       thinchat-#{rails_env}\" '(NR==n) { print s } 1' /etc/hosts > /home/deployer/new_hosts"
+    sudo "mv /home/deployer/new_hosts /etc/hosts"
+  end
 
   desc "Push god configuration"
   task :god, roles: :app do
@@ -84,7 +91,7 @@ namespace :deploy do
     sudo "service god-service start"
   end
 
-  desc "Create the production database"
+  desc "Create the database"
   task :create_database, roles: :app do
     run "cd #{release_path} && bundle exec rake RAILS_ENV=#{rails_env} db:create"
   end
@@ -142,4 +149,4 @@ task :provision do
     puts "Phew. That was a close one eh?"
   end
 end
-after "provision", "deploy:keys"
+after "provision", "deploy:keys", "deploy:hostname"
