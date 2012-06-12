@@ -1,23 +1,38 @@
 <div id="room">
-  <h1><%= @room.name %></h1>
+  <div class="row">
+    <div class="room_meta span3">
+      <h1 class="well"><%= @room.name %></h1>
+    </div>
   
-  <%= content_tag "div", id: "messages", data: {location: @room.id } do %>
-  <% end %>
+    <%= content_tag "div", id: "messages", class: "span9 offset3", data: {location: @room.id } do %>
+    <% end %>
+  </div><!--end row -->
 
-  <%= render "form", :locals => { :room => @room } %>
-  <br />
-  <br />
-  <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
+  <div class="row" id="chat_input">
+    <div class="span9 offset3">
+    <%= render "form", :locals => { :room => @room } %>
+    <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
+  </div>
+  </div>
+
+
+
 </div>
 
 <script type="text/html" id="message_template">
   <div class="message">
-    {{user_name}}: {{message_body}}
+    <div id="author" class="{{user_type}}">
+      {{user_name}}:
+    </div>
+
+    <div id="chat">
+      {{message_body}}
+     </div>
   </div>
 </script>
 
 <script type="text/html" id="event_template">
-  <div class="message">
+  <div class="message" >
     {{message_body}}
   </div>
 </script>

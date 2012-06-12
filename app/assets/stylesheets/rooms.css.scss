@@ -2,6 +2,44 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.room_meta {
+  position: fixed;
+  margin-top: 10px;
+}
+
+#messages {
+  margin-bottom: 150px;
+}
+
+.message {
+  font-size: 1.2em;
+  margin: 5px 0px 10px 0px;
+  padding: 10px 25px 10px 25px;
+  line-height: 24px;
+  background: #fff;
+
+}
+.message #author {
+  font-weight: 600;
+}
+
+#chat_input {
+  position: fixed;
+  padding-top: 40px;
+  bottom: 0px;
+  background: #f7f7f7;
+}
+
+#chat_input textarea {
+  width: 80%;
+  height: 50px;
+}
+
+
+
+
+
+
 /*div#room {
   width: 960px;
   margin: 50px auto 0;
