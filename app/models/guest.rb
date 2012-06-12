@@ -20,8 +20,4 @@ class Guest < ActiveRecord::Base
   def user_hash
     { user_id: id.to_s, user_type: 'Guest', user_name: name }
   end
-
-  def user_json
-    user_hash.to_json
-  end
 end

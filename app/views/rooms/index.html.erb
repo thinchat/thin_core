@@ -1,16 +1,28 @@
-<h1>Room list</h1>
+<h1>Lobby</h1>
 <%= link_to "Create a room", rooms_path, :method => :post %>
-<ul>
-<% @rooms.each do |room| %>
-  <li><%= link_to room.name, room_path(room) %></li>
-<% end %>
-</ul>
 
-<% unless @user.class == 'Guest' %>
-  <%= "#{@user.inspect}" %>
-<% end %>
+<div id="rooms"></div>
+<div id="users"></div>
 
-<script type="text/javascript">
-  faye_url = '<%= FAYE_URL %>'
-  user = '<%= current_user.user_json.html_safe %>'
+<script type="text/html" id="user_template">
+  <div class="{{client_id}}">{{user_name}} in Room {{room_id}}</div>
 </script>
+
+<script type="text/html" id="room_template">
+  <div class="{{id}}"><a href={{location}}>Room {{id}}</a></div>
+</script>
+
+<% content_for :faye do %>
+  <%= render "shared/faye_handler" %>
+  <%= render "room_handler" %>
+  <%= render "rooms/user_handler" %>
+<% end %>
+
+<%= coffee_script_tag do %>
+  jQuery ->
+    location = 'Lobby'
+    roomHandler = RoomHandler.getRooms()
+    userHandler = UserHandler.getUsers()
+    user_hash = $.namespace.getUser(location)
+    faye_users = new FayeHandler(user_hash, '/online_users', UserHandler.handleUser)
+<% end %>

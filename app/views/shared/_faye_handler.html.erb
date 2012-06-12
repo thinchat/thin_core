@@ -1,23 +1,27 @@
 <%= coffee_script_tag do %>
   class @FayeHandler
-    constructor: (faye_url) ->
+    constructor: (user_hash, channel, callback) ->
+      faye_url = '<%= FAYE_URL %>'
       @client = new Faye.Client(faye_url + '/faye')
+      @user_hash = user_hash
+      @subscribe(channel, callback)
+      @addSubscribeExtension()
+      @addPulse()
 
-    subscribe: (channel) =>
+    subscribe: (channel, callback) =>
       @client.subscribe(channel, (data) ->
         console.log(data)
-        ChatHandler.addMessage(data)
+        callback(data)
       )
 
-    subscribeUsers: (channel) =>
-      @client.subscribe(channel, (data) ->
-        UserHandler.handleMessage(data)
-      )
-
-    addSubscribeExtension: (user_hash) =>
-      @client.addExtension outgoing: (message, callback) ->
+    addSubscribeExtension: =>
+      @client.addExtension outgoing: (message, callback) =>
         if message.channel is "/meta/subscribe"
-          message.data = message.data or user_hash
+          message.data = message.data or @user_hash
           console.log message
         callback message
+
+    addPulse: =>
+      @client.publish('/heart_beat', @user_hash)
+      setTimeout((=> @addPulse()), 10000)
 <% end %>
