@@ -2,6 +2,10 @@ class Agent
   # attr_accessible :name, :thin_auth_id
   attr_accessor :name, :thin_auth_id
 
+  def id
+    thin_auth_id
+  end
+
   def initialize(thin_auth_id, name)
     @thin_auth_id = thin_auth_id.to_i
     @name = name

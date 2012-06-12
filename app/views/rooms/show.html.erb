@@ -6,6 +6,7 @@
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
+  <%= render "messages/file" %>
   <br />
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
@@ -56,6 +57,8 @@
 <%= coffee_script_tag do %>
   jQuery ->
     user_hash = $.namespace.getUser(location)
+    location = $('#messages').data('location')
+    ChatHandler.getMessages(location)
 
     if user_hash.user_type == 'Guest'
       $('#myModal').modal('show')
@@ -67,4 +70,29 @@
         user_hash.user_name = $(".entry_modal").find('#guest_name').val()
         $('#user').data('user', user_hash)
         $.namespace.fayeLoader()
+
+    uploadHandler()
+    $(':file').change ->
+      file = this.files[0]
+      name = file.name
+      size = file.size
+      type = file.type
+
+  uploadHandler = ->
+    $('.file_upload').click ->
+      form = $('.file_form')[0]
+      data = new FormData form
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3001/api/documents',
+        data: data,
+        cache: false,
+        contentType: false,
+        crossDomain: true,
+        processData: false,
+        success: (response) ->
+          console.log response
+          $('.file').attr({ value: '' })
+        })
+
 <% end %>

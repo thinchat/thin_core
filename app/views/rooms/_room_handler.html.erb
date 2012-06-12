@@ -1,7 +1,11 @@
+<script type="text/javascript">
+  window.api_v1_rooms_url = "<%= api_v1_rooms_url %>"
+</script>
+
 <%= coffee_script_tag do %>
   class @RoomHandler
     @getRooms: ->
-      $.getJSON("http://localhost:3000/api/v1/rooms", RoomHandler.renderRooms)
+      $.getJSON(api_v1_rooms_url, RoomHandler.renderRooms)
 
     @renderRooms: (rooms) =>
       for room in rooms

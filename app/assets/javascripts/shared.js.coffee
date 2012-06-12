@@ -10,7 +10,6 @@ $.namespace = {
 
   fayeLoader: =>
     location = $('#messages').data('location')
-    ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
     
     faye_chat = new FayeHandler(user_hash, '/messages/'+ location, ChatHandler.handleMessage)
