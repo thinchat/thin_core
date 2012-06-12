@@ -4,15 +4,19 @@
       faye_url = '<%= FAYE_URL %>'
       @client = new Faye.Client(faye_url + '/faye')
       @user_hash = user_hash
-      @subscribe(channel, callback)
+      @channel = channel
+      @subscribe(callback)
       @addSubscribeExtension()
       @addPulse()
 
-    subscribe: (channel, callback) =>
-      @client.subscribe(channel, (data) ->
+    subscribe: (callback) =>
+      @client.subscribe(@channel, (data) =>
         console.log(data)
         callback(data)
       )
+
+    publish: (data) =>
+      @client.publish(@channel, data)
 
     addSubscribeExtension: =>
       @client.addExtension outgoing: (message, callback) =>
