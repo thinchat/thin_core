@@ -5,6 +5,6 @@
 $.namespace = {
   getUser: (location) =>
     user_hash = $('#user').data('user')
-    user_hash.room_id = location if location?
+    user_hash.location = location if location?
     user_hash
 }
