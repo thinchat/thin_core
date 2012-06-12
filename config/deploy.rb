@@ -87,9 +87,8 @@ namespace :deploy do
     sudo "chmod +x /etc/god/god-initd.sh"
     sudo "cp /etc/god/god-initd.sh /etc/init.d/god-service"
     sudo "update-rc.d god-service defaults"
-    sudo "service god-service stop"
-    sudo "service god-service start"
   end
+  after "deploy:god_config", "deploy:god"
 
   desc "Create the database"
   task :create_database, roles: :app do
