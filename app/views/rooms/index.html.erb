@@ -1,15 +1,17 @@
-<h1>Lobby</h1>
+<%= content_tag "div", class: "info", data: {location: @location } do %>
+  <h1>Lobby</h1>
+<% end %>
 <%= link_to "Create a room", rooms_path, :method => :post %>
 
 <div id="rooms"></div>
 <div id="users"></div>
 
 <script type="text/html" id="user_template">
-  <div class="{{client_id}}">{{user_name}} in Room {{room_id}}</div>
+  <p class="{{client_id}}">{{user_name}}</p>
 </script>
 
 <script type="text/html" id="room_template">
-  <div class="{{id}}"><a href={{location}}>Room {{id}}</a></div>
+  <div id="room-{{id}}"><a href={{location}}>{{name}}</a></div>
 </script>
 
 <% content_for :faye do %>
@@ -20,7 +22,7 @@
 
 <%= coffee_script_tag do %>
   jQuery ->
-    location = 'Lobby'
+    location = $(".info").data("location")
     roomHandler = RoomHandler.getRooms()
     userHandler = UserHandler.getUsers()
     user_hash = $.namespace.getUser(location)

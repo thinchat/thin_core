@@ -19,41 +19,44 @@ describe Message do
     end
   end
 
-  describe "#agent?" do
-    let(:message) { Message.new(thin_auth_id: 1) }
-
-    context "if a message is published by an agent" do
-      it "returns true" do
-        message.agent?.should == true
-      end
-    end
-
-    context "if a message is published by a guest" do
-      it "returns false" do
-        message.thin_auth_id = nil
-        message.agent?.should == false
+  describe "#to_hash" do
+    let(:message) { Message.new(room_id: 1) }
+    it "should return a hash" do
+      hash = message.to_hash
+      hash.should be_a_kind_of(Hash)
+      [:room_id, :user_name, :user_id, :user_type, :message_id, 
+       :message_type, :message_body, :metadata, :created_at].each do |key|
+        hash.has_key?(key).should be_true
       end
     end
   end
 
-  describe "#agent" do
-    let(:message) { Message.new(thin_auth_id: 1) }
-
-    context "if a message is published by an agent" do
-      it "returns the agent" do
-        raise message.inspect
-
-        agent = double
-        Agent.should_receive(:where).with({thin_auth_id: message.thin_auth_id.to_s}).and_return([agent])
-        message.agent.should == agent
-      end
+  describe "#channel" do
+    let(:message) { Message.new(room_id: 1) }
+    it "returns the channel it is associated" do
+      message.channel == "/messages/1"
     end
+  end
 
-    context "if a message is published by a guest" do
-      it "returns nil" do
-        # message.thin_auth_id = nil
-        message.agent.should == nil
-      end
+  describe "#broadcast" do
+    let(:message) { Message.new() }
+
+    it "should publish to faye and redis" do
+      message.should_receive(:publish_to_faye)
+      message.should_receive(:publish_to_redis)
+      message.broadcast
+    end
+  end
+
+  describe "#faye_message_json" do
+    let(:message) { Message.new() }
+
+    it "should return a JSON string" do
+      message.should_receive(:to_hash).and_return({})
+      message.should_receive(:channel).and_return("")
+      faye_message = JSON.parse(message.faye_message_json)
+      faye_message["channel"].should == ""
+      faye_message["data"]["chat_message"].should == {}
     end
   end
 end

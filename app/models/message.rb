@@ -23,11 +23,22 @@ class Message < ActiveRecord::Base
     "/messages/#{room_id}"
   end
 
+  def faye_message_json
+    { :channel => channel,
+      :data    => { :chat_message => to_hash } }.to_json
+  end
+
   def broadcast
-    message_hash = {:channel => channel, 
-                    :data => { :chat_message => self.to_hash } }
+    publish_to_faye
+    publish_to_redis
+  end
+
+  def publish_to_faye
     uri = URI.parse("#{FAYE_URL}/faye")
-    Net::HTTP.post_form(uri, :message => message_hash.to_json)
-    REDIS.publish 'thinchat', message_hash.to_json
+    Net::HTTP.post_form(uri, :message => faye_message_json)
+  end
+
+  def publish_to_redis(message_hash)
+    REDIS.publish 'thinchat', faye_message_json
   end
 end
