@@ -7,6 +7,10 @@
 #              framework written in Ruby.
 #
 
+# Add /usr/local/bin to path so god can find bundler on boot
+PATH=$PATH:/usr/local/bin
+export PATH
+
 CONF_DIR=/etc/god
 GOD_BIN=/usr/local/bin/god
 RUBY_BIN=/usr/local/bin/ruby

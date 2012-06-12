@@ -6,6 +6,7 @@
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
+  <%= render "messages/file" %>
   <br />
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
@@ -42,4 +43,29 @@
 
     $("#new_message").live("ajax:complete", (event,xhr,status) ->
       $('#new_message')[0].reset())
+
+    uploadHandler(faye_chat)
+    $(':file').change ->
+      file = this.files[0]
+      name = file.name
+      size = file.size
+      type = file.type
+
+  uploadHandler = (faye_client) ->
+    $('.file_upload').click ->
+      form = $('.file_form')[0]
+      data = new FormData form
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3001/api/documents',
+        data: data,
+        cache: false,
+        contentType: false,
+        crossDomain: true,
+        processData: false,
+        success: (response) ->
+          console.log response
+          $('.file').attr({ value: '' })
+        })
+
 <% end %>
