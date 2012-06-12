@@ -114,6 +114,12 @@ namespace :deploy do
   end
   after "deploy:finalize_update", "deploy:symlink_config"
 
+  desc "Install environment-specific god configuration"
+  task :god_config, roles: :app do
+    run "cp #{release_path}/config/god/thin_core.#{rails_env}.god #{release_path}/config/thin_core.god"
+  end
+  after "deploy:secret", "deploy:god_config"
+
   desc "Make sure local git is in sync with remote."
   task :check_revision, roles: :web do
     unless `git rev-parse HEAD` == `git rev-parse origin/master`
