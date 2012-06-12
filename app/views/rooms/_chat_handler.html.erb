@@ -1,7 +1,11 @@
+<script type="text/javascript">
+  window.api_v1_messages_url = "<%= api_v1_messages_url %>"
+</script>
+
 <%= coffee_script_tag do %>
   class @ChatHandler
     @getMessages: (room_id) ->
-      $.getJSON("http://localhost:3000/api/v1/messages?room_id=#{room_id}", ChatHandler.renderMessages)
+      $.getJSON("#{api_v1_messages_url}?room_id=#{room_id}", ChatHandler.renderMessages)
 
     @renderMessages: (messages) =>
       for message in messages

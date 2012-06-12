@@ -1,7 +1,11 @@
+<script type="text/javascript">
+  window.api_v1_users_url = "<%= api_v1_users_url %>"
+</script>
+
 <%= coffee_script_tag do %>
   class @UserHandler
     @getUsers: ->
-      $.getJSON("http://localhost:3000/api/v1/users", UserHandler.renderUsers)
+      $.getJSON(api_v1_users_url, UserHandler.renderUsers)
 
     @renderUsers: (users) =>
       for user in users
