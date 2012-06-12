@@ -25,7 +25,7 @@
       $('#messages').append Mustache.to_html($('#event_template').html(), message)
 
     @replaceLinks: (content) ->
-      images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png)/ig
+      images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png)(?:\?.*)?/ig
       if images
         ChatHandler.replaceImages(images, content)
       else

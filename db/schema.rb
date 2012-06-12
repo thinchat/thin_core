@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120607014304) do
+ActiveRecord::Schema.define(:version => 20120612212426) do
 
   create_table "guests", :force => true do |t|
     t.string   "name"
@@ -22,12 +22,14 @@ ActiveRecord::Schema.define(:version => 20120607014304) do
 
   create_table "messages", :force => true do |t|
     t.text     "body"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "room_id"
     t.integer  "user_id"
     t.string   "user_type"
     t.string   "user_name"
+    t.string   "message_type"
+    t.text     "metadata"
   end
 
   create_table "rooms", :force => true do |t|
