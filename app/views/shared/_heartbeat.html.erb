@@ -1,6 +1,0 @@
-<%= coffee_script_tag do %>
-  class @Heartbeat
-    @pulse: (client, user_hash) ->
-      client.publish('/heart_beat', user_hash)
-      setTimeout((-> Heartbeat.pulse(client, user_hash)), 10000)
-<% end %>

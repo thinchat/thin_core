@@ -9,11 +9,11 @@ class Guest < ActiveRecord::Base
   end
 
   def self.find_or_create_by_cookie(cookie)
-    if cookie
-      params = JSON.parse(cookie)
-      Guest.where(id: params["id"].to_s).first
+    params = cookie ? JSON.parse(cookie) : nil
+    if params && guest = Guest.where(id: params["id"].to_s).first
+      guest
     else
-      guest = Guest.create
+      Guest.create
     end
   end
 

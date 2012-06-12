@@ -1,7 +1,7 @@
 <div id="room">
   <h1><%= @room.name %></h1>
   
-  <%= content_tag "div", id: "messages", data: {location: @room.id } do %>
+  <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id } do %>
   <% end %>
 
   <%= render "form", :locals => { :room => @room } %>
