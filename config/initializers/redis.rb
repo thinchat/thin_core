@@ -8,7 +8,9 @@ end
 
 REDIS = Redis.new(:host => REDIS_URL, :port => 6379)
 
-if Rails.env == 'production'
+PASSWORD_REQUIRED = ['production', 'staging']
+
+if PASSWORD_REQUIRED.include? Rails.env
   require "#{Rails.root}/config/secret/redis_password.rb"
   REDIS.auth(REDIS_PASSWORD)
 end
