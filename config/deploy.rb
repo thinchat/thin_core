@@ -62,16 +62,29 @@ namespace :deploy do
     sudo "chown -R deployer:admin /home/deployer"
   end
 
+  desc "Push god configuration"
+  task :god, roles: :app do
+    sudo "mkdir /etc/god"
+    sudo "mkdir /var/log/god"
+    transfer(:up, "config/god/master.conf", "/home/deployer/master.conf", :scp => true)
+    transfer(:up, "config/god/god-initd.sh", "/home/deployer/god-initd.sh", :scp => true)
+    sudo "mv /home/deployer/master.conf /etc/god/master.conf"
+    sudo "mv /home/deployer/god-initd.sh /etc/god/god-initd.sh"
+    sudo "chmod +x /etc/god/god-initd.sh"
+    sudo "cp /etc/god/god-initd.sh /etc/init.d/god-service"
+    sudo "update-rc.d god-service defaults"
+  end
+
   desc "Create the production database"
   task :create_database, roles: :app do
-    run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:create"
+    run "cd #{release_path} && bundle exec rake RAILS_ENV=#{rails_env} db:create"
   end
   after "deploy:symlink_config", "deploy:create_database"
   after "deploy:create_database", "deploy:migrate"
 
   desc "Setup unicorn configuration"
   task :setup_config, roles: :app do
-    sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
+    sudo "ln -nfs #{current_path}/config/unicorn/unicorn_#{rails_env}_init.sh /etc/init.d/unicorn_#{application}"
   end
   after "deploy:setup", "deploy:create_release_dir", "deploy:setup_config"
 

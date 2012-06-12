@@ -3,7 +3,7 @@ class Agent
   attr_accessor :name, :thin_auth_id
 
   def initialize(thin_auth_id, name)
-    @thin_auth_id = thin_auth_id
+    @thin_auth_id = thin_auth_id.to_i
     @name = name
   end
 
