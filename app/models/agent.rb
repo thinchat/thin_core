@@ -12,11 +12,8 @@ class Agent
     Agent.new(params["id"], params["name"])
   end
 
-  def user_hash
-    { user_id: thin_auth_id.to_s, user_type: 'Agent', user_name: name }
-  end
-
-  def user_json
-    user_hash.to_json
+  def user_hash(location = nil)
+    hash = { user_id: thin_auth_id.to_s, user_type: 'Agent', user_name: name}
+    location ? hash[:room_id] = location : hash
   end
 end

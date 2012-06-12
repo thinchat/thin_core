@@ -1,0 +1,21 @@
+<%= coffee_script_tag do %>
+  class @RoomHandler
+    @getRooms: ->
+      $.getJSON("http://localhost:3000/api/v1/rooms", RoomHandler.renderRooms)
+
+    @renderRooms: (rooms) =>
+      for room in rooms
+        RoomHandler.addRoom(room)
+
+    @handleRoom: (data) =>
+      if (data.chat_message.message_type == "Subscribe")
+        RoomHandler.addUser(data.chat_message)
+      else if (data.chat_message.message_type == "Disconnect")
+        RoomHandler.removeUser(data.chat_message.client_id)
+
+    @addRoom: (room) =>
+      $('#rooms').append Mustache.to_html($('#room_template').html(), room)
+
+    @removeRoom: (room_id) =>
+      $('#rooms').find(".#{room_id}").remove()
+<% end %>
