@@ -9,6 +9,26 @@
   <br />
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
+<div class="modal hide" id="myModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Welcome to thinChat!</h3>
+  </div>
+  <div class="modal-body">
+    <p>We're glad to have you!</p>
+    <p>If you like, enter your name and email address</p>
+    <%= form_for @user, :id => "entry_modal", :html => { :class => "entry_modal"}, :remote => true do |f| %>
+      <%= f.label :user_name %>
+      <%= f.text_field :name %>
+
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+  </div>
+  <div class="modal-footer">
+      <%= f.submit "Enter Chat", :class => "btn btn-success", :data => { :dismiss => "modal" } %>
+    <% end %>
+  </div>
+</div>
 
 <script type="text/html" id="message_template">
   <div class="message">
@@ -35,11 +55,16 @@
 
 <%= coffee_script_tag do %>
   jQuery ->
-    location = $('#messages').data('location')
-    ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
-    faye_chat = new FayeHandler(user_hash, '/messages/'+ location, ChatHandler.handleMessage)
 
-    $("#new_message").live("ajax:complete", (event,xhr,status) ->
-      $('#new_message')[0].reset())
+    if user_hash.user_type == 'Guest'
+      $('#myModal').modal('show')
+
+      $("#myModal .btn-success").click (e) =>
+        e.preventDefault()
+        $("#myModal").modal "hide"
+        $(".entry_modal").submit()
+        user_hash.user_name = $(".entry_modal").find('#guest_name').val()
+        $('#user').data('user', user_hash)
+        $.namespace.fayeLoader()
 <% end %>

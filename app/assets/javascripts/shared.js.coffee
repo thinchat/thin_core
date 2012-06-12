@@ -7,4 +7,13 @@ $.namespace = {
     user_hash = $('#user').data('user')
     user_hash.location = location if location?
     user_hash
+
+  fayeLoader: =>
+    location = $('#messages').data('location')
+    ChatHandler.getMessages(location)
+    user_hash = $.namespace.getUser(location)
+    
+    faye_chat = new FayeHandler(user_hash, '/messages/'+ location, ChatHandler.handleMessage)
+    $("#new_message").live("ajax:complete", (event,xhr,status) ->
+      $('#new_message')[0].reset())
 }

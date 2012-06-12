@@ -9,7 +9,7 @@ class RoomsController < ApplicationController
     last_room = Room.order("id DESC").first
     name = Faker::Name.name
     room = Room.create(name: "The #{name}")
-    redirect_to room_path(room)
+    redirect_to room_path(room), :notice => "Welcome to magic!" 
   end
 
   def show
