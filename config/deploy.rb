@@ -73,13 +73,11 @@ namespace :deploy do
 
   desc "Push ssh keys to authorized_keys"
   task :keys, roles: :app do
-    run "mkdir /home/deployer/.ssh"
-    sudo "chmod 700 /home/deployer/.ssh"
     transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
+    sudo "chmod 700 /home/deployer/.ssh"
     sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
     sudo "chown -R deployer:admin /home/deployer"
   end
-
 
   desc "Create god directories"
   task :god_dir, roles: :app do
@@ -102,7 +100,7 @@ namespace :deploy do
     sudo "service god-service start"
   end
 
-  desc "Create the production database"
+  desc "Create the database"
   task :create_database, roles: :app do
     run "cd #{release_path} && bundle exec rake RAILS_ENV=#{rails_env} db:create"
   end
