@@ -9,8 +9,14 @@ ThinCore::Application.routes.draw do
   end
 
   resources :messages
-  resources :rooms
+  resources :rooms do
+    member do
+      post 'send_log'
+    end
+  end
   resources :guests
+  
+  mount Resque::Server, :at => "/resque"
 
   root :to => 'rooms#index'
 end
