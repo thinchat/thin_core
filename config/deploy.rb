@@ -28,9 +28,9 @@ end
 
 def set_branch
   if current_git_branch != "master"
-    set :branch, ENV['BRANCH'] || prompt_with_default("Enter branch to deploy, or ENTER for default.", "master")
+    set :branch, ENV['BRANCH'] || prompt_with_default("Enter branch to deploy, or ENTER for default.", "#{current_git_branch.chomp}")
   else
-    set :branch, ENV['BRANCH'] || "master"
+    set :branch, ENV['BRANCH'] || "#{current_git_branch.chomp}"
   end
 end
 
