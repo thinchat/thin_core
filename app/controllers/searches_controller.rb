@@ -1,6 +1,6 @@
 class SearchesController < ApplicationController
   def show
     @query = params[:query]
-    raise params.inspect
+    @query = @query.sub(" ", ",") if @query
   end
 end
