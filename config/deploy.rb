@@ -13,12 +13,29 @@ set :ssh_options, { :forward_agent => true }
 
 set :scm, "git"
 set :repository, "git@github.com:thinchat/#{application}.git"
-set :branch, "master"
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
 after "deploy", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
+def current_git_branch
+  `git symbolic-ref HEAD`.gsub("refs/heads/", "")
+end
+
+def prompt_with_default(message, default)
+  response = Capistrano::CLI.ui.ask "#{message} Default is: [#{default}] : "
+  response.empty? ? default : response
+end
+
+def set_branch
+  if current_git_branch != "master"
+    set :branch, ENV['BRANCH'] || prompt_with_default("Enter branch to deploy, or ENTER for default.", "#{current_git_branch.chomp}")
+  else
+    set :branch, ENV['BRANCH'] || "#{current_git_branch.chomp}"
+  end
+end
+
+set :branch, set_branch
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -122,8 +139,8 @@ namespace :deploy do
 
   desc "Make sure local git is in sync with remote."
   task :check_revision, roles: :web do
-    unless `git rev-parse HEAD` == `git rev-parse origin/master`
-      puts "WARNING: HEAD is not the same as origin/master"
+    unless `git rev-parse HEAD` == `git rev-parse origin/#{branch}`
+      puts "WARNING: HEAD is not the same as origin/#{branch}"
       puts "Run `git push` to sync changes."
       exit
     end
