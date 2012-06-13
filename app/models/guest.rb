@@ -2,10 +2,14 @@ class Guest < ActiveRecord::Base
   attr_accessible :name, :email
   has_many :rooms
 
-  before_create :set_name
-
+  before_create :set_name, :set_auth_token
+  
   def set_name
     self.name = "Guest #{rand(1000)}"
+  end
+
+  def set_auth_token
+    self.authentication_token = rand(36**8).to_s(16)
   end
 
   def self.find_or_create_by_cookie(cookie)
