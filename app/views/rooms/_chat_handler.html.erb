@@ -9,13 +9,16 @@
 
     @renderMessages: (messages) =>
       for message in messages
-        ChatHandler.addMessage(message)
+        ChatHandler.handleMessage(message)
 
-    @handleMessage: (data) =>
-      if (data.chat_message.message_type == "Message")
-        ChatHandler.addMessage(data.chat_message)
+    @handleMessage: (message) =>
+      if (message.message_type == "Message")
+        ChatHandler.addMessage(message)
+      else if (message.message_type == "Document")
+        console.log message
+        ChatHandler.addDocument(message)
       else
-        ChatHandler.addEvent(data.chat_message)
+        ChatHandler.addEvent(message)
 
     @addMessage: (message) =>
       mustache_message = Mustache.to_html($('#message_template').html(), message)
@@ -24,8 +27,11 @@
     @addEvent: (message) =>
       $('#messages').append Mustache.to_html($('#event_template').html(), message)
 
+    @addDocument: (message) =>
+      $('#messages').append Mustache.to_html($('#document_template').html(), message)
+
     @replaceLinks: (content) ->
-      images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png)/ig
+      images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png|jpeg)(?:\?.*)?/ig
       if images
         ChatHandler.replaceImages(images, content)
       else

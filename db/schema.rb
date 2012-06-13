@@ -23,12 +23,14 @@ ActiveRecord::Schema.define(:version => 20120613002759) do
 
   create_table "messages", :force => true do |t|
     t.text     "body"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "room_id"
     t.integer  "user_id"
     t.string   "user_type"
     t.string   "user_name"
+    t.string   "message_type"
+    t.text     "metadata"
   end
 
   create_table "rooms", :force => true do |t|

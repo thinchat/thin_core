@@ -10,8 +10,8 @@ class Api::V1::MessagesController < ApplicationController
   end
 
   def create
-    message_params = params[:message]
-    message = Message.create!(JSON.parse(message_params))
+    params = Message.build_params_hash(params[:message])
+    message = Message.create(params)
     render :nothing => true, :status => 201 if message.broadcast
   end
 

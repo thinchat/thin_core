@@ -12,7 +12,7 @@
     subscribe: (callback) =>
       @client.subscribe(@channel, (data) =>
         console.log(data)
-        callback(data)
+        callback(data.chat_message)
       )
 
     publish: (data) =>
