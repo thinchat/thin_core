@@ -18,7 +18,7 @@
   <div class="modal-body">
     <p>We're glad to have you!</p>
     <p>If you like, enter your name and email address</p>
-    <%= form_for @user, :id => "entry_modal", :html => { :class => "entry_modal"}, :remote => true do |f| %>
+    <%= form_for @user, :id => "entry_modal", :html => { :class => "entry_modal"}, :remote => true, :validate => true do |f| %>
       <%= f.label :user_name %>
       <%= f.text_field :name %>
 

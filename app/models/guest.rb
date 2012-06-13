@@ -1,5 +1,9 @@
 class Guest < ActiveRecord::Base
   attr_accessible :name, :email
+  validates_presence_of :name
+  email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, :format => { :with => email_regex },
+                    :allow_blank => true
   has_many :rooms
 
   before_create :set_name

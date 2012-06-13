@@ -16,3 +16,12 @@ $.namespace = {
     $("#new_message").live("ajax:complete", (event,xhr,status) ->
       $('#new_message')[0].reset())
 }
+
+clientSideValidations.callbacks.element.fail = (element, message, callback) ->
+  callback()
+  if element.data("valid") isnt false
+    element.parent().parent().parent().parent().find('input[type="submit"]').attr('disabled','disabled')
+
+clientSideValidations.callbacks.element.pass = (element, callback, eventData) ->
+  callback()
+  element.parent().parent().parent().parent().find('input[type="submit"]').removeAttr('disabled')

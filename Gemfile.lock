@@ -58,6 +58,7 @@ GEM
       xpath (~> 0.1.4)
     childprocess (0.3.2)
       ffi (~> 1.0.6)
+    client_side_validations (3.1.4)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -122,6 +123,9 @@ GEM
     jquery-rails (2.0.2)
       railties (>= 3.2.0, < 5.0)
       thor (~> 0.14)
+    jquery-ui-rails (1.0.0)
+      jquery-rails
+      railties (>= 3.1.0)
     json (1.5.4)
     kgio (2.7.4)
     launchy (2.1.0)
@@ -259,6 +263,7 @@ PLATFORMS
 DEPENDENCIES
   capistrano
   capybara
+  client_side_validations
   coffee-rails (~> 3.2.1)
   coffeebeans
   factory_girl_rails
@@ -270,6 +275,7 @@ DEPENDENCIES
   hashie
   jbuilder
   jquery-rails
+  jquery-ui-rails
   launchy
   mustache
   mysql2
