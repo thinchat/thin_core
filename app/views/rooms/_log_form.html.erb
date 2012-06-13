@@ -5,8 +5,9 @@
   </div>
   <div class="modal-body">
     <p>Would you like a chat transcript?</p>
-    <p><%= form_for @room, :url => send_log_room_path(@room), :method => "post" do |f| %>
-       <%= text_field_tag "[log_email]" %>
+  </br>
+    Email:<%= form_for @room,:url => send_log_room_path(@room),:method => "post" do |f| %>
+       <%= text_field_tag "[log_email]", @user.guest_email %>
     </p>
   </div>
   <div class="modal-footer">

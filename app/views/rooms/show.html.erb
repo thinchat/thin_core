@@ -1,12 +1,13 @@
 <div id="room">
   <h1><%= @room.name %></h1>
+  
   <a id="open_modal">Close the room</a>
   <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
-  <%= render "messages/file" %>
+  <%= render "messages/file", :locals =>  { :user => @user} %>
   <br />
   <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
