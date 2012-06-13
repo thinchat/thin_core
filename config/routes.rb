@@ -12,5 +12,7 @@ ThinCore::Application.routes.draw do
   resources :rooms
   resources :guests
 
+  resource :search, :only => [:show] 
+
   root :to => 'rooms#index'
 end
