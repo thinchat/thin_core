@@ -1,3 +1,4 @@
+require './config/secret/gmail.rb'
 ThinCore::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -25,7 +26,7 @@ ThinCore::Application.configure do
     authentication: "plain",
     enable_starttls_auto: true,
     user_name: "thinchat",
-    password: "Thinchatpassword"
+    password: GMAIL_PASSWORD
     #hide these variables and disallow error raises
   }
 
