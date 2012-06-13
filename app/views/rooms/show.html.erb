@@ -1,6 +1,6 @@
 <div id="room">
   <h1><%= @room.name %></h1>
-  
+  <a id="open_modal">Close the room</a>
   <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
 
