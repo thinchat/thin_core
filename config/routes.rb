@@ -9,7 +9,11 @@ ThinCore::Application.routes.draw do
   end
 
   resources :messages
-  resources :rooms
+  resources :rooms do
+    member do
+      post 'send_log'
+    end
+  end
   resources :guests
 
   root :to => 'rooms#index'

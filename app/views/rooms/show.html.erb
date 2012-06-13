@@ -8,6 +8,7 @@
   <br />
   <%= render "messages/file" %>
   <br />
+  <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
 
@@ -68,6 +69,6 @@
           console.log response
           
         })
-        $('.file').attr({ value: '' })
+      $('.file').attr({ value: '' })
 
 <% end %>

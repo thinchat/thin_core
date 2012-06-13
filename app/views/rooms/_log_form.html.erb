@@ -1,0 +1,4 @@
+<%= form_for @room, :url => send_log_room_path(@room), :method => "post" do |f| %>
+<%= text_field_tag "[log_email]" %>
+<%= f.submit "Send me a Log"%>
+<% end %>
