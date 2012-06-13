@@ -2,7 +2,6 @@ class MessagesController < ApplicationController
   respond_to :html, :json, :js
 
   def create
-    raise params.inspect
     params[:message].merge!(current_user.user_hash)
     message = Message.create!(params[:message])
     render :nothing => true, :status => 201 if message.broadcast
