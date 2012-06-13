@@ -8,4 +8,11 @@ class Api::V1::MessagesController < ApplicationController
       render :json => {:error => "Room not found."}, :status => :not_found
     end
   end
+
+  def create
+    message_params = params[:message]
+    message = Message.create!(JSON.parse(message_params))
+    render :nothing => true, :status => 201 if message.broadcast
+  end
+
 end
