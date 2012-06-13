@@ -1,7 +1,7 @@
 <div id="room">
   <h1><%= @room.name %></h1>
   
-  <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id } do %>
+  <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
 
   <%= render "form", :locals => { :room => @room } %>
@@ -37,21 +37,22 @@
 <%= coffee_script_tag do %>
   jQuery ->
     location = $('#messages').data('location')
+    channel = $('#messages').data('channel')
     ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
-    faye_chat = new FayeHandler(user_hash, '/messages/'+ location, ChatHandler.handleMessage)
+    faye_chat = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
 
     $("#new_message").live("ajax:complete", (event,xhr,status) ->
       $('#new_message')[0].reset())
 
-    uploadHandler(faye_chat)
+    uploadHandler()
     $(':file').change ->
       file = this.files[0]
       name = file.name
       size = file.size
       type = file.type
 
-  uploadHandler = (faye_client) ->
+  uploadHandler = () ->
     $('.file_upload').click ->
       form = $('.file_form')[0]
       data = new FormData form
