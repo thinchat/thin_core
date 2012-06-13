@@ -12,7 +12,7 @@
     subscribe: (callback) =>
       @client.subscribe(@channel, (data) =>
         console.log(data)
-        callback(data)
+        callback(data.chat_message)
       )
 
     publish: (data) =>
@@ -22,7 +22,6 @@
       @client.addExtension outgoing: (message, callback) =>
         if message.channel is "/meta/subscribe"
           message.data = message.data or @user_hash
-          console.log message
         callback message
 
     addPulse: =>
