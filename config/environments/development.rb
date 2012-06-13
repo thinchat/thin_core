@@ -1,3 +1,4 @@
+require './config/secret/gmail.rb'
 ThinCore::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -14,7 +15,20 @@ ThinCore::Application.configure do
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+
+  # Change mail delvery to either :smtp, :sendmail, :file, :test
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "thinchat.com",
+    authentication: "plain",
+    enable_starttls_auto: true,
+    user_name: "thinchat",
+    password: GMAIL_PASSWORD
+    #hide these variables and disallow error raises
+  }
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
