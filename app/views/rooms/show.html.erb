@@ -19,7 +19,7 @@
 
 <script type="text/html" id="document_template">
   <div class="message">
-    {{user_name}}: <a href={{message_body}} target="_blank">{{metadata.filename}}</a>
+    {{user_name}}: <a href={{message_body}} target="_blank"><img src="/assets/document.png"> {{metadata.filename}}</a>
   </div>
 </script>
 
@@ -66,7 +66,8 @@
         processData: false,
         success: (response) ->
           console.log response
-          $('.file').attr({ value: '' })
+          
         })
+      $('.file').attr({ value: '' })
 
 <% end %>

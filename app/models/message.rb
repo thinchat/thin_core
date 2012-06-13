@@ -26,8 +26,8 @@ class Message < ActiveRecord::Base
     MESSAGE_ATTRS.each do |attribute|
       hash[attribute] = params[attribute.to_s] if params.has_key? attribute.to_s
     end
-    hash[:room_id] = params["location"]
-    hash[:metadata] = {client_id: params["client_id"], location: params["location"]}
+    hash[:room_id] = params["location"] || params["room_id"] #faye_server sends location, for Lobby. thin_file sends as room_id, for message.
+    hash[:metadata].merge({client_id: params["client_id"], location: params["location"]})
     hash
   end
 

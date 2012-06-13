@@ -13,12 +13,29 @@ set :ssh_options, { :forward_agent => true }
 
 set :scm, "git"
 set :repository, "git@github.com:thinchat/#{application}.git"
-set :branch, "master"
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
 after "deploy", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
+def current_git_branch
+  `git symbolic-ref HEAD`.gsub("refs/heads/", "")
+end
+
+def prompt_with_default(message, default)
+  response = Capistrano::CLI.ui.ask "#{message} Default is: [#{default}] : "
+  response.empty? ? default : response
+end
+
+def set_branch
+  if current_git_branch != "master"
+    set :branch, ENV['BRANCH'] || prompt_with_default("Enter branch to deploy, or ENTER for default.", "#{current_git_branch.chomp}")
+  else
+    set :branch, ENV['BRANCH'] || "#{current_git_branch.chomp}"
+  end
+end
+
+set :branch, set_branch
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -55,6 +72,7 @@ namespace :deploy do
 
   desc "Push ssh keys to authorized_keys"
   task :keys, roles: :app do
+    run "mkdir /home/deployer/.ssh"
     transfer(:up, "config/secret/authorized_keys", "/home/deployer/.ssh/authorized_keys", :scp => true)
     sudo "chmod 700 /home/deployer/.ssh"
     sudo "chmod 644 /home/deployer/.ssh/authorized_keys"
@@ -70,10 +88,10 @@ namespace :deploy do
 
   desc "Set hostname for server"
   task :hostname, roles: :app do
-    sudo "echo 'thinchat-#{rails_env}' > /home/deployer/hostname"
+    sudo "echo '#{rails_env}' > /home/deployer/hostname"
     sudo "mv /home/deployer/hostname /etc/hostname"
     sudo "hostname -F /etc/hostname"
-    sudo "awk -v \"n=2\" -v \"s=127.0.0.1       thinchat-#{rails_env}\" '(NR==n) { print s } 1' /etc/hosts > /home/deployer/new_hosts"
+    sudo "awk -v \"n=2\" -v \"s=127.0.0.1       #{rails_env}.thinchat.com        #{rails_env}\" '(NR==n) { print s } 1' /etc/hosts > /home/deployer/new_hosts"
     sudo "mv /home/deployer/new_hosts /etc/hosts"
   end
 
@@ -121,8 +139,8 @@ namespace :deploy do
 
   desc "Make sure local git is in sync with remote."
   task :check_revision, roles: :web do
-    unless `git rev-parse HEAD` == `git rev-parse origin/master`
-      puts "WARNING: HEAD is not the same as origin/master"
+    unless `git rev-parse HEAD` == `git rev-parse origin/#{branch}`
+      puts "WARNING: HEAD is not the same as origin/#{branch}"
       puts "Run `git push` to sync changes."
       exit
     end
@@ -154,4 +172,4 @@ task :provision do
     puts "Phew. That was a close one eh?"
   end
 end
-after "provision", "deploy:keys", "deploy:hostname"
+after "provision", "deploy:keys"
