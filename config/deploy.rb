@@ -91,6 +91,8 @@ namespace :deploy do
     sudo "echo 'thinchat-#{rails_env}' > /home/deployer/hostname"
     sudo "mv /home/deployer/hostname /etc/hostname"
     sudo "hostname -F /etc/hostname"
+    sudo "awk -v \"n=2\" -v \"s=127.0.0.1       thinchat-#{rails_env}\" '(NR==n) { print s } 1' /etc/hosts > /home/deployer/new_hosts"
+    sudo "mv /home/deployer/new_hosts /etc/hosts"
   end
 
   desc "Push god configuration"
