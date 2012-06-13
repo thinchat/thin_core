@@ -18,7 +18,7 @@
       $.getJSON("#{api_v1_messages_url}?room_id=#{51}", SearchHandler.renderMessages)
 
     @renderMessages: (messages, query) =>
-      if messages.length >= 1
+      if messages.length > 0
         for message in messages
           SearchHandler.handleMessage(message.chat_message)
       else
