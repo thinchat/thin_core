@@ -86,6 +86,13 @@ namespace :deploy do
   end
   after "provision", "deploy:god_dir"
 
+  desc "Set hostname for server"
+  task :hostname, roles: :app do
+    sudo "echo 'thinchat-#{rails_env}' > /home/deployer/hostname"
+    sudo "mv /home/deployer/hostname /etc/hostname"
+    sudo "hostname -F /etc/hostname"
+  end
+
   desc "Push god configuration"
   task :god, roles: :app do
     sudo "chown -R deployer:admin /var/log/god"
@@ -158,4 +165,4 @@ task :provision do
     puts "Phew. That was a close one eh?"
   end
 end
-after "provision", "deploy:keys"
+after "provision", "deploy:keys", "deploy:hostname"
