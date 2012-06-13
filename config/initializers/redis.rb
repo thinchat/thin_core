@@ -1,11 +1,11 @@
-if Rails.env == 'development'
+if ENV['RAILS_ENV'] == 'development'
   REDIS_URL = 'localhost'
-elsif Rails.env == 'staging'
+elsif ENV['RAILS_ENV'] == 'staging'
   REDIS_URL = 'http://50.116.40.131'
-elsif Rails.env == 'production'
+elsif ENV['RAILS_ENV'] == 'production'
   REDIS_URL = 'http://thinchat.com'
 else
-  raise NotImplementedError, "The environment '#{Rails.env}' has no REDIS_URL\n Set one in config/initializers/redis.rb"
+  raise NotImplementedError, "The environment '#{ENV["RAILS_ENV"]}' has no REDIS_URL\n Set one in config/initializers/redis.rb"
 end
 
 REDIS = Redis.new(:host => REDIS_URL, :port => 6379)
