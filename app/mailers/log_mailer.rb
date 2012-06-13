@@ -1,4 +1,6 @@
 class LogMailer < ActionMailer::Base
+  include Resque::Mailer
+  
   default from: "thinchat@gmail.com"
 
   # Subject can be set in your I18n file at config/locales/en.yml
