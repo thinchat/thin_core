@@ -1,7 +1,7 @@
 <div id="room">
   <h1><%= @room.name %></h1>
   
-  <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id } do %>
+  <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
 
   <%= render "form", :locals => { :room => @room } %>
@@ -43,6 +43,12 @@
   </div>
 </script>
 
+<script type="text/html" id="document_template">
+  <div class="message">
+    {{user_name}}: <a href={{message_body}} target="_blank">{{metadata.filename}}</a>
+  </div>
+</script>
+
 <script type="text/html" id="event_template">
   <div class="message">
     {{message_body}}
@@ -58,7 +64,10 @@
   jQuery ->
     user_hash = $.namespace.getUser(location)
     location = $('#messages').data('location')
+    channel = $('#messages').data('channel')
     ChatHandler.getMessages(location)
+    user_hash = $.namespace.getUser(location)
+    faye_chat = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
 
     if user_hash.user_type == 'Guest'
       $('#myModal').modal('show')
@@ -78,7 +87,7 @@
       size = file.size
       type = file.type
 
-  uploadHandler = ->
+  uploadHandler = () ->
     $('.file_upload').click ->
       form = $('.file_form')[0]
       data = new FormData form

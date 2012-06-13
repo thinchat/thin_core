@@ -20,4 +20,10 @@ class Agent
     hash = { user_id: thin_auth_id.to_s, user_type: 'Agent', user_name: name}
     location ? hash[:room_id] = location : hash
   end
+
+  def self.find_by_authentication_token(token)
+    uri = URI.parse("#{root_url}/auth/api/v1/users.json?authentication_token=#{thin_auth_id}")
+    response = Net::HTTP.get(uri)
+    JSON.parse(response)["authentication_token"]
+  end
 end

@@ -12,13 +12,14 @@
         UserHandler.addUserToRoom(user)
 
     @handleUser: (data) =>
-      if (data.chat_message.message_type == "Subscribe")
-        UserHandler.addUserToRoom(data.chat_message)
-      else if (data.chat_message.message_type == "Disconnect")
-        UserHandler.removeUser(data.chat_message.client_id)
+      console.log data
+      if (data.message_type == "Subscribe")
+        UserHandler.addUserToRoom(data)
+      else if (data.message_type == "Disconnect")
+        UserHandler.removeUser(data.metadata.client_id)
 
     @addUserToRoom: (user) =>
-      $("#room-#{user.location}").append Mustache.to_html($('#user_template').html(), user)
+      $("#room-#{user.metadata.location}").append Mustache.to_html($('#user_template').html(), user)
 
     @removeUser: (client_id) =>
       $(".#{client_id}").remove()

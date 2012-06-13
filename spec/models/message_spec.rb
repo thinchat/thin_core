@@ -48,15 +48,13 @@ describe Message do
     end
   end
 
-  describe "#faye_message_json" do
-    let(:message) { Message.new() }
+  describe "#faye_message" do
+    let(:message) { Message.new(:room_id => 123) }
 
-    it "should return a JSON string" do
-      message.should_receive(:to_hash).and_return({})
-      message.should_receive(:channel).and_return("")
-      faye_message = JSON.parse(message.faye_message_json)
-      faye_message["channel"].should == ""
-      faye_message["data"]["chat_message"].should == {}
+    it "should return a hash of message data" do
+      faye_message = message.faye_message
+      faye_message[:channel].should == "/messages/123"
+      faye_message[:data][:chat_message].should have_key(:message_body)
     end
   end
 end
