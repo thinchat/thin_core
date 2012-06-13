@@ -1,13 +1,13 @@
 <script type="text/javascript">
-  window.api_v1_messages_url = "<%= api_v1_messages_url %>"
+  window.api_v1_search_url = "search/api/v1/search?query="
 </script>
 
 <%= coffee_script_tag do %>
   class @SearchHandler
-    @find: (query) =>
-      console.log 'http://localhost:2323/api/v1/search?query=' + query
+    @find: (url, query) =>
+      api_url = url + api_v1_search_url + query
       $.ajax
-        url: 'http://localhost:2323/api/v1/search?query=' + query
+        url: api_url
         dataType: 'json'
         type: 'GET'
         crossDomain: true,
