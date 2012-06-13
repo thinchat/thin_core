@@ -18,6 +18,7 @@ default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
 after "deploy", "deploy:nginx:config", "deploy:cleanup" # keep only the last 5 releases
+
 def current_git_branch
   `git symbolic-ref HEAD`.gsub("refs/heads/", "")
 end
@@ -38,12 +39,20 @@ end
 set :branch, set_branch
 
 namespace :deploy do
+  # %w[start stop restart].each do |command|
+  #   desc "#{command} unicorn server"
+  #   task command, roles: :app, except: {no_release: true} do
+  #     sudo "service god-service #{command} #{application}"
+  #   end
+  # end
+
   %w[start stop restart].each do |command|
     desc "#{command} unicorn server"
     task command, roles: :app, except: {no_release: true} do
-      sudo "service god-service #{command} #{application}"
+      sudo "/etc/init.d/unicorn_#{application} #{command}"
     end
   end
+  
 
   desc "Deploy to Vagrant (assumes you've run 'rake vagrant:setup')"
   task :vagrant, roles: :app do
@@ -155,7 +164,7 @@ namespace :deploy do
 
     desc "Copy nginx.conf to thinchat/config and symlink to /etc/nginx/sites-enabled/default "
     task :config, roles: :app do
-      sudo "ln -nfs #{release_path}/config/nginx.conf /etc/nginx/sites-enabled/default"
+      sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/default"
     end
   end
 end
