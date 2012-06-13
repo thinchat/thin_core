@@ -15,7 +15,7 @@ class Message < ActiveRecord::Base
       user_id: user_id,
       user_type: user_type,
       message_id: id,
-      message_type: self.class.name,
+      message_type: message_type,
       message_body: body,
       metadata: metadata,
       created_at: created_at,

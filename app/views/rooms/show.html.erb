@@ -17,6 +17,12 @@
   </div>
 </script>
 
+<script type="text/html" id="document_template">
+  <div class="message">
+    {{user_name}}: <a href={{message_body}} target="_blank">{{metadata.filename}}</a>
+  </div>
+</script>
+
 <script type="text/html" id="event_template">
   <div class="message">
     {{message_body}}
