@@ -2,7 +2,7 @@ class Api::V1::RoomsController < ApplicationController
   respond_to :json
 
   def index
-    @rooms = Room.all
+    @rooms = Room.in_queue
   end
 
   def update

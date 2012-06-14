@@ -20,8 +20,6 @@ ThinCore::Application.routes.draw do
   
   resources :guests, :only => [:update]
   resources :agents, :only => [:index]
-  
-  mount Resque::Server, :at => "/resque"
-
   root :to => 'rooms#index'
+  mount Resque::Server, :at => "/resque"
 end
