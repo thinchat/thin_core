@@ -1,6 +1,6 @@
 <div id="room">
   <h1><%= @room.name %></h1>
-  
+
   <a class="close_room" id="<%= @room.id %>">Close the room</a>
   <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
@@ -41,7 +41,6 @@
     location = $('#messages').data('location')
     channel = $('#messages').data('channel')
     ChatHandler.showModalHandler()
-    ChatHandler.closeModalHandler()
     ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
     room = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)

@@ -1,18 +1,16 @@
 <div class="modal hide" id="myModal">
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">×</button>
     <h3>Thanks for thinchatting!</h3>
   </div>
   <div class="modal-body">
-    <p>Would you like a chat transcript?</p>
+    <p>Would you like a transcript of today's chat?</p>
   </br>
     Email:<%= form_for @room,:url => send_log_room_path(@room),:method => "post" do |f| %>
        <%= text_field_tag "[log_email]", @user.email %>
     </p>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">No Thanks</a>
+  </br>
     <%= f.submit "Send me a Log", :class => "btn btn-primary", :id => "send_log" %>
+    <%= link_to "No Thanks", closed_room_path(@room), params %>
     <% end %>
   </div>
 </div>
