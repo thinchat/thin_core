@@ -17,4 +17,3 @@ pickle-email-*.html
 /config/database.yml
 .vagrant
 Vagrantfile
-/config/secret/*

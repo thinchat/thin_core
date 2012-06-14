@@ -9,10 +9,11 @@
       <a class="brand" href="/">thin<span>Core</span></a>
       <div class="container nav-collapse">
         <ul class="nav">
-          <li><%= link_to "Lobby", rooms_path()  %></li>
+          <li><%= link_to "Lobby", rooms_path() %></li>
+          <li><%= link_to "Online Users", guests_path() %></li>
         </ul>
 
-      <%= content_tag "div", id: "user", data: {user: current_user.user_hash } do %>
+      <%= content_tag "div", id: "user", data: {user: current_user.user_hash} do %>
         <p><%= "Welcome, #{current_user.name}!" %></p>
       <% end %>
       </div><!--/.nav-collapse -->

@@ -20,19 +20,30 @@ class Message < ActiveRecord::Base
     }
   end
 
-  def self.build_params_hash(json)
-    params = JSON.parse(json)
+  def self.build_params_hash(params)
+    params = JSON.parse(params)
     hash = {}
     MESSAGE_ATTRS.each do |attribute|
       hash[attribute] = params[attribute.to_s] if params.has_key? attribute.to_s
     end
-    hash[:room_id] = params["location"]
-    hash[:metadata] = {client_id: params["client_id"], location: params["location"]}
-    hash
+    hash[:room_id] = params["location"] || params["room_id"]
+    #faye_server sends location, for Lobby. thin_file sends as room_id, for message.
+    add_metadata(hash, params)
+  end
+
+  def self.add_metadata(hash, params)
+    hash[:metadata] ||= {}
+    hash.tap do |h|
+      h[:metadata].merge!({client_id: params["client_id"], location: params["location"]})
+    end
+  end
+
+  def in_chat_room?
+    room_id > 0
   end
 
   def room_channel
-    "/messages/#{room_id}"
+    "/messages/#{room_id}" if in_chat_room?
   end
 
   def online_user_channel
@@ -51,7 +62,7 @@ class Message < ActiveRecord::Base
   def get_channels
     case message_type
     when "Subscribe", "Disconnect"
-      [ room_channel, online_user_channel ]
+      [ online_user_channel, room_channel ].delete_if{ |x| x.nil? }
     else
       [ room_channel ]
     end

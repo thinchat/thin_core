@@ -1,13 +1,15 @@
 <div id="room">
   <h1><%= @room.name %></h1>
   
+  <a class="close_room" id="<%= @room.id %>">Close the room</a>
   <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
-  <%= render "messages/file" %>
+  <%= render "messages/file", :locals =>  { :user => @user} %>
   <br />
+  <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
 <div class="modal hide" id="myModal">
@@ -45,7 +47,7 @@
 
 <script type="text/html" id="document_template">
   <div class="message">
-    {{user_name}}: <a href={{message_body}} target="_blank">{{metadata.filename}}</a>
+    {{user_name}}: <a href={{message_body}} target="_blank"><img src="/assets/document.png"> {{metadata.filename}}</a>
   </div>
 </script>
 
@@ -65,9 +67,12 @@
     user_hash = $.namespace.getUser(location)
     location = $('#messages').data('location')
     channel = $('#messages').data('channel')
+    ChatHandler.showModalHandler()
+    ChatHandler.closeModalHandler()
     ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
-    faye_chat = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
+    room = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
+    room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     if user_hash.user_type == 'Guest'
       $('#myModal').modal('show')
@@ -101,7 +106,8 @@
         processData: false,
         success: (response) ->
           console.log response
-          $('.file').attr({ value: '' })
+          
         })
+      $('.file').attr({ value: '' })
 
 <% end %>

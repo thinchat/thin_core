@@ -1,0 +1,10 @@
+<%= coffee_script_tag do %>
+  class @PrivateMessageHandler
+    @handleMessage: (data) =>
+      PrivateMessageHandler.showFlash(data)
+
+    @showFlash: (data) =>
+      $("#flash").append Mustache.to_html($('#alert_template').html(), data)
+      $(".alert").delay(500).fadeIn "normal", ->
+        $(this).delay(3500).fadeOut(->$(this).remove())
+<% end %>

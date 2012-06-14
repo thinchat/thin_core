@@ -1,0 +1,3 @@
+[submodule "config/secret"]
+	path = config/secret
+	url = git@github.com:chrismanderson/thin_secret.git

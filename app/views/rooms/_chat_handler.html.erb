@@ -22,7 +22,7 @@
 
     @addMessage: (message) =>
       mustache_message = Mustache.to_html($('#message_template').html(), message)
-      $('#messages').append ChatHandler.replaceLinks(mustache_message)
+      $('#messages').append ChatHandler.linkMessage(mustache_message)
 
     @addEvent: (message) =>
       $('#messages').append Mustache.to_html($('#event_template').html(), message)
@@ -30,7 +30,7 @@
     @addDocument: (message) =>
       $('#messages').append Mustache.to_html($('#document_template').html(), message)
 
-    @replaceLinks: (content) ->
+    @linkMessage: (content) ->
       images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png|jpeg)(?:\?.*)?/ig
       if images
         ChatHandler.replaceImages(images, content)
@@ -42,7 +42,25 @@
         content = content.replace image, ""
       content = linkify(content)
       for image in images
-        content = content + "<a href='#{image}' target='_blank'><img src='#{image}' height=200</img></a>"
+        content = content + "<a href='#{image}' target='_blank'><img src='#{image}' height=200 ></img></a>"
       content
+
+    @showModalHandler: =>
+      $('.close_room').click ->
+        ChatHandler.closeRoom($(this).attr("id"))
+        $('#myModal').modal('show')
+
+    @closeModalHandler: =>
+      $('.log_send').click ->
+        $('#myModal').modal('hide')
+
+    @closeRoom = (id) ->
+      $.ajax({
+          type: 'PUT',
+          url: "/api/v1/rooms/#{id}",
+          data: {"room": { "status": "Closed"}},
+          success: (response) ->
+            console.log response
+          })
 
 <% end %>

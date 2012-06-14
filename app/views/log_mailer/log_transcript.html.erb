@@ -1,0 +1,18 @@
+<h1>Greetings,</h1>
+
+<p>Here is a transcript of your chat from <%= @room.created_at.to_date %></p>
+</br>
+<hr>
+</br>
+<% @room.messages.each do |msg| %>
+<div>
+  <% if msg.message_type == "Document" %>
+    <%= render 'document', :msg => msg %>
+  <% elsif msg.message_type == "Message" %>
+    <%= render 'document', :msg => msg  %>
+  <% else %>
+    <%= render 'event', :msg => msg  %>
+  <% end %>
+</div>
+<% end %>
+
