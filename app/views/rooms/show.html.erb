@@ -61,11 +61,7 @@
     room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     $(".new_message").live("ajax:complete", (event,xhr,status) ->
-      elem = document.getElementById("#messages")
-      elem.scrollTop = elem.scrollHeight
       $(this)[0].reset())
-
-
 
     uploadHandler()
     $(':file').change ->
