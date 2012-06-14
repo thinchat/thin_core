@@ -1,0 +1,26 @@
+<div id="users"></div>
+
+<script type="text/html" id="user_template">
+  <div class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite user!</a></span></div>
+</script>
+
+<% content_for :faye do %>
+  <%= render "shared/faye_handler", :locals => { :room => @room } %>
+  <%= render "rooms/user_handler" %>
+<% end %>
+
+<%= coffee_script_tag do %>
+  jQuery ->
+    location = 'OnlineAgents'
+    UserHandler.getUsers("<%= api_v1_agents_url %>", AgentsIndexUserPresenter.renderUsers)
+    
+    user_hash = $.namespace.getUser(location)
+    online_agents = new FayeHandler(user_hash, '/online/agent')
+    online_agents.joinRoomAndPulse(AgentsIndexUserPresenter.handleUser)
+
+    $('.invite').live("click", ->
+      $.post(
+        "<%= api_v1_alerts_url %>" + "?user_id=#{$(this).data('id')}"
+        user_hash: user_hash
+      ))
+<% end %>

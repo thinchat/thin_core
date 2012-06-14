@@ -9,11 +9,23 @@ module ThinHeartbeat
 
     def get_users
       keys = redis.keys "hb:*"
-      users = keys.collect do |key|
+      get_hashies_from_keys(keys)
+    end
+
+    def get_agents
+      keys = redis.keys "hb:*Agent:*"
+      get_hashies_from_keys(keys)
+    end
+
+    def get_guests
+      keys = redis.keys "hb:*Guest:*"
+      get_hashies_from_keys(keys)      
+    end
+
+    def get_hashies_from_keys(keys)
+      keys.collect do |key|
         json_to_hashie(redis.smembers(key).first)
       end
-
-      # [#<Hashie::Mash client_id="6v42flzhf6rn1vq4fg0vwfcjv" room="/messages/6" room_id="6" user_id="2" user_name="Edward Weng" user_type="Agent">]
     end
 
     def json_to_hashie(json)

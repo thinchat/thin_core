@@ -14,28 +14,18 @@
   <div id="room-{{id}}"><a href={{location}}>{{name}}</a></div>
 </script>
 
-<script type="text/html" id="alert_template">
-  <div class="alert">{{message_body}} <a href={{location}} target="_blank">Go to room.</a></div>
-</script>
-
 <% content_for :faye do %>
   <%= render "shared/faye_handler" %>
   <%= render "room_handler" %>
   <%= render "rooms/user_handler" %>
-  <%= render "shared/private_message_handler" %>
 <% end %>
 
 <%= coffee_script_tag do %>
   jQuery ->
-
     location = $(".info").data("location")
     roomHandler = RoomHandler.getRooms("<%= api_v1_rooms_url %>", RoomsIndexRoomPresenter.renderRooms)
     userHandler = UserHandler.getUsers("<%= api_v1_users_url %>", RoomsIndexUserPresenter.renderUsers)
     user_hash = $.namespace.getUser(location)
-    online_users = new FayeHandler(user_hash, '/online_users')
+    online_users = new FayeHandler(user_hash, '/online/*')
     online_users.joinRoomAndPulse(RoomsIndexUserPresenter.handleUser)
-
-    if user_hash.user_type == "Agent"
-      agent_channel = new FayeHandler(user_hash, user_hash.private_channel)
-      agent_channel.joinRoom(PrivateMessageHandler.handleMessage)
 <% end %>
