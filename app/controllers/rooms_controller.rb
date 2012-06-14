@@ -12,9 +12,12 @@ class RoomsController < ApplicationController
   end
 
   def show
-    @room     = Room.where(id: params[:id]).first
-    @messages = @room.messages.last(MESSAGE_DISPLAY_COUNT)
-    @user     = current_user
+      @room     = Room.where(id: params[:id]).first
+      @messages = @room.messages.last(MESSAGE_DISPLAY_COUNT)
+      @user     = current_user
+    if @room.status == "Closed"
+      redirect_to closed_room_path(@room, params)
+    end
   end
 
   def send_log
@@ -22,6 +25,12 @@ class RoomsController < ApplicationController
     email   = params[:log_email]
     room_id = params[:id]
     LogMailer.log_transcript(email, room_id).deliver
-    redirect_to room_path(@room)
+    redirect_to closed_room_path(@room, params)
   end
+
+  def closed
+    @room = Room.where(id: params[:id]).first
+    @user = current_user
+  end
+
 end
