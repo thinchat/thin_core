@@ -1,6 +1,5 @@
 class Guest < ActiveRecord::Base
   attr_accessible :name, :email
-  has_many :rooms
 
   before_create :set_name, :set_auth_token
   

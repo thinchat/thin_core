@@ -7,8 +7,7 @@ class RoomsController < ApplicationController
   def create
     # redirect_to rooms_path and return if current_user.class == Agent
     last_room = Room.order("id DESC").first
-    name      = Faker::Name.name
-    room      = Room.create(name: "The #{name}")
+    room = Room.create(name: "The #{Faker::Name.name}")
     redirect_to room_path(room)
   end
 

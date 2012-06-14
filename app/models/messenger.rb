@@ -6,6 +6,7 @@ class Messenger
   end
 
   def publish(channels, hash)
+    channels = [channels] if channels.is_a? String
     channels.uniq.each do |channel|
       Net::HTTP.post_form(uri, :message => message(channel, hash).to_json)
     end
