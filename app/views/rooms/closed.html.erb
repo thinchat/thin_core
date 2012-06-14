@@ -13,9 +13,8 @@
 
 <%= render "rooms/log_form" %>
 
-
 <%= coffee_script_tag do %>
   jQuery ->
     $('.resend_log').click ->
-      $('#myModal').modal('show')
+      $('#logModal').modal('show')
 <% end %>

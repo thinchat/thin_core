@@ -31,6 +31,9 @@ class RoomsController < ApplicationController
   def closed
     @room = Room.where(id: params[:id]).first
     @user = current_user
+    unless @room.status == "Closed"
+      redirect_to room_path(@room, params)
+    end
   end
 
 end
