@@ -1,32 +1,46 @@
 <div id="room">
-  <h1><%= @room.name %></h1>
 
-  <a class="close_room" id="<%= @room.id %>">Close the room</a>
-  <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
+
+  <div class="row">
+    <div class="span8">
+    <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
+    </div>
 
-  <%= render "form", :locals => { :room => @room } %>
-  <br />
+    <div class="span4" id="room_meta">
+<a class="close_room" id="<%= @room.id %>">Close the room</a>
   <%= render "messages/file", :locals =>  { :user => @user} %>
-  <br />
   <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
+</div>
+  </div><!-- end row -->
+
+  <div class="row">
+    <div class="span8" id="chat_input">
+      <%= render "form", :locals => { :room => @room } %>
+    </div>
+  </div>
+  
+  <a class="close_room" id="<%= @room.id %>">Close the room</a>
+
+  
 </div>
 
 <script type="text/html" id="message_template">
   <div class="message">
-    {{user_name}}: {{message_body}}
+    <div class="user_name">{{user_name}}:</div>
+    {{message_body}}
   </div>
 </script>
 
 <script type="text/html" id="document_template">
   <div class="message">
-    {{user_name}}: <a href={{message_body}} target="_blank"><img src="/assets/document.png"> {{metadata.filename}}</a>
+    {{user_name}}: <a href={{message_body}} target="_blank"><img class="download_image" src ={{metadata.icon}} height=50> {{metadata.filename}}</a>
   </div>
 </script>
 
 <script type="text/html" id="event_template">
-  <div class="message">
+  <div class="message event">
     {{message_body}}
   </div>
 </script>
@@ -46,8 +60,8 @@
     room = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
     room.joinRoomAndPulse(ChatHandler.handleMessage)
 
-    $("#new_message").live("ajax:complete", (event,xhr,status) ->
-      $('#new_message')[0].reset())
+    $(".new_message").live("ajax:complete", (event,xhr,status) ->
+      $(this)[0].reset())
 
     uploadHandler()
     $(':file').change ->

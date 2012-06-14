@@ -3,6 +3,12 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
 
+  before_filter :set_access
+
+  def set_access
+    response.headers["Access-Control-Allow-Origin"] = "*"
+  end
+
   def current_user
     @current_user ||= (get_agent || get_or_create_guest)
   end

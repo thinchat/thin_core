@@ -48,7 +48,7 @@
     @showModalHandler: =>
       $('.close_room').click ->
         ChatHandler.closeRoom($(this).attr("id"))
-        $('#myModal').modal('show')
+        $('#logModal').modal('show')
 
     @closeRoom = (id) ->
       $.ajax({
