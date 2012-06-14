@@ -1,22 +1,29 @@
 <div id="room">
-  <h1><%= @room.name %></h1>
 
   <div class="row">
     <div class="span8">
     <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
     </div>
+
+    <div class="span4" id="room_meta">
+      <%= render "form", :locals => { :room => @room } %>
+  <%= render "messages/file", :locals =>  { :user => @user} %>
+  <%= render "rooms/log_form" %>
+  <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
+</div>
+  </div><!-- end row -->
+
+  <div class="row">
+    <div class="span8" id="chat_input">
+      <%= render "form", :locals => { :room => @room } %>
+    </div>
   </div>
   
   <a class="close_room" id="<%= @room.id %>">Close the room</a>
   
 
-  <%= render "form", :locals => { :room => @room } %>
-  <br />
-  <%= render "messages/file", :locals =>  { :user => @user} %>
-  <br />
-  <%= render "rooms/log_form" %>
-  <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
+  
 </div>
 
 <script type="text/html" id="message_template">
