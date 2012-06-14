@@ -7,4 +7,10 @@ $ ->
     $('#myModal').modal('hide')
 
   closeRoom = (id) -> 
-    alert id
+    $.ajax({
+        type: 'PUT',
+        url: "/api/v1/rooms/#{id}",
+        data: {"room": { "status": "Closed"}},
+        success: (response) ->
+          console.log response
+        })
