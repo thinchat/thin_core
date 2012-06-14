@@ -7,7 +7,7 @@
     </div>
 
     <div class="span4" id="room_meta">
-      <%= render "form", :locals => { :room => @room } %>
+
   <%= render "messages/file", :locals =>  { :user => @user} %>
   <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
@@ -21,7 +21,6 @@
   </div>
   
   <a class="close_room" id="<%= @room.id %>">Close the room</a>
-  
 
   
 </div>
@@ -61,8 +60,12 @@
     room = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
     room.joinRoomAndPulse(ChatHandler.handleMessage)
 
-    $("#new_message").live("ajax:complete", (event,xhr,status) ->
-      $('#new_message')[0].reset())
+    $(".new_message").live("ajax:complete", (event,xhr,status) ->
+      elem = document.getElementById("#messages")
+      elem.scrollTop = elem.scrollHeight
+      $(this)[0].reset())
+
+
 
     uploadHandler()
     $(':file').change ->
