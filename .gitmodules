@@ -1,3 +1,6 @@
 [submodule "config/secret"]
 	path = config/secret
 	url = git@github.com:chrismanderson/thin_secret.git
+[submodule "config/deploy"]
+	path = config/deploy
+	url = git@github.com:thinchat/thin_cap.git

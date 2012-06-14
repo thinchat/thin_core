@@ -5,7 +5,7 @@ ThinCore::Application.routes.draw do
       resources :messages, :only => [:index, :create]
       resources :users, :only => [:index]
       resources :agents, :onlly => [:index]
-      resources :rooms, :only => [:index]
+      resources :rooms, :only => [:index, :update]
       resources :alerts, :only => [:create]
     end
   end
@@ -14,6 +14,7 @@ ThinCore::Application.routes.draw do
   resources :rooms do
     member do
       post 'send_log'
+      get 'closed'
     end
   end
   

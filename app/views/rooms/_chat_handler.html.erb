@@ -50,10 +50,6 @@
         ChatHandler.closeRoom($(this).attr("id"))
         $('#myModal').modal('show')
 
-    @closeModalHandler: =>
-      $('.log_send').click ->
-        $('#myModal').modal('hide')
-
     @closeRoom = (id) ->
       $.ajax({
           type: 'PUT',
