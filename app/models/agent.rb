@@ -1,19 +1,20 @@
 class Agent
   # attr_accessible :name, :thin_auth_id
-  attr_accessor :name, :thin_auth_id
+  attr_accessor :name, :thin_auth_id, :email
 
   def id
     thin_auth_id
   end
 
-  def initialize(thin_auth_id, name=nil)
+  def initialize(thin_auth_id, email, name=nil)
     @thin_auth_id = thin_auth_id.to_i
+    @email = email
     @name = name
   end
 
   def self.new_from_cookie(cookie)
     params = JSON.parse(cookie)
-    Agent.new(params["id"], params["name"])
+    Agent.new(params["id"], params["emails"], params["name"])
   end
 
   def channel

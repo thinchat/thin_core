@@ -10,6 +10,7 @@ set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
 set :ssh_options, { :forward_agent => true }
+set :git_enable_submodules,1
 
 set :scm, "git"
 set :repository, "git@github.com:thinchat/#{application}.git"
@@ -77,7 +78,6 @@ namespace :deploy do
     require "./config/secret/redis_password.rb"
     sudo "/usr/bin/redis-cli config set requirepass #{REDIS_PASSWORD}"
   end
-  before "deploy:symlink_config", "deploy:secret"
 
   desc "Push ssh keys to authorized_keys"
   task :keys, roles: :app do
@@ -136,7 +136,7 @@ namespace :deploy do
 
   desc "Symlink shared/database.yml to config/database.yml"
   task :symlink_config, roles: :app do
-    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "cp #{release_path}/config/secret/database.#{application}.yml #{release_path}/config/database.yml"
   end
   after "deploy:finalize_update", "deploy:symlink_config"
 
@@ -144,7 +144,7 @@ namespace :deploy do
   task :god_config, roles: :app do
     run "cp #{release_path}/config/god/thin_core.#{rails_env}.god #{release_path}/config/thin_core.god"
   end
-  after "deploy:secret", "deploy:god_config"
+  after "deploy:symlink_config", "deploy:god_config"
 
   desc "Make sure local git is in sync with remote."
   task :check_revision, roles: :web do
