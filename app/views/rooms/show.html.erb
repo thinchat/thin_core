@@ -40,7 +40,8 @@
     channel = $('#messages').data('channel')
     ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
-    faye_chat = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
+    room = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
+    room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     $("#new_message").live("ajax:complete", (event,xhr,status) ->
       $('#new_message')[0].reset())

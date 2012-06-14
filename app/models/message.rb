@@ -31,8 +31,12 @@ class Message < ActiveRecord::Base
     hash
   end
 
+  def in_chat_room?
+    room_id > 0
+  end
+
   def room_channel
-    "/messages/#{room_id}"
+    "/messages/#{room_id}" if in_chat_room?
   end
 
   def online_user_channel
@@ -51,7 +55,7 @@ class Message < ActiveRecord::Base
   def get_channels
     case message_type
     when "Subscribe", "Disconnect"
-      [ room_channel, online_user_channel ]
+      [ online_user_channel, room_channel ].delete_if{ |x| x.nil? }
     else
       [ room_channel ]
     end
