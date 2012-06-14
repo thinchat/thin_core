@@ -18,15 +18,9 @@ ThinCore::Application.routes.draw do
     end
   end
   
-<<<<<<< HEAD
-  mount Resque::Server, :at => "/resque"
-
   match 'find' => 'searches#show'
-
-=======
   resources :guests, :only => [:update]
   resources :agents, :only => [:index]
->>>>>>> 79fc11f0146e0a98769fe91418869a10665362bf
   root :to => 'rooms#index'
   mount Resque::Server, :at => "/resque"
 end
