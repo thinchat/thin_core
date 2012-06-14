@@ -1,9 +1,15 @@
 <div id="room">
   <h1><%= @room.name %></h1>
+
+  <div class="row">
+    <div class="span8">
+    <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
+  <% end %>
+    </div>
+  </div>
   
   <a class="close_room" id="<%= @room.id %>">Close the room</a>
-  <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
-  <% end %>
+  
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
@@ -15,7 +21,8 @@
 
 <script type="text/html" id="message_template">
   <div class="message">
-    {{user_name}}: {{message_body}}
+    <div class="user_name">{{user_name}}:</div>
+    {{message_body}}
   </div>
 </script>
 
@@ -26,7 +33,7 @@
 </script>
 
 <script type="text/html" id="event_template">
-  <div class="message">
+  <div class="message event">
     {{message_body}}
   </div>
 </script>
