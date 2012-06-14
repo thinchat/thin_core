@@ -1,29 +1,5 @@
-<script type="text/javascript">
-  window.api_v1_users_url = "<%= api_v1_users_url %>"
-</script>
-
 <%= coffee_script_tag do %>
   class @UserHandler
-    @getUsers: ->
-      $.getJSON(api_v1_users_url, UserHandler.renderUsers)
-
-    @renderUsers: (users) =>
-      for user in users
-        UserHandler.addUserToRoom(user)
-
-    @handleUser: (data) =>
-      console.log data
-      if (data.message_type == "Subscribe")
-        UserHandler.addUserToRoom(data)
-      else if (data.message_type == "Disconnect")
-        UserHandler.removeUser(data.metadata.client_id)
-
-    @addUserToRoom: (user) =>
-      $("#room-#{user.metadata.location}").append Mustache.to_html($('#user_template').html(), user)
-
-    @removeUser: (client_id) =>
-      $(".#{client_id}").remove()
-
-    @addUser: (user) =>
-      $('#users').append Mustache.to_html($('#user_template').html(), user)
+    @getUsers: (api_v1_users_url, callback) ->
+      $.getJSON(api_v1_users_url, callback)
 <% end %>
