@@ -1,6 +1,5 @@
 class Guest < ActiveRecord::Base
   attr_accessible :name, :email
-  has_many :rooms
 
   before_create :set_name, :set_auth_token
   
@@ -23,5 +22,9 @@ class Guest < ActiveRecord::Base
 
   def user_hash
     { user_id: id.to_s, user_type: 'Guest', user_name: name }
+  end
+
+  def guest_email
+    email ? email : ""
   end
 end

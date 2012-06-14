@@ -1,7 +1,7 @@
 <div id="users"></div>
 
 <script type="text/html" id="user_template">
-  <div class="{{client_id}}">{{user_name}} in Room {{room_id}}</div>
+  <div class="{{metadata.client_id}}">{{user_name}} in Room {{metadata.location}} <span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite user!</a></span></div>
 </script>
 
 <% content_for :faye do %>
@@ -11,9 +11,17 @@
 
 <%= coffee_script_tag do %>
   jQuery ->
-    location = 'Lobby'
-    roomHandler = RoomHandler.getRooms()
-    userHandler = UserHandler.getUsers()
+    location = 'Guest Users'
+    userHandler = UserHandler.getUsers("<%= api_v1_users_url %>", GuestsIndexUserPresenter.renderUsers)
     user_hash = $.namespace.getUser(location)
-    faye_users = new FayeHandler(user_hash, '/online_users', UserHandler.handleUser)
+    online_users = new FayeHandler(user_hash, '/online_users')
+    online_users.joinRoomAndPulse(GuestsIndexUserPresenter.handleUser)
+
+    #$('.invite').live("click", -> console.log($(this).data('id')))
+    $('.invite').live("click", ->
+      $.post(
+        "<%= api_v1_alerts_url %>" + "?user_id=#{$(this).data('id')}"
+        id: 2
+        user_hash: user_hash
+      ))
 <% end %>

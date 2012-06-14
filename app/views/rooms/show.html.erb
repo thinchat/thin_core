@@ -1,13 +1,15 @@
 <div id="room">
   <h1><%= @room.name %></h1>
   
+  <a class="close_room" id="<%= @room.id %>">Close the room</a>
   <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
   <% end %>
 
   <%= render "form", :locals => { :room => @room } %>
   <br />
-  <%= render "messages/file" %>
+  <%= render "messages/file", :locals =>  { :user => @user} %>
   <br />
+  <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
 </div>
 
@@ -40,7 +42,8 @@
     channel = $('#messages').data('channel')
     ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
-    faye_chat = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
+    room = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
+    room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     $("#new_message").live("ajax:complete", (event,xhr,status) ->
       $('#new_message')[0].reset())
