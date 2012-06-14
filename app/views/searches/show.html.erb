@@ -1,0 +1,30 @@
+<h1>Search results</h1>
+<h4>Searching for <%= @query %></h4>
+
+<%= content_tag "div", id: "messages", class: "info", 
+    data: {search_string: @query } do %>
+<% end %>
+
+<%= render "search_handler" %>
+
+<script type="text/html" id="message_template">
+  <div class="message">
+    <h3>Room: {{room_id}}</h3>
+    {{user_name}}:
+    {{created_at}}
+    {{message_body}}
+  </div>
+</script>
+
+<script type="text/html" id="empty_template">
+  <div class="message">
+    <p>No search results for {{query_text}}, sorry!</p>
+  </div>
+</script>
+
+
+<%= coffee_script_tag do %>
+  jQuery ->
+    url = '<%= root_url %>'
+    SearchHandler.find(url,"<%= @query %>")
+<% end %>

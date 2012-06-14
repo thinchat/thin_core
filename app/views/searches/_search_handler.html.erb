@@ -1,0 +1,43 @@
+<script type="text/javascript">
+  window.api_v1_search_url = "search/api/v1/search?query="
+</script>
+
+<%= coffee_script_tag do %>
+  class @SearchHandler
+    @find: (url, query) =>
+      api_url = url + api_v1_search_url + query
+      $.ajax
+        url: api_url
+        dataType: 'json'
+        type: 'GET'
+        crossDomain: true,
+        success: (response) ->
+          SearchHandler.renderMessages(response, query)
+
+    @getMessages: (room_id) ->
+      $.getJSON("#{api_v1_messages_url}?room_id=#{51}", SearchHandler.renderMessages)
+
+    @renderMessages: (messages, query) =>
+      if messages.length > 0
+        for message in messages
+          SearchHandler.handleMessage(message.chat_message)
+      else
+        SearchHandler.handleEmpty(query)
+
+    @handleEmpty: (query) =>
+      query_hash = {query_text: query}
+      $('#messages').append Mustache.to_html($('#empty_template').html(), query_hash)
+
+    @handleMessage: (message) =>
+      console.log message
+      if (message.message_type == "Message")
+        SearchHandler.addMessage(message)
+      else if (message.message_type == "Document")
+        SearchHandler.addDocument(message)
+      else
+        SearchHandler.addEvent(message)
+
+    @addMessage: (message) =>
+      $('#messages').append Mustache.to_html($('#message_template').html(), message)
+
+<% end %>

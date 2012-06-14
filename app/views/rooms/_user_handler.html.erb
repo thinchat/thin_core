@@ -1,5 +1,5 @@
 <%= coffee_script_tag do %>
   class @UserHandler
-    @getUsers: (api_v1_users_url, callback) ->
-      $.getJSON(api_v1_users_url, callback)
+    @getUsers: (url, callback) ->
+      $.getJSON(url, callback)
 <% end %>

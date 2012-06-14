@@ -2,24 +2,36 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.room_meta {
+#room_meta {
   position: fixed;
   margin-top: 10px;
+  margin-left: 65%;
 }
 
 #messages {
-  margin-bottom: 150px;
+  margin-bottom: 20px;
+  -moz-box-shadow: 0 2px 5px rgba(104, 104, 104, 0.62);
+  -webkit-box-shadow: 0 2px 5px rgba(104, 104, 104, 0.62);
+  -o-box-shadow: 0px 1px 0px #fff;
+  box-shadow: 0 2px 5px rgba(104, 104, 104, 0.62);
+  border-top: 1px solid #d0d0d0;
+  overflow: auto;
 }
 
 .message {
-  font-size: 1.2em;
-  margin: 5px 0px 10px 0px;
+  font-size: 1.1em;
   padding: 10px 25px 10px 25px;
   line-height: 24px;
   background: #fff;
-
+  border-bottom: 1px inset #d0d0d0;
 }
-.message #author {
+
+.message.event {
+  font-style: italic;
+  font-size: 1em;
+}
+
+.user_name {
   font-weight: 600;
 }
 
@@ -30,8 +42,8 @@
   background: #f7f7f7;
 }
 
-#chat_input textarea {
-  width: 80%;
+#message_body {
+  width: 98%;
   height: 50px;
 }
 

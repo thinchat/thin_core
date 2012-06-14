@@ -16,8 +16,18 @@
     <div class="container">
       <div class="content">
         <div id="flash"></div>
+        <%= render "shared/alert_template" %>
+        <%= render "shared/private_message_handler" %>
 
-              <%= yield %>
+        <%= coffee_script_tag do %>
+          jQuery ->
+            user_hash = $.namespace.getUser(location)
+            if user_hash.user_type == "Agent"
+              agent_channel = new FayeHandler(user_hash, user_hash.private_channel)
+              agent_channel.joinRoom(PrivateMessageHandler.handleMessage)
+        <% end %>
+
+        <%= yield %>
       </div><!--/content-->
       <%= render "layouts/footer" %>
     </div> <!-- /container -->

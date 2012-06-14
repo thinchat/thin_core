@@ -6,15 +6,12 @@ class RoomsController < ApplicationController
 
   def create
     # redirect_to rooms_path and return if current_user.class == Agent
-    last_room = Room.order("id DESC").first
-    room = Room.create(name: "The #{Faker::Name.name}")
+    room = Room.create()
     redirect_to room_path(room)
   end
 
   def show
-      @room     = Room.where(id: params[:id]).first
-      @messages = @room.messages.last(MESSAGE_DISPLAY_COUNT)
-      @user     = current_user
+    @room     = Room.where(id: params[:id]).first
     if @room.status == "Closed"
       redirect_to closed_room_path(@room, params)
     end
@@ -35,5 +32,4 @@ class RoomsController < ApplicationController
       redirect_to room_path(@room, params)
     end
   end
-
 end
