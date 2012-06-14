@@ -1,6 +1,6 @@
 class RoomsController < ApplicationController
   def index
-    @user = current_user
+    @user     = current_user
     @location = "Lobby"
   end
 
@@ -12,8 +12,16 @@ class RoomsController < ApplicationController
   end
 
   def show
-    @room = Room.where(id: params[:id]).first
+    @room     = Room.where(id: params[:id]).first
     @messages = @room.messages.last(MESSAGE_DISPLAY_COUNT)
-    @user = current_user
+    @user     = current_user
+  end
+
+  def send_log
+    @room   = Room.where(id: params[:id]).first
+    email   = params[:log_email]
+    room_id = params[:id]
+    LogMailer.log_transcript(email, room_id).deliver
+    redirect_to room_path(@room)
   end
 end

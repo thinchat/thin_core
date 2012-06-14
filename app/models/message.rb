@@ -20,14 +20,15 @@ class Message < ActiveRecord::Base
     }
   end
 
-  def self.build_params_hash(json)
-    params = JSON.parse(json)
+  def self.build_params_hash(params)
+    params = JSON.parse(params)
     hash = {}
     MESSAGE_ATTRS.each do |attribute|
       hash[attribute] = params[attribute.to_s] if params.has_key? attribute.to_s
     end
-    hash[:room_id] = params["location"]
-    hash[:metadata] = {client_id: params["client_id"], location: params["location"]}
+    hash[:room_id] = params["location"] || params["room_id"] #faye_server sends location, for Lobby. thin_file sends as room_id, for message.
+    hash[:metadata] ||= {}
+    hash[:metadata].merge({client_id: params["client_id"], location: params["location"]})
     hash
   end
 

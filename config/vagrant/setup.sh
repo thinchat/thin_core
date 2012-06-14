@@ -2,7 +2,7 @@
 
 apt-get -y update
 apt-get -y upgrade
-apt-get -y install git-core curl vim libffi-dev
+apt-get -y install git-core curl vim libffi-dev libxslt-dev libxml2-dev
 echo "America/New_York" | sudo tee /etc/timezone
 dpkg-reconfigure --frontend noninteractive tzdata
 curl -L https://raw.github.com/gist/2910634/8ddbbe9c3c95782bc37bc0a1d261265d5afedebe/chef_solo_bootstrap.sh | bash
