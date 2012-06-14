@@ -46,8 +46,16 @@ class Message < ActiveRecord::Base
     "/messages/#{room_id}" if in_chat_room?
   end
 
+  def from_agent?
+    user_type == "Agent"
+  end
+
+  def from_guest?
+    user_type == "Guest"
+  end
+
   def online_user_channel
-    "/online_users"
+    user_type ? "/online/#{user_type.downcase}" : "/online"
   end
 
   def faye_message

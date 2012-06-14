@@ -18,6 +18,7 @@ gem 'coffeebeans'
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'resque'
 gem 'resque_mailer'
+gem 'squeel'
 
 # Gems used only for assets and not required
 # in production environments by default.

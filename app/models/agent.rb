@@ -14,7 +14,7 @@ class Agent
 
   def self.new_from_cookie(cookie)
     params = JSON.parse(cookie)
-    Agent.new(params["id"], params["emails"], params["name"])
+    Agent.new(params["id"], params["email"], params["name"])
   end
 
   def channel

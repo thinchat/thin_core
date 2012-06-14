@@ -7,7 +7,4 @@ class GuestsController < ApplicationController
     @guest.update_attributes(params[:guest])
     render :json => true
   end
-
-  def index
-  end
 end

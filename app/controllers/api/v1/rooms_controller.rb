@@ -2,11 +2,7 @@ class Api::V1::RoomsController < ApplicationController
   respond_to :json
 
   def index
-    @rooms = Room.all
-  end
-
-  def show
-    respond_with Room.find(params[:id])
+    @rooms = Room.in_queue
   end
 
   def update
