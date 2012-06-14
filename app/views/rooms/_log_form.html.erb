@@ -7,7 +7,7 @@
     <p>Would you like a chat transcript?</p>
   </br>
     Email:<%= form_for @room,:url => send_log_room_path(@room),:method => "post" do |f| %>
-       <%= text_field_tag "[log_email]", @user.guest_email %>
+       <%= text_field_tag "[log_email]", @user.email %>
     </p>
   </div>
   <div class="modal-footer">
