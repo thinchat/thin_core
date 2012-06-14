@@ -26,10 +26,16 @@ class Message < ActiveRecord::Base
     MESSAGE_ATTRS.each do |attribute|
       hash[attribute] = params[attribute.to_s] if params.has_key? attribute.to_s
     end
-    hash[:room_id] = params["location"] || params["room_id"] #faye_server sends location, for Lobby. thin_file sends as room_id, for message.
+    hash[:room_id] = params["location"] || params["room_id"]
+    #faye_server sends location, for Lobby. thin_file sends as room_id, for message.
+    add_metadata(hash, params)
+  end
+
+  def self.add_metadata(hash, params)
     hash[:metadata] ||= {}
-    hash[:metadata].merge({client_id: params["client_id"], location: params["location"]})
-    hash
+    hash.tap do |h|
+      h[:metadata].merge!({client_id: params["client_id"], location: params["location"]})
+    end
   end
 
   def in_chat_room?
