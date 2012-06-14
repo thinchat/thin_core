@@ -45,4 +45,22 @@
         content = content + "<a href='#{image}' target='_blank'><img src='#{image}' height=200</img></a>"
       content
 
+    @showModalHandler: =>
+      $('.close_room').click ->
+        ChatHandler.closeRoom($(this).attr("id"))
+        $('#myModal').modal('show')
+
+    @closeModalHandler: =>
+      $('.log_send').click ->
+        $('#myModal').modal('hide')
+
+    @closeRoom = (id) ->
+      $.ajax({
+          type: 'PUT',
+          url: "/api/v1/rooms/#{id}",
+          data: {"room": { "status": "Closed"}},
+          success: (response) ->
+            console.log response
+          })
+
 <% end %>

@@ -40,6 +40,8 @@
   jQuery ->
     location = $('#messages').data('location')
     channel = $('#messages').data('channel')
+    ChatHandler.showModalHandler()
+    ChatHandler.closeModalHandler()
     ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
     faye_chat = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
