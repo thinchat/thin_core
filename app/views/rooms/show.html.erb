@@ -80,7 +80,7 @@
       data = new FormData form
       $.ajax({
         type: 'POST',
-        url: '<%= root_url %>file/api/documents',
+        url: '<%= root_url %>file/api/v1/documents.json',
         data: data,
         cache: false,
         contentType: false,
