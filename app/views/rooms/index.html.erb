@@ -15,7 +15,6 @@
 </script>
 
 <% content_for :faye do %>
-  <%= render "shared/faye_handler" %>
   <%= render "room_handler" %>
   <%= render "rooms/user_handler" %>
 <% end %>
@@ -26,6 +25,6 @@
     roomHandler = RoomHandler.getRooms("<%= api_v1_rooms_url %>", RoomsIndexRoomPresenter.renderRooms)
     userHandler = UserHandler.getUsers("<%= api_v1_users_url %>", RoomsIndexUserPresenter.renderUsers)
     user_hash = $.namespace.getUser(location)
-    online_users = new FayeHandler(user_hash, '/online/*')
+    online_users = new FayeHandler("<%= FAYE_URL %>", user_hash, '/online/*')
     online_users.joinRoomAndPulse(RoomsIndexUserPresenter.handleUser)
 <% end %>

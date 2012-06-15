@@ -7,12 +7,16 @@ class Room < ActiveRecord::Base
     self.name = rand(36**8).to_s(16)
   end
 
+  def closed?
+    status == "Closed"
+  end
+
   def self.in_queue
-    statuses = [ nil, "pending", "active" ]
+    statuses = [ "Pending", "Active" ]
     Room.where{status.in statuses}
   end
 
   def channel
-    "/messages/#{id}"
+    "/messages/#{name}"
   end
 end

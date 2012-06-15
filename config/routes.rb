@@ -11,13 +11,11 @@ ThinCore::Application.routes.draw do
   end
 
   resources :messages
-  resources :rooms do
-    member do
-      post 'send_log'
-      get 'closed'
-    end
-  end
-  
+  resources :rooms, :only => [:create, :index]
+  resources :logs, :only => [:create]
+  match '/rooms/:name/closed' => 'rooms#closed', :as => :closed_room
+  match '/rooms/:name' => 'rooms#show', :as => :room
+
   resources :guests, :only => [:update]
   resources :agents, :only => [:index]
   root :to => 'rooms#index'

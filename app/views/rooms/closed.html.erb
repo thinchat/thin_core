@@ -1,12 +1,12 @@
 <h1>Thanks for Thinchatting</h1>
 </br>
 </br>
-<% if params[:log_email] %>
-  <p>Your Transcript was sent to <%= params[:log_email] %>
-  <a class="resend_log" id="<%= params[:id] %>">(Change or Resend)</a></p>
+<% if @email %>
+  <p>Your Transcript was sent to <%= @email %>.
+  <a class="resend_log" id="<%= @room.id %>">(Change or Resend)</a></p>
 <% else %>
   <p>Are you sure you don't want a transcript?
-  <a class="resend_log" id="<%= params[:id] %>">Receive a transcript</a></p>
+  <a class="resend_log" id="<%= @room.id %>">Receive a transcript</a></p>
 <% end %>
 </br>
 </br>

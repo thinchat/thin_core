@@ -1,6 +1,7 @@
 class @AgentsIndexUserPresenter
   @renderUsers: (users) =>
     for user in users
+      console.log user
       AgentsIndexUserPresenter.addUser(user)
 
   @handleUser: (data) =>

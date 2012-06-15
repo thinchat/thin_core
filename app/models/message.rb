@@ -38,12 +38,9 @@ class Message < ActiveRecord::Base
     end
   end
 
-  def in_chat_room?
-    room_id > 0
-  end
-
   def room_channel
-    "/messages/#{room_id}" if in_chat_room?
+    room = Room.where(id: room_id).first
+    room.present? ? "/messages/#{room.name}" : nil
   end
 
   def from_agent?

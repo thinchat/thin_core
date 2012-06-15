@@ -32,7 +32,6 @@
 </script>
 
 <% content_for :faye do %>
-  <%= render "shared/faye_handler" %>
   <%= render "chat_handler" %>
 <% end %>
 
@@ -43,7 +42,8 @@
     ChatHandler.showModalHandler()
     ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
-    room = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
+    console.log channel
+    room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
     room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     $("#new_message").live("ajax:complete", (event,xhr,status) ->

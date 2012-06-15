@@ -16,7 +16,6 @@ class MessagesController < ApplicationController
       :user_type => current_user.user_hash[:user_type],
       :user_name => current_user.user_hash[:user_name] }
   end
-
 end
 
 # {"channel"=>"/messages/5", 
