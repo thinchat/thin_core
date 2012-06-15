@@ -1,5 +1,4 @@
 ThinCore::Application.routes.draw do
-  
   namespace :api do
     namespace :v1 do
       resources :messages, :only => [:index, :create]
@@ -16,8 +15,14 @@ ThinCore::Application.routes.draw do
   match '/rooms/:name/closed' => 'rooms#closed', :as => :closed_room
   match '/rooms/:name' => 'rooms#show', :as => :room
 
+  match 'find' => 'searches#show'
   resources :guests, :only => [:update]
   resources :agents, :only => [:index]
   root :to => 'rooms#index'
   mount Resque::Server, :at => "/resque"
+
+  resources :hangouts
+  match '/tos' => 'legal#tos'
+  match '/privacy' => 'legal#privacy'
+  match '/support' => 'legal#support'
 end
