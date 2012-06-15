@@ -40,9 +40,9 @@
     @replaceImages: (images, content) ->
       for image in images
         content = content.replace image, ""
-      content = linkify(content)
+      content = $(linkify(content))
       for image in images
-        content = content + "<a href='#{image}' target='_blank'><img src='#{image}' height=200 ></img></a>"
+        content.append "<a href='#{image}' target='_blank'><img src='#{image}' height=200 ></img></a>"
       content
 
     @showModalHandler: =>
