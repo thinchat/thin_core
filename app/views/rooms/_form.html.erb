@@ -2,5 +2,5 @@
   <%= f.text_area :body  %>
   <%= f.hidden_field :room_id, :value => @room.id %>
   <%= f.hidden_field :message_type, :value =>"Message" %>
-  <%= f.submit 'Send Message', :id => 'message_submit', :class => 'btn'  %>
+  <%= f.submit 'Send Message', :id => 'message_submit', :class => 'btn btn-warning btn-large'  %>
 <% end %>
