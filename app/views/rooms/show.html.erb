@@ -15,7 +15,7 @@
 </div>
   </div><!-- end row -->
 
-  <div class="row">
+  <div class="row" id="chat_input_row">
     <div class="span8" id="chat_input">
       <%= render "form", :locals => { :room => @room } %>
     </div>
@@ -61,7 +61,12 @@
     room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     $(".new_message").live("ajax:complete", (event,xhr,status) ->
+      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
       $(this)[0].reset())
+
+    $("#message_body").keypress (e) ->
+      if (e.which == 13 && e.shiftKey == false)
+        $("#new_message").submit()
 
     uploadHandler()
     $(':file').change ->
