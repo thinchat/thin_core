@@ -1,10 +1,6 @@
 ThinCore::Application.routes.draw do
-  
-  get "legal/tos"
 
-  get "legal/support"
-
-  get "legal/privacy"
+  get "hangout/index"
 
   namespace :api do
     namespace :v1 do
