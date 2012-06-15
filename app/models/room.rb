@@ -8,11 +8,15 @@ class Room < ActiveRecord::Base
   end
 
   def self.in_queue
-    statuses = [ nil, "pending", "active" ]
+    statuses = [ nil, "Pending", "Active" ]
     Room.where{status.in statuses}
   end
 
   def channel
     "/messages/#{id}"
+  end
+
+  def change_status
+    self.update_attribute(:status, "Active") if status == "Pending"
   end
 end
