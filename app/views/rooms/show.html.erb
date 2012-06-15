@@ -81,7 +81,7 @@
       data = new FormData form
       $.ajax({
         type: 'POST',
-        url: 'http://localhost:3001/api/documents',
+        url: '<%= root_url %>file/api/documents',
         data: data,
         cache: false,
         contentType: false,
