@@ -17,6 +17,7 @@ class Message < ActiveRecord::Base
       message_body: body,
       metadata: metadata,
       created_at: created_at,
+      pretty_time: created_at.strftime("%l:%M %p")
     }
   end
 

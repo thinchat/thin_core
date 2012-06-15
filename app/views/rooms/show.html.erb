@@ -23,8 +23,8 @@
 
 <script type="text/html" id="message_template">
   <div class="message">
-    <div class="user_name">{{user_name}}</div>
-    {{message_body}}
+    <div class="user_name">{{user_name}}</div><div class="chat_date">{{pretty_time}}</div>
+    <div class="message_body">{{message_body}}</div>
   </div>
 </script>
 
@@ -64,6 +64,7 @@
     room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     $(".new_message").live("ajax:complete", (event,xhr,status) ->
+      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
       $(this)[0].reset())
 
     $(document).ready ->
@@ -86,7 +87,7 @@
       data = new FormData form
       $.ajax({
         type: 'POST',
-        url: 'http://localhost:3001/api/documents',
+        url: '<%= root_url %>file/api/v1/documents.json',
         data: data,
         cache: false,
         contentType: false,
