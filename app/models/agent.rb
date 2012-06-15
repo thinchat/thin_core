@@ -28,7 +28,7 @@ class Agent
   end
 
   def self.find_by_authentication_token(token)
-    uri = URI.parse("#{root_url}/auth/api/v1/users.json?authentication_token=#{token}")
+    uri = URI.parse("#{root_url}auth/api/v1/users.json?authentication_token=#{token}")
     response = Net::HTTP.get(uri)
     JSON.parse(response)["authentication_token"]
   end
