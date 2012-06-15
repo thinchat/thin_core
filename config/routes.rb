@@ -23,4 +23,8 @@ ThinCore::Application.routes.draw do
   resources :agents, :only => [:index]
   root :to => 'rooms#index'
   mount Resque::Server, :at => "/resque"
+
+  match '/tos', :to => redirect('/public/tos.html')
+  match '/privacy', :to => redirect('/public/privacy.html')
+  match '/support', :to => redirect('/public/support.html')
 end
