@@ -50,7 +50,7 @@
       content
 
     @showModalHandler: =>
-      $('.close_room').click ->
+      $(document).on 'click','.close_room', (e) ->
         ChatHandler.closeRoom($(this).attr("id"))
         $('#logModal').modal('show')
 
