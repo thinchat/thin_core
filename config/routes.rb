@@ -1,11 +1,4 @@
 ThinCore::Application.routes.draw do
-  
-  get "legal/tos"
-
-  get "legal/support"
-
-  get "legal/privacy"
-
   namespace :api do
     namespace :v1 do
       resources :messages, :only => [:index, :create]
@@ -23,13 +16,14 @@ ThinCore::Application.routes.draw do
       get 'closed'
     end
   end
-  
+
   match 'find' => 'searches#show'
   resources :guests, :only => [:update]
   resources :agents, :only => [:index]
   root :to => 'rooms#index'
   mount Resque::Server, :at => "/resque"
 
+  resources :hangouts
   match '/tos' => 'legal#tos'
   match '/privacy' => 'legal#privacy'
   match '/support' => 'legal#support'

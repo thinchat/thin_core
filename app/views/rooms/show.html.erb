@@ -12,23 +12,20 @@
   <%= render "messages/file", :locals =>  { :user => @user} %>
   <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
+  <a class="close_room" id="<%= @room.id %>">Close the room</a>
 </div>
   </div><!-- end row -->
 
-  <div class="row">
+  <div class="row" id="chat_input_row">
     <div class="span8" id="chat_input">
       <%= render "form", :locals => { :room => @room } %>
     </div>
   </div>
-  
-  <a class="close_room" id="<%= @room.id %>">Close the room</a>
-
-  
 </div>
 
 <script type="text/html" id="message_template">
   <div class="message">
-    <div class="user_name">{{user_name}}:</div>
+    <div class="user_name">{{user_name}}</div>
     {{message_body}}
   </div>
 </script>
@@ -62,6 +59,13 @@
 
     $(".new_message").live("ajax:complete", (event,xhr,status) ->
       $(this)[0].reset())
+
+    $(document).ready ->
+      $("a.fancybox").fancybox()
+
+    $("#message_body").keypress (e) ->
+      if (e.which == 13 && e.shiftKey == false)
+        $("#new_message").submit()
 
     uploadHandler()
     $(':file').change ->
