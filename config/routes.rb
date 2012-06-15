@@ -1,7 +1,4 @@
 ThinCore::Application.routes.draw do
-
-  get "hangout/index"
-
   namespace :api do
     namespace :v1 do
       resources :messages, :only => [:index, :create]
@@ -19,13 +16,14 @@ ThinCore::Application.routes.draw do
       get 'closed'
     end
   end
-  
+
   match 'find' => 'searches#show'
   resources :guests, :only => [:update]
   resources :agents, :only => [:index]
   root :to => 'rooms#index'
   mount Resque::Server, :at => "/resque"
 
+  resource :hangout
   match '/tos' => 'legal#tos'
   match '/privacy' => 'legal#privacy'
   match '/support' => 'legal#support'
