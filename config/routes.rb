@@ -1,5 +1,11 @@
 ThinCore::Application.routes.draw do
   
+  get "legal/tos"
+
+  get "legal/support"
+
+  get "legal/privacy"
+
   namespace :api do
     namespace :v1 do
       resources :messages, :only => [:index, :create]
@@ -24,7 +30,7 @@ ThinCore::Application.routes.draw do
   root :to => 'rooms#index'
   mount Resque::Server, :at => "/resque"
 
-  match '/tos', :to => redirect('/public/tos.html')
-  match '/privacy', :to => redirect('/public/privacy.html')
-  match '/support', :to => redirect('/public/support.html')
+  match '/tos' => 'legal#tos'
+  match '/privacy' => 'legal#privacy'
+  match '/support' => 'legal#support'
 end
