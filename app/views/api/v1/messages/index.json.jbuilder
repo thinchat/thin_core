@@ -3,4 +3,5 @@ json.array!(@messages) do |json, message|
   json.message_body message.body
   json.message_id message.id
   json.metadata message.metadata
+  json.pretty_time message.created_at.strftime("%l:%M %p")
 end
