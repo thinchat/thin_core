@@ -12,6 +12,7 @@
   <%= render "messages/file", :locals =>  { :user => @user} %>
   <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
+  <a class="close_room" id="<%= @room.id %>">Close the room</a>
 </div>
   </div><!-- end row -->
 
@@ -20,15 +21,11 @@
       <%= render "form", :locals => { :room => @room } %>
     </div>
   </div>
-  
-  <a class="close_room" id="<%= @room.id %>">Close the room</a>
-
-  
 </div>
 
 <script type="text/html" id="message_template">
   <div class="message">
-    <div class="user_name">{{user_name}}:</div>
+    <div class="user_name">{{user_name}}</div>
     {{message_body}}
   </div>
 </script>
@@ -61,7 +58,6 @@
     room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     $(".new_message").live("ajax:complete", (event,xhr,status) ->
-      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
       $(this)[0].reset())
 
     $(document).ready ->
