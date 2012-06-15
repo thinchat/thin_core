@@ -23,7 +23,7 @@ ThinCore::Application.routes.draw do
   root :to => 'rooms#index'
   mount Resque::Server, :at => "/resque"
 
-  resource :hangout
+  resources :hangouts
   match '/tos' => 'legal#tos'
   match '/privacy' => 'legal#privacy'
   match '/support' => 'legal#support'

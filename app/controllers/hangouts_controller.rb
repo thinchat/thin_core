@@ -1,4 +1,6 @@
 class HangoutsController < ApplicationController
-  def show
+  respond_to :xml
+
+  def new
   end
 end
