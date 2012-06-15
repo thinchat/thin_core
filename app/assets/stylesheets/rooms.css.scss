@@ -32,8 +32,17 @@
   font-size: 1em;
 }
 
+.message .chat_date {
+  color:  #a9a9a9;
+  font-size: 0.8em;
+  display: inline;
+  float: right;
+}
+
 .user_name {
   font-weight: 600;
+  width: 50%;
+  display: inline;
 }
 
 #chat_input {

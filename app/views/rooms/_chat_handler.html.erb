@@ -15,8 +15,9 @@
       if (message.message_type == "Message")
         ChatHandler.addMessage(message)
       else if (message.message_type == "Document")
-        console.log message
         ChatHandler.addDocument(message)
+      else if (message.message_type == "Agent_close")
+        ChatHandler.addAgentClose(message)
       else
         ChatHandler.addEvent(message)
 
@@ -29,6 +30,9 @@
 
     @addDocument: (message) =>
       $('#messages').append Mustache.to_html($('#document_template').html(), message)
+
+    @addAgentClose: (message) =>
+      $('#messages').append Mustache.to_html($('#agent_close_template').html(), message)
 
     @linkMessage: (content) ->
       images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png|jpeg)(?:\?.*)?/ig

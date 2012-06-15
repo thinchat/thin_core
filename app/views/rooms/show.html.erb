@@ -1,6 +1,4 @@
 <div id="room">
-
-
   <div class="row">
     <div class="span8">
     <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
@@ -8,7 +6,7 @@
     </div>
 
     <div class="span4" id="room_meta">
-<a class="close_room" id="<%= @room.id %>">Close the room</a>
+  <%= render "agent_close" %>
   <%= render "messages/file", :locals =>  { :user => @user} %>
   <%= render "rooms/log_form" %>
   <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
@@ -25,8 +23,8 @@
 
 <script type="text/html" id="message_template">
   <div class="message">
-    <div class="user_name">{{user_name}}</div>
-    {{message_body}}
+    <div class="user_name">{{user_name}}</div><div class="chat_date">{{pretty_time}}</div>
+    <div class="message_body">{{message_body}}</div>
   </div>
 </script>
 
@@ -42,6 +40,14 @@
   </div>
 </script>
 
+<script type="text/html" id="agent_close_template">
+  <div class="message event">
+  <div class="user_name">{{user_name}}</div>
+    Is your issue resolved?  If so, <a class="close_room" id="<%= @room.id %>">click here to close the room</a>
+  </div>
+</script>
+
+
 <% content_for :faye do %>
   <%= render "shared/faye_handler" %>
   <%= render "chat_handler" %>
@@ -54,10 +60,11 @@
     ChatHandler.showModalHandler()
     ChatHandler.getMessages(location)
     user_hash = $.namespace.getUser(location)
-    room = new FayeHandler(user_hash, channel, ChatHandler.handleMessage)
+    room = new FayeHandler(user_hash, channel)
     room.joinRoomAndPulse(ChatHandler.handleMessage)
 
     $(".new_message").live("ajax:complete", (event,xhr,status) ->
+      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
       $(this)[0].reset())
 
     $(document).ready ->
