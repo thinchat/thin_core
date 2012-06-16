@@ -151,7 +151,7 @@
       form_data.append( 'document[file]', file )
       $.ajax({
         type: 'POST',
-        url: 'http://localhost:3001/file/api/v1/documents.json',
+        url: '<%= root_url %>file/api/v1/documents.json',
         data: form_data,
         cache: false,
         contentType: false,
@@ -172,7 +172,7 @@
       console.log form
       $.ajax({
         type: 'POST',
-        url: 'http://localhost:3001/file/api/v1/documents.json',
+        url: '<%= root_url %>file/api/v1/documents.json',
         data: data,
         cache: false,
         contentType: false,
