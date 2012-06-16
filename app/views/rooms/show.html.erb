@@ -54,7 +54,7 @@
 
 <%= coffee_script_tag do %>
   jQuery ->
-    location = $('#messages').data('room-name')
+    location = $(".info").data("location")
     channel = $('#messages').data('channel')
     ChatInitializer.initialize()
     ChatHandler.showModalHandler()

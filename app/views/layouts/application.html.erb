@@ -19,8 +19,11 @@
         <%= render "shared/alert_template" %>
         <%= render "shared/private_message_handler" %>
 
+        <%= content_tag "div", class: "info", data: {location: @location} do %><% end %>
+
         <%= coffee_script_tag do %>
           jQuery ->
+            location = $(".info").data("location")
             user_hash = $.namespace.getUser(location)
             if user_hash.user_type == "Agent"
               agent_channel = new FayeHandler("<%= FAYE_URL %>", user_hash, user_hash.private_channel)

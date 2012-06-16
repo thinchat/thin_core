@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
   before_filter :set_access
+  before_filter :set_location
 
   def set_access
     response.headers["Access-Control-Allow-Origin"] = "*"
@@ -26,5 +27,12 @@ class ApplicationController < ActionController::Base
 
   def require_login
     redirect_to not_found_path and return unless get_agent
+  end
+
+
+  private
+
+  def set_location
+    @location = "NOLOCSET"
   end
 end
