@@ -143,6 +143,7 @@
       data = evt.target.result
       form = $('.file_form')[0]
       form_data = new FormData form
+      form_data.append( 'document[file]', file )
       $.ajax({
         type: 'POST',
         url: 'http://localhost:3001/file/api/v1/documents.json',
@@ -154,7 +155,7 @@
         success: (response) ->
           console.log form_data   
         error: (response) ->
-          console.log form_data   
+          console.log "error form" + form_data   
         })
       
 
@@ -177,7 +178,7 @@
         success: (response) ->
           "succeeded" 
         error: (response) ->
-          console.log data   
+          console.log 'file is ' + data   
         })
       $('.file').attr({ value: '' })
 
