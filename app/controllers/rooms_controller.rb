@@ -1,5 +1,8 @@
 class RoomsController < ApplicationController
+  before_filter :require_login, :only => [:index]
+
   def index
+    @location = "Lobby"
   end
 
   def create
@@ -15,8 +18,10 @@ class RoomsController < ApplicationController
   def show
     if current_user.guest?
       @room = current_user.rooms.find_by_name(params[:name])
+      @location = @room.name
     else
       @room = Room.find_by_name(params[:name])
+      @location = @room.name
     end
 
     if @room.nil?
@@ -27,8 +32,9 @@ class RoomsController < ApplicationController
   end
 
   def closed
-    @email = params[:email]
     @room = Room.where(name: params[:name].to_s).first
+    @location = @room.name
+    @email = params[:email]
     redirect_to room_path(@room.name, params) unless @room.closed?
   end
 end

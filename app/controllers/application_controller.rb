@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
-
   before_filter :set_access
+  before_filter :set_location
 
   def set_access
     headers['Access-Control-Allow-Origin'] = '*'
@@ -24,5 +24,16 @@ class ApplicationController < ActionController::Base
     if cookies.signed[:user]
       Agent.new_from_cookie(cookies.signed[:user])
     end
+  end
+
+  def require_login
+    redirect_to not_found_path and return unless get_agent
+  end
+
+
+  private
+
+  def set_location
+    @location = "NOLOCSET"
   end
 end

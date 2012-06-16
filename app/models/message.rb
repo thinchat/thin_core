@@ -49,6 +49,7 @@ class Message < ActiveRecord::Base
   end
 
   def in_room?
+    # raise room_id.inspect
     room_id != 0
   end
 

@@ -8,5 +8,4 @@ class Api::V1::RoomsController < ApplicationController
   def update
     respond_with Room.update(params[:id], params[:room])
   end
-
 end
