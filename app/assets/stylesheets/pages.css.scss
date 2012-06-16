@@ -56,3 +56,14 @@ $border: 1px inset #d0d0d0;
   }
 }
 
+footer {
+  font-weight: 600;
+  ul {
+    li {
+      display: block;
+      float: left;
+      margin: 20px 10px 40px 0px;
+    }
+  }
+}
+
