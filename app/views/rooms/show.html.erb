@@ -88,9 +88,8 @@
 
     $(document).ready ->
       $("a.fancybox").fancybox()
-
-    $("#message_body").keypress (e) ->
-      alert "HI"
+    
+    $("#message_body").keyup (e) ->
       if (e.which == 13 && e.shiftKey == false)
         $("#new_message").submit()
 
