@@ -19,6 +19,15 @@
   overflow: auto;
 }
 
+#drop_zone {
+  background: blue;
+  height: 300px;
+}
+
+#drop_zone.hover {
+  background: green;
+}
+
 .message {
   font-size: 1.1em;
   padding: 10px 25px 10px 25px;

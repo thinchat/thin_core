@@ -12,6 +12,9 @@
       <%= render "rooms/log_form" %>
       <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
       <a class="close_room" data-room-name="<%= @room.name %>">Close the room</a>
+      <div id="drop_zone">
+        DROP HERE
+      </div>
     </div>
   </div><!-- end row -->
 
@@ -88,12 +91,17 @@
       if (e.which == 13 && e.shiftKey == false)
         $("#new_message").submit()
 
-    uploadHandler()
-    $(':file').change ->
-      file = this.files[0]
-      name = file.name
-      size = file.size
-      type = file.type
+    $('#drop_zone').get(0).addEventListener("dragenter", onDragEnter, false);
+    $('#drop_zone').get(0).addEventListener("dragleave", onDragLeave, false);
+
+  onDragEnter = (evt) ->
+    $("#drop_zone").html "Release file to upload"
+    $("#drop_zone").addClass('hover')
+
+  onDragLeave = (evt) ->
+    $("#drop_zone").html "Drag file here"
+    $("#drop_zone").removeClass('hover')
+
 
   uploadHandler = () ->
     $('.file_upload').click ->
