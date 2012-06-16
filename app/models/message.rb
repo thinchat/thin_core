@@ -1,6 +1,6 @@
 class Message < ActiveRecord::Base
   MESSAGE_ATTRS = [ :body, :room_id, :user_id, :user_type, :user_name, :message_type, :metadata ]
-  attr_accessible :body, :room_id, :user_id, :user_type, :user_name, :message_type, :metadata
+  attr_accessible *MESSAGE_ATTRS
   validates_length_of :body, :maximum => 1000
   validates_presence_of :room_id, :body
   store :metadata
@@ -52,12 +52,10 @@ class Message < ActiveRecord::Base
     room_id != 0
   end
 
-  def from_agent?
-    user_type == "Agent"
-  end
-
-  def from_guest?
-    user_type == "Guest"
+  ["guest", "agent"].each do |type|
+    define_method "from_#{type}?".to_sym do
+      user_type == type.capitalize
+    end
   end
 
   def room_channel

@@ -45,11 +45,6 @@
   <div class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite user!</a></span></div>
 </script>
 
-<% content_for :faye do %>
-  <%= render "chat_handler" %>
-  <%= render "rooms/user_handler" %>
-<% end %>
-
 <%= coffee_script_tag do %>
   jQuery ->
     location = $('#messages').data('room-name')

@@ -25,6 +25,5 @@
 
 <%= coffee_script_tag do %>
   jQuery ->
-    url = '<%= root_url %>'
-    SearchHandler.find(url,"<%= @query %>")
+    SearchHandler.find("<%= query_path(@query) %>")
 <% end %>

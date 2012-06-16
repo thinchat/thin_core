@@ -14,11 +14,6 @@
   <div id="room-{{name}}"><a href={{room_url}}>{{name}}</a></div>
 </script>
 
-<% content_for :faye do %>
-  <%= render "room_handler" %>
-  <%= render "rooms/user_handler" %>
-<% end %>
-
 <%= coffee_script_tag do %>
   jQuery ->
     location = $(".info").data("location")

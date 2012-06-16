@@ -1,5 +1,6 @@
 class Guest < ActiveRecord::Base
   attr_accessible :name, :email
+  has_many :rooms
 
   before_create :set_name, :set_auth_token
   
@@ -26,5 +27,11 @@ class Guest < ActiveRecord::Base
 
   def guest_email
     email ? email : ""
+  end
+
+  ["guest", "agent"].each do |user_type|
+    define_method "#{user_type}?".to_sym do
+      self.class.to_s.downcase == user_type
+    end
   end
 end

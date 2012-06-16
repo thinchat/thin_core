@@ -3,7 +3,7 @@
     <h3>Thanks for thinchatting!</h3>
   </div>
   <div class="modal-body">
-    <p>Would you like a transcript of today's chat?</p>
+    <p>Would you like a transcript of your chat?</p>
     </br>
     <%= form_tag logs_path :method => :post do %>
       <%= hidden_field_tag 'name', @room.name %>

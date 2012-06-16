@@ -25,4 +25,6 @@ ThinCore::Application.routes.draw do
   match '/tos' => 'legal#tos'
   match '/privacy' => 'legal#privacy'
   match '/support' => 'legal#support'
+
+  match '/not_found' => 'errors#not_found', :as => :not_found
 end

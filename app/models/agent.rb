@@ -32,4 +32,10 @@ class Agent
     response = Net::HTTP.get(uri)
     JSON.parse(response)["authentication_token"]
   end
+
+  ["guest", "agent"].each do |user_type|
+    define_method "#{user_type}?".to_sym do
+      self.class.to_s.downcase == user_type
+    end
+  end
 end
