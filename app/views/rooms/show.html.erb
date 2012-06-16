@@ -56,6 +56,7 @@
   jQuery ->
     location = $('#messages').data('room-name')
     channel = $('#messages').data('channel')
+    ChatInitializer.initialize()
     ChatHandler.showModalHandler()
     ChatHandler.getMessages("<%= api_v1_messages_url(room_name: @room.name) %>", ChatHandler.renderMessages)
     user_hash = $.namespace.getUser(location)
@@ -76,16 +77,6 @@
         "<%= api_v1_alerts_url %>" + "?user_id=#{$(this).data('id')}"
         user_hash: user_hash
       ))
-
-    $(".new_message").live("ajax:complete", (event,xhr,status) ->
-      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
-      $(this)[0].reset())
-
-    $("a.fancybox").fancybox()
-    
-    $("#message_body").keypress (e) ->
-      if (e.which == 13 && e.shiftKey == false)
-        $("#new_message").submit()
 
     uploadHandler()
     $(':file').change ->
