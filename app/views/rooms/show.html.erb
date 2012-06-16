@@ -137,11 +137,27 @@
           console.log "Cannot read " + file.name + "."
         when 5
           console.log "File too large for browser to upload."
-    console.log "getting here?"
     reader.onloadend = (evt) ->
+      console.log "getting here?"
       data = evt.target.result
-      console.log data
-    reader.readAsDataURL(file);
+      form = $('.file_form')[0]
+      form_data = new FormData form
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3001/file/api/v1/documents.json',
+        data: form_data,
+        cache: false,
+        contentType: false,
+        crossDomain: true,
+        processData: false,
+        success: (response) ->
+          console.log form_data   
+        error: (response) ->
+          console.log form_data   
+        })
+      
+
+    reader.readAsDataURL(file)
 
   uploadHandler = () ->
     $('.file_upload').click ->
@@ -151,14 +167,16 @@
       console.log form
       $.ajax({
         type: 'POST',
-        url: '<%= root_url %>file/api/v1/documents.json',
+        url: 'http://localhost:3001/file/api/v1/documents.json',
         data: data,
         cache: false,
         contentType: false,
         crossDomain: true,
         processData: false,
         success: (response) ->
-          console.log response   
+          "succeeded" 
+        error: (response) ->
+          console.log data   
         })
       $('.file').attr({ value: '' })
 
