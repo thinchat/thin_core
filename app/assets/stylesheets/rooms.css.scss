@@ -20,12 +20,24 @@
 }
 
 #drop_zone {
-  background: blue;
   height: 300px;
+  display: none;
+  text-align: center;
+  color: white;
+
+  h1 {
+    font-size: 40px;
+  }
 }
 
-#drop_zone.hover {
-  background: green;
+.overlay {  
+  background-color:#f2884c;   
+  z-index:99997;  
+} 
+
+.overlay-drop {  
+  background-color: green;   
+  z-index:99997;  
 }
 
 .message {
@@ -66,9 +78,6 @@
   width: 99%;
   height: 50px;
 }
-
-
-
 
 
 

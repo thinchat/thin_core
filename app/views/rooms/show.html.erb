@@ -12,8 +12,8 @@
       <%= render "rooms/log_form" %>
       <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
       <a class="close_room" data-room-name="<%= @room.name %>">Close the room</a>
-      <div id="drop_zone">
-        DROP HERE
+      <div id="drop_zone" class="well">
+        <h1>DROP HERE</h1>
       </div>
     </div>
   </div><!-- end row -->
@@ -87,15 +87,12 @@
 
     $(document).ready ->
       $("a.fancybox").fancybox()
-    
-    $("#message_body").keypress (e) ->
-      if (e.which == 13 && e.shiftKey == false)
-        $("#new_message").submit()
 
-    $('#drop_zone').get(0).addEventListener("dragenter", onDragEnter, false);
-    $('#drop_zone').get(0).addEventListener("dragleave", onDragLeave, false);
-    $('#drop_zone').get(0).addEventListener("dragover", noopHandler, false);
-    $('#drop_zone').get(0).addEventListener("drop", onDrop, false);
+    $('body').get(0).addEventListener("dragenter", onDragBody, false)
+    $('#drop_zone').get(0).addEventListener("dragenter", onDragEnter, false)
+    $('#drop_zone').get(0).addEventListener("dragleave", onDragLeave, false)
+    $('#drop_zone').get(0).addEventListener("dragover", noopHandler, false)
+    $('#drop_zone').get(0).addEventListener("drop", onDrop, false)
 
     uploadHandler()
     $(':file').change ->
@@ -104,17 +101,25 @@
       size = file.size
       type = file.type
 
+  onDragBody = (evt) ->
+    $("#drop_zone").addClass('overlay')
+    $('#drop_zone').html "<h1>Drag your file over here!</h1>"
+    $("#drop_zone").show()
+
   onDragEnter = (evt) ->
-    $("#drop_zone").html "Release file to upload"
-    $("#drop_zone").addClass('hover')
+    evt.stopPropagation();
+    $("#drop_zone").addClass('overlay-drop')
+    $('#drop_zone').html "<h1>Drop your file!</h1>"
 
   onDragLeave = (evt) ->
-    $("#drop_zone").html "Drag file here"
-    $("#drop_zone").removeClass('hover')
+    noopHandler(evt)
+    $("#drop_zone").removeClass('overlay-drop')
+    $("#drop_zone").addClass('overlay')
 
   onDrop = (evt) -> 
     noopHandler(evt)
     files = evt.dataTransfer.files
+    $('#drop_zone').hide()
     uploadDraggedFile(files[0], files.length)
 
   noopHandler = (evt) ->
@@ -157,8 +162,6 @@
         error: (response) ->
           console.log "error form" + form_data   
         })
-      
-
     reader.readAsDataURL(file)
 
   uploadHandler = () ->
