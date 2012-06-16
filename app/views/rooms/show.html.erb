@@ -11,7 +11,7 @@
       <%= render "messages/file", :locals =>  { :user => @user} %>
       <%= render "rooms/log_form" %>
       <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
-      <a class="close_room" id="<%= @room.id %>">Close the room</a>
+      <a class="close_room" data-room-name="<%= @room.name %>">Close the room</a>
     </div>
   </div><!-- end row -->
 
@@ -45,6 +45,13 @@
   <div class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite user!</a></span></div>
 </script>
 
+<script type="text/html" id="agent_close_template">
+  <div class="message event">
+  <div class="user_name">{{user_name}}</div>
+    Is your issue resolved?  If so, <a class="close_room" data-room-name="<%= @room.name %>">click here to close the room</a>
+  </div>
+</script>
+
 <%= coffee_script_tag do %>
   jQuery ->
     location = $('#messages').data('room-name')
@@ -52,6 +59,7 @@
     ChatHandler.showModalHandler()
     ChatHandler.getMessages("<%= api_v1_messages_url(room_name: @room.name) %>", ChatHandler.renderMessages)
     user_hash = $.namespace.getUser(location)
+
     room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
     if user_hash.user_type == "Guest"
       room.joinRoomAndPulse(ChatHandler.handleMessage)
@@ -75,7 +83,7 @@
 
     $(document).ready ->
       $("a.fancybox").fancybox()
-
+    
     $("#message_body").keypress (e) ->
       if (e.which == 13 && e.shiftKey == false)
         $("#new_message").submit()
