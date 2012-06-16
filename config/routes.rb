@@ -3,7 +3,7 @@ ThinCore::Application.routes.draw do
     namespace :v1 do
       resources :messages, :only => [:index, :create]
       resources :users, :only => [:index]
-      resources :agents, :onlly => [:index]
+      resources :agents, :only => [:index]
       resources :rooms, :only => [:index, :update]
       resources :alerts, :only => [:create]
     end

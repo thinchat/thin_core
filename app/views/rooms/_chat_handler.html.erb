@@ -44,17 +44,4 @@
       for image in images
         content.append "<a href='#{image}' class='fancybox' target='_blank'><img src='#{image}' height=200 ></img></a>"
       content
-
-    @showModalHandler: =>
-      $(document).on 'click','.close_room', (e) ->
-        ChatHandler.closeRoom($(this).data("room_name"))
-        $('#logModal').modal('show')
-
-    @closeRoom = (id) ->
-      $.ajax({
-          type: 'PUT',
-          url: "/api/v1/rooms/#{id}",
-          data: {"room": { "status": "Closed"}},
-          success: (response) ->
-          })
 <% end %>
