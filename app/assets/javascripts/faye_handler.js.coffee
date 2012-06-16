@@ -29,5 +29,4 @@ class @FayeHandler
 
   addPulse: =>
     @client.publish('/heart_beat', @user_hash)
-    console.log @user_hash
     setTimeout((=> @addPulse()), 10000)

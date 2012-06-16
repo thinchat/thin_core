@@ -4,6 +4,7 @@ class @RoomsShowUserPresenter
       RoomsShowUserPresenter.addUser(user)
 
   @handleUser: (data) =>
+    console.log(data)
     if (data.message_type == "Subscribe")
       RoomsShowUserPresenter.addUser(data)
     else if (data.message_type == "Disconnect")
