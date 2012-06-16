@@ -1,5 +1,5 @@
 class LegalController < ApplicationController
-  before_each :set_location
+  before_filter :set_location
 
   def tos
   end
