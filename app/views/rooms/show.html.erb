@@ -93,6 +93,8 @@
 
     $('#drop_zone').get(0).addEventListener("dragenter", onDragEnter, false);
     $('#drop_zone').get(0).addEventListener("dragleave", onDragLeave, false);
+    $('#drop_zone').get(0).addEventListener("dragover", noopHandler, false);
+    $('#drop_zone').get(0).addEventListener("drop", onDrop, false);
 
     uploadHandler()
     $(':file').change ->
@@ -109,11 +111,44 @@
     $("#drop_zone").html "Drag file here"
     $("#drop_zone").removeClass('hover')
 
+  onDrop = (evt) -> 
+    noopHandler(evt)
+    files = evt.dataTransfer.files
+    uploadDraggedFile(files[0], files.length)
+
+  noopHandler = (evt) ->
+    evt.stopPropagation()
+    evt.preventDefault()
+
+  uploadDraggedFile = (file, length) ->
+    console.log file
+    console.log length
+    reader = new FileReader()
+    reader.onerror = (evt) ->
+      message
+      switch evt.target.error.code
+        when 1
+          console.log file.name + " not found."
+        when 2
+          console.log file.name + " has changed on disk, please re-try."
+        when 3
+          console.log "Upload cancelled."
+        when 4
+          console.log "Cannot read " + file.name + "."
+        when 5
+          console.log "File too large for browser to upload."
+    console.log "getting here?"
+    reader.onloadend = (evt) ->
+      data = evt.target.result
+      console.log data
+    reader.readAsDataURL(file);
 
   uploadHandler = () ->
     $('.file_upload').click ->
       form = $('.file_form')[0]
       data = new FormData form
+      console.log data
+      console.log form
       $.ajax({
         type: 'POST',
         url: '<%= root_url %>file/api/v1/documents.json',
