@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
-
   before_filter :set_access
 
   def set_access
@@ -23,5 +22,9 @@ class ApplicationController < ActionController::Base
     if cookies.signed[:user]
       Agent.new_from_cookie(cookies.signed[:user])
     end
+  end
+
+  def require_login
+    redirect_to not_found_path and return unless get_agent
   end
 end

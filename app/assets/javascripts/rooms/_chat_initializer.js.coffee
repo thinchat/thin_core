@@ -1,0 +1,1 @@
+_chat_initializer.js.coffee

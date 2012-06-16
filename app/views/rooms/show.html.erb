@@ -81,8 +81,7 @@
       $('html, body').animate({scrollTop:$(document).height()}, 'slow');
       $(this)[0].reset())
 
-    $(document).ready ->
-      $("a.fancybox").fancybox()
+    $("a.fancybox").fancybox()
     
     $("#message_body").keypress (e) ->
       if (e.which == 13 && e.shiftKey == false)

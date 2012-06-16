@@ -1,4 +1,6 @@
 class RoomsController < ApplicationController
+  before_filter :require_login, :only => [:index]
+
   def index
   end
 
