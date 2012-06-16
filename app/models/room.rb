@@ -19,4 +19,8 @@ class Room < ActiveRecord::Base
   def channel
     "/messages/#{name}"
   end
+
+  def change_to_active
+    self.update_attribute(:status, "Active") if status == "Pending"
+  end
 end

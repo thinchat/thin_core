@@ -12,6 +12,8 @@
         ChatHandler.addMessage(message)
       else if (message.message_type == "Document")
         ChatHandler.addDocument(message)
+      else if (message.message_type == "Agent_close")
+        ChatHandler.addAgentClose(message)
       else
         ChatHandler.addEvent(message)
 
@@ -24,6 +26,9 @@
 
     @addDocument: (message) =>
       $('#messages').append Mustache.to_html($('#document_template').html(), message)
+
+    @addAgentClose: (message) =>
+      $('#messages').append Mustache.to_html($('#agent_close_template').html(), message)
 
     @linkMessage: (content) ->
       images = content.match /http[s]?:\/\/(?:[a-z\-\d]+\.)+\S+\.(?:jpg|gif|png|jpeg)(?:\?.*)?/ig
@@ -41,8 +46,8 @@
       content
 
     @showModalHandler: =>
-      $('.close_room').click ->
-        ChatHandler.closeRoom($(this).attr("id"))
+      $(document).on 'click','.close_room', (e) ->
+        ChatHandler.closeRoom($(this).data("room_name"))
         $('#logModal').modal('show')
 
     @closeRoom = (id) ->
@@ -52,5 +57,4 @@
           data: {"room": { "status": "Closed"}},
           success: (response) ->
           })
-
 <% end %>

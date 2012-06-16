@@ -60,6 +60,14 @@ class Message < ActiveRecord::Base
     user_type == "Guest"
   end
 
+  def subscribe?
+    message_type == "Subscribe"
+  end
+
+  def disconnect?
+    message_type == "Disconnect"
+  end
+
   def room_channel
     room = Room.where(id: room_id).first
     room.present? ? "/messages/#{room.name}" : nil
@@ -70,8 +78,7 @@ class Message < ActiveRecord::Base
   end
 
   def get_channels
-    case message_type
-    when "Subscribe", "Disconnect"
+    if subscribe? || disconnect?
       [ online_user_channel, room_channel ].delete_if{ |x| x.nil? }
     else
       [ room_channel ]

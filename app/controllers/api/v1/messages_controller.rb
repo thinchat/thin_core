@@ -12,8 +12,11 @@ class Api::V1::MessagesController < ApplicationController
   def create
     params_hash = Message.build_params_hash(params["message"])
     message = Message.new(params_hash)
-    message.save if message.in_room?
+    if message.in_room?
+      current_room = message.room
+      current_room.change_to_active if message.subscribe? && message.from_agent?
+      message.save
+    end
     render :json => true, :status => 201 if message.broadcast
   end
-
 end
