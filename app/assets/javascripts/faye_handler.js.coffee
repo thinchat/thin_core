@@ -15,7 +15,6 @@ class @FayeHandler
 
   subscribe: (callback) =>
     @client.subscribe(@channel, (data) =>
-      console.log(data)
       callback(data.chat_message)
     )
 

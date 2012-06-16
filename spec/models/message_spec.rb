@@ -31,30 +31,64 @@ describe Message do
     end
   end
 
-  describe "#channel" do
-    let(:message) { Message.new(room_id: 1) }
-    it "returns the channel it is associated" do
-      message.channel == "/messages/1"
-    end
-  end
-
   describe "#broadcast" do
     let(:message) { Message.new() }
 
-    it "should publish to faye and redis" do
-      message.should_receive(:publish_to_faye)
-      message.should_receive(:publish_to_redis)
+    it "should attempt to publish to faye and redis" do
+      message.should_receive(:publish_to_faye).and_return(true)
+      message.should_receive(:publish_to_redis).and_return(true)
       message.broadcast
     end
   end
 
-  describe "#faye_message" do
-    let(:message) { Message.new(:room_id => 123) }
+  describe "#in_room?" do
+    let(:message) { Message.new(:room_id => 1) }
 
-    it "should return a hash of message data" do
-      faye_message = message.faye_message
-      faye_message[:channel].should == "/messages/123"
-      faye_message[:data][:chat_message].should have_key(:message_body)
+    context "Given a message is created in a room" do
+      it "should return true" do
+        message.in_room?.should == true
+      end
+    end
+
+    context "Given a message is created outside a room" do
+      it "should return false" do
+        message.room_id = 0
+        message.in_room?.should == false
+      end
+    end
+  end
+
+  describe "#from_agent?" do
+    let(:guest_message) { Message.new(:user_type => "Guest") }
+    let(:agent_message) { Message.new(:user_type => "Agent") }
+
+    context "Given a message is created by an agent" do
+      it "should return true" do
+        agent_message.from_agent?.should == true
+      end
+    end
+
+    context "Given a message is created by a guest" do
+      it "should return false" do
+        guest_message.from_agent?.should == false
+      end
+    end
+  end
+
+  describe "#from_guest?" do
+    let(:guest_message) { Message.new(:user_type => "Guest") }
+    let(:agent_message) { Message.new(:user_type => "Agent") }
+
+    context "Given a message is created by a guest" do
+      it "should return true" do
+        guest_message.from_guest?.should == true
+      end
+    end
+
+    context "Given a message is created by an agent" do
+      it "should return false" do
+        agent_message.from_guest?.should == false
+      end
     end
   end
 end

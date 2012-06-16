@@ -1,19 +1,18 @@
 <div id="room">
-
-
   <div class="row">
     <div class="span8">
-    <%= content_tag "div", id: "messages", class: "info", data: {location: @room.id, channel: @room.channel } do %>
-  <% end %>
+      <%= content_tag "div", id: "messages", class: "info", data: {room_name: @room.name, channel: @room.channel } do %>
+      <% end %>
     </div>
 
     <div class="span4" id="room_meta">
-<a class="close_room" id="<%= @room.id %>">Close the room</a>
-  <%= render "messages/file", :locals =>  { :user => @user} %>
-  <%= render "rooms/log_form" %>
-  <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
-  <a class="close_room" id="<%= @room.id %>">Close the room</a>
-</div>
+      <div id="online_agents"></div>
+      <a class="close_room" id="<%= @room.id %>">Close the room</a>
+      <%= render "messages/file", :locals =>  { :user => @user} %>
+      <%= render "rooms/log_form" %>
+      <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
+      <a class="close_room" id="<%= @room.id %>">Close the room</a>
+    </div>
   </div><!-- end row -->
 
   <div class="row" id="chat_input_row">
@@ -42,20 +41,38 @@
   </div>
 </script>
 
+<script type="text/html" id="user_template">
+  <div class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite user!</a></span></div>
+</script>
+
 <% content_for :faye do %>
   <%= render "chat_handler" %>
+  <%= render "rooms/user_handler" %>
 <% end %>
 
 <%= coffee_script_tag do %>
   jQuery ->
-    location = $('#messages').data('location')
+    location = $('#messages').data('room-name')
     channel = $('#messages').data('channel')
     ChatHandler.showModalHandler()
-    ChatHandler.getMessages(location)
+    ChatHandler.getMessages("<%= api_v1_messages_url(room_name: @room.name) %>", ChatHandler.renderMessages)
     user_hash = $.namespace.getUser(location)
-    console.log channel
     room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
-    room.joinRoomAndPulse(ChatHandler.handleMessage)
+    if user_hash.user_type == "Guest"
+      room.joinRoomAndPulse(ChatHandler.handleMessage)
+    else
+      room.joinRoom(ChatHandler.handleMessage)
+
+    UserHandler.getUsers("<%= api_v1_agents_url %>", RoomsShowUserPresenter.renderUsers)
+    user_hash = $.namespace.getUser(null)
+    online_agents = new FayeHandler("<%= FAYE_URL %>", user_hash, '/online/agent')
+    online_agents.joinRoom(RoomsShowUserPresenter.handleUser)
+
+    $(".invite").live("click", ->
+      $.post(
+        "<%= api_v1_alerts_url %>" + "?user_id=#{$(this).data('id')}"
+        user_hash: user_hash
+      ))
 
     $(".new_message").live("ajax:complete", (event,xhr,status) ->
       $('html, body').animate({scrollTop:$(document).height()}, 'slow');
@@ -88,8 +105,7 @@
         crossDomain: true,
         processData: false,
         success: (response) ->
-          console.log response
-          
+          console.log response   
         })
       $('.file').attr({ value: '' })
 

@@ -1,19 +1,19 @@
-class @AgentsIndexUserPresenter
+class @RoomsShowUserPresenter
   @renderUsers: (users) =>
     for user in users
-      AgentsIndexUserPresenter.addUser(user)
+      RoomsShowUserPresenter.addUser(user)
 
   @handleUser: (data) =>
     if (data.message_type == "Subscribe")
-      AgentsIndexUserPresenter.addUser(data)
+      RoomsShowUserPresenter.addUser(data)
     else if (data.message_type == "Disconnect")
-      AgentsIndexUserPresenter.removeUser(data)
+      RoomsShowUserPresenter.removeUser(data)
 
   @addUser: (user) =>
-    userDiv = $('#users').find(".user-#{user.user_id}")
+    userDiv = $('#online_agents').find(".user-#{user.user_id}")
     if userDiv.length == 0
-      $('#users').append Mustache.to_html($('#user_template').html(), user)
-      userDiv = $('#users').find(".user-#{user.user_id}")
+      $('#online_agents').append Mustache.to_html($('#user_template').html(), user)
+      userDiv = $('#online_agents').find(".user-#{user.user_id}")
       userDiv.data('client-ids', ["#{user.metadata.client_id}"])
     else
       client_ids = userDiv.data('client-ids')
@@ -21,10 +21,11 @@ class @AgentsIndexUserPresenter
       userDiv.data('client-ids', client_ids)
 
   @removeUser: (user) =>
-    userDiv = $('#users').find(".user-#{user.user_id}")
+    console.log user
+    userDiv = $('#online_agents').find(".user-#{user.user_id}")
     if userDiv.length > 0
       client_ids = userDiv.data('client-ids')
-      client_ids = AgentsIndexUserPresenter.removeClientId(client_ids, "#{user.metadata.client_id}")
+      client_ids = RoomsShowUserPresenter.removeClientId(client_ids, "#{user.metadata.client_id}")
       if client_ids.length == 0
         userDiv.remove()
       else

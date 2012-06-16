@@ -1,4 +1,4 @@
-if Rails.env == 'development'
+if Rails.env == 'development' || Rails.env == 'test'
   FAYE_URL = 'http://localhost:9292'
 elsif Rails.env == 'staging'
   FAYE_URL = 'http://50.116.40.131:9292'

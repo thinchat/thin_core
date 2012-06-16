@@ -29,7 +29,6 @@
       $('#messages').append Mustache.to_html($('#empty_template').html(), query_hash)
 
     @handleMessage: (message) =>
-      console.log message
       if (message.message_type == "Message")
         SearchHandler.addMessage(message)
       else if (message.message_type == "Document")

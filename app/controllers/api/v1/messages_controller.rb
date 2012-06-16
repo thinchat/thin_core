@@ -2,7 +2,7 @@ class Api::V1::MessagesController < ApplicationController
   respond_to :json
 
   def index
-    if room = Room.where(id: params[:room_id].to_s).first
+    if room = Room.where(name: params[:room_name].to_s).first
       @messages = room.messages
     else
       render :json => {:error => "Room not found."}, :status => :not_found
@@ -11,8 +11,9 @@ class Api::V1::MessagesController < ApplicationController
 
   def create
     params_hash = Message.build_params_hash(params["message"])
-    message = Message.create!(params_hash)
-    render :nothing => true, :status => 201 if message.broadcast
+    message = Message.new(params_hash)
+    message.save if message.in_room?
+    render :json => true, :status => 201 if message.broadcast
   end
 
 end

@@ -7,9 +7,9 @@ describe Room do
       room.should be_valid
     end
 
-    it "cannot be created without a name" do
+    it "can be created without a name" do
       room = Room.new()
-      room.should_not be_valid
+      room.should be_valid
     end
   end
 end

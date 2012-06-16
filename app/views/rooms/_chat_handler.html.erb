@@ -1,11 +1,7 @@
-<script type="text/javascript">
-  window.api_v1_messages_url = "<%= api_v1_messages_url %>"
-</script>
-
 <%= coffee_script_tag do %>
   class @ChatHandler
-    @getMessages: (room_id) ->
-      $.getJSON("#{api_v1_messages_url}?room_id=#{room_id}", ChatHandler.renderMessages)
+    @getMessages: (url, callback) ->
+      $.getJSON(url, callback)
 
     @renderMessages: (messages) =>
       for message in messages
@@ -15,7 +11,6 @@
       if (message.message_type == "Message")
         ChatHandler.addMessage(message)
       else if (message.message_type == "Document")
-        console.log message
         ChatHandler.addDocument(message)
       else
         ChatHandler.addEvent(message)
@@ -56,7 +51,6 @@
           url: "/api/v1/rooms/#{id}",
           data: {"room": { "status": "Closed"}},
           success: (response) ->
-            console.log response
           })
 
 <% end %>

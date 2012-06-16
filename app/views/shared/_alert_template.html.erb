@@ -1,3 +1,6 @@
 <script type="text/html" id="alert_template">
-  <div class="alert">{{message_body}} <a href={{location}} target="_blank">Go to room.</a></div>
+  <div class="alert">
+    <button class="close" data-dismiss="alert">×</button>
+    {{message_body}} <a href={{location}} target="_blank">Go to room.</a>
+  </div>
 </script>

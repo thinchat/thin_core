@@ -11,7 +11,7 @@
 </script>
 
 <script type="text/html" id="room_template">
-  <div id="room-{{id}}"><a href={{location}}>{{name}}</a></div>
+  <div id="room-{{name}}"><a href={{room_url}}>{{name}}</a></div>
 </script>
 
 <% content_for :faye do %>
@@ -26,5 +26,5 @@
     userHandler = UserHandler.getUsers("<%= api_v1_users_url %>", RoomsIndexUserPresenter.renderUsers)
     user_hash = $.namespace.getUser(location)
     online_users = new FayeHandler("<%= FAYE_URL %>", user_hash, '/online/*')
-    online_users.joinRoomAndPulse(RoomsIndexUserPresenter.handleUser)
+    online_users.joinRoom(RoomsIndexUserPresenter.handleUser)
 <% end %>
