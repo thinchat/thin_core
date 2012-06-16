@@ -94,6 +94,13 @@
     $('#drop_zone').get(0).addEventListener("dragenter", onDragEnter, false);
     $('#drop_zone').get(0).addEventListener("dragleave", onDragLeave, false);
 
+    uploadHandler()
+    $(':file').change ->
+      file = this.files[0]
+      name = file.name
+      size = file.size
+      type = file.type
+
   onDragEnter = (evt) ->
     $("#drop_zone").html "Release file to upload"
     $("#drop_zone").addClass('hover')
