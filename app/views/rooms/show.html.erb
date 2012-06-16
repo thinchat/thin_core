@@ -7,7 +7,7 @@
 
     <div class="span4" id="room_meta">
       <div id="online_agents"></div>
-      <%= render "agent_close" %>
+      <a class="close_room" id="<%= @room.id %>">Close the room</a>
       <%= render "messages/file", :locals =>  { :user => @user} %>
       <%= render "rooms/log_form" %>
       <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
