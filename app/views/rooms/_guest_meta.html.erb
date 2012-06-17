@@ -1,0 +1,9 @@
+<ul class="meta" id="guest-meta">
+  <li><h3>Update your display name</h3></li>
+  <li><%= render "user_name", :locals =>  { :user => @user} %></li>
+  
+  <li><%= render "messages/file", :locals =>  { :user => @user} %></li>
+  <li id="close_btn"><a class="close_room btn btn-danger btn-large" id="<%= @room.id %>">End chat</a></li>
+</ul>
+
+<%= render "rooms/log_form" %>
