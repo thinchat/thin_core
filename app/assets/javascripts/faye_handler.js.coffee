@@ -2,6 +2,8 @@ class @FayeHandler
   constructor: (faye_url, user_hash, channel) ->
     @client = new Faye.Client(faye_url + '/faye')
     @client.disable('callback-polling')
+    @client.disable('long-polling')
+    @client.disable('cross-origin-long-polling')
     @user_hash = user_hash
     @channel = channel
 
