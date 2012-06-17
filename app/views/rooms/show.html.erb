@@ -1,12 +1,12 @@
+
 <div id="room">
-  <div class="row">
-    <div class="span8">
+  <div class="row-fluid">
+    <div class="span8 offset4">
       <%= content_tag "div", id: "messages", class: "info", data: {room_name: @room.name, channel: @room.channel } do %>
       <% end %>
     </div>
 
     <div class="span4" id="room_meta">
-      
       <% if current_user.agent? %>
         <%= render "agent_meta" %>
       <% else %>
@@ -19,7 +19,7 @@
     </div>
   </div><!-- end row -->
 
-  <div class="row" id="chat_input_row">
+  <div class="row-fluid" id="chat_input_row">
     <div class="span8" id="chat_input">
       <%= render "form", :locals => { :room => @room } %>
     </div>
@@ -62,9 +62,9 @@
     location = $(".info").data("location")
     channel = $('#messages').data('channel')
     ChatInitializer.initialize()
-    ChatHandler.showModalHandler()
     ChatHandler.getMessages("<%= api_v1_messages_url(room_name: @room.name) %>", ChatHandler.renderMessages)
     user_hash = $.namespace.getUser(location)
+    ChatHandler.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
 
     room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
     if user_hash.user_type == "Guest"

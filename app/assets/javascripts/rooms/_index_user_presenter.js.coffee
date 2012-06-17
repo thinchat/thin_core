@@ -1,10 +1,10 @@
 class @RoomsIndexUserPresenter
   @renderUsers: (users) =>
     for user in users
+      console.log user
       RoomsIndexUserPresenter.addUser(user)
 
   @handleUser: (data) =>
-    console.log data
     if (data.message_type == "Subscribe")
       RoomsIndexUserPresenter.addUser(data)
     else if (data.message_type == "Disconnect")

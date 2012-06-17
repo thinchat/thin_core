@@ -1,6 +1,6 @@
 <%= coffee_script_tag do %>
   class @SearchHandler
-    @find: (api_url) =>
+    @find: (api_url, query) =>
       $.ajax
         url: api_url
         dataType: 'json'
