@@ -12,7 +12,7 @@
         <% if current_user.agent? %>
         <ul class="nav">
           <li><%= link_to "Lobby", rooms_path() %></li>
-          <li><%= link_to "Online Agents", agents_path() %></li>
+          <li><%= link_to "Analytics", "/dashboard" %></li>
           <li class="dropdown"><%= render "layouts/nav_login" %></li>
         </ul>
 
