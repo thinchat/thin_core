@@ -43,9 +43,9 @@ ActiveRecord::Schema.define(:version => 20120617002418) do
 
   create_table "rooms", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-    t.string   "status",     :default => "Pending"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "status"
     t.integer  "guest_id"
   end
 

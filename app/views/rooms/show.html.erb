@@ -1,20 +1,24 @@
 <div id="room">
-  <div class="row">
-    <div class="span8">
+  <div class="row-fluid">
+    <div class="span8 offset4">
       <%= content_tag "div", id: "messages", class: "info", data: {room_name: @room.name, channel: @room.channel } do %>
       <% end %>
     </div>
 
     <div class="span4" id="room_meta">
-      <div id="online_agents"></div>
-      <%= render "messages/file", :locals =>  { :user => @user} %>
-      <%= render "rooms/log_form" %>
-      <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
-      <a class="close_room" data-room-name="<%= @room.name %>">Close the room</a>
+      <% if current_user.agent? %>
+        <%= render "agent_meta" %>
+      <% else %>
+        <%= render "guest_meta" %>
+      <% end %>
+      
+      <div id="drop_zone" class="well">
+        <h1>DROP HERE</h1>
+      </div>
     </div>
   </div><!-- end row -->
 
-  <div class="row" id="chat_input_row">
+  <div class="row-fluid" id="chat_input_row">
     <div class="span8" id="chat_input">
       <%= render "form", :locals => { :room => @room } %>
     </div>
