@@ -1,5 +1,6 @@
 class Room < ActiveRecord::Base
   attr_accessible :name, :status, :guest_id
+  attr_accessor :users
   has_many :messages
   before_create :set_name
   belongs_to :guest

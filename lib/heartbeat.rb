@@ -22,6 +22,11 @@ module ThinHeartbeat
       get_hashies_from_keys(keys)      
     end
 
+    def get_users_in_room(room_name)
+      keys = redis.keys "hb:*#{room_name}*"
+      get_hashies_from_keys(keys)
+    end
+
     def get_hashies_from_keys(keys)
       keys.collect do |key|
         json_to_hashie(redis.smembers(key).first)
