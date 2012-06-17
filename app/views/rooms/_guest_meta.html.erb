@@ -1,9 +1,9 @@
 <ul class="meta" id="guest-meta">
-
   <li><h3>Upload a file</h3></li>
   <li><%= render "messages/file", :locals =>  { :user => @user} %></li>
   <br>
-  <li id="close_btn"><a class="close_room btn btn-danger" id="<%= @room.id %>">End chat</a></li>
+  <li id="close_btn"><a class="close_room btn btn-danger" data-room-name="<%= @room.name %>">End chat</a></li>
+
 </ul>
 
 <%= render "rooms/log_form" %>

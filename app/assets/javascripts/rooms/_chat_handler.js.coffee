@@ -40,20 +40,3 @@ class @ChatHandler
       content.find('.chat_date').after "<div class='chat_image'><a href='#{image}' class='fancybox' target='_blank'><img src='#{image}'></img></a></div>"
     content
 
-  @showModalHandler:(api_v1_messages_url, user_hash) =>
-    $('.close_room').click ->
-      name = $(this).data("room-name")
-      $.ajax({
-          type: 'POST',
-          url: "#{api_v1_messages_url}",
-          data: {"message": $.extend({"message_type":"CloseRequest", "body":"An agent has requested that this room be closed."}, user_hash)},
-          success: (response) ->
-          })
-  
-  @closeRoom = (id) ->
-    $.ajax({
-        type: 'PUT',
-        url: "/api/v1/rooms/#{id}",
-        data: {"room": { "status": "Closed"}},
-        success: (response) ->
-        })
