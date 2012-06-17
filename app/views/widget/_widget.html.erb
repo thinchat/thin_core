@@ -1,4 +1,16 @@
+<style>
+div.thin_chat_widget a#button {
+  display:block;
+  width:160px;
+  height:47px;
+  text-indent:-424242px;
+  background:url('http://localhost:3000/assets/chat_with_support_small.png') no-repeat top left;
+}
 
+div.thin_chat_widget a#button:hover {
+  background-position:0 -47px;
+}
+</style>
 <div class="thin_chat_widget">
-<%= link_to "Chat Live With an Agent", rooms_url, :method => :post, :target => "_blank" %>
+<%= link_to "Chat Live With an Agent", rooms_url, :method => :post, :target => "_blank", :id => "button" %>
 </div>
