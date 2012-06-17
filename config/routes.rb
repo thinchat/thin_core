@@ -9,6 +9,7 @@ ThinCore::Application.routes.draw do
     end
   end
 
+  resources :widget
   resources :messages
   resources :rooms do
     member do
