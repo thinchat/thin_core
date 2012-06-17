@@ -1,0 +1,12 @@
+<ul class="meta" id="online_agents">
+  <li class="header">Online Agents</li>
+</ul>
+
+      <ul class="meta">
+        <li class="header">Room Actions</li>
+        <li><%= render "agent_close" %></li>
+      </ul>
+      <a class="close_room" id="<%= @room.id %>">Close the room</a>
+      <%= render "messages/file", :locals =>  { :user => @user} %>
+      <%= render "rooms/log_form" %>
+      
