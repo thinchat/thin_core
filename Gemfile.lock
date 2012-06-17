@@ -300,6 +300,7 @@ DEPENDENCIES
   guard-rspec
   guard-spork
   hashie
+  i18n
   jbuilder
   jquery-rails
   launchy
