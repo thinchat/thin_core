@@ -15,3 +15,6 @@ class @RoomsIndexUserPresenter
 
   @removeUser: (client_id) =>
     $(".#{client_id}").remove()
+
+  @getUsers: (url, callback) ->
+    $.getJSON(url, callback)
