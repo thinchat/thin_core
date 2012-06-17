@@ -1,1 +1,60 @@
-<h1>Welcome to Thin Chat</h1>
+<div class="hero-unit">
+  <div class="row">
+    <div class="span12">
+  <h1><span>thin</span>Chat</h1>
+  <br>
+  <h2>We made a lightweight yet powerful support chat client</h2>
+  <h2>So you can help your customers <span>faster</span><h2>
+  </div>
+  </div>
+</div>
+
+<div class="row" id="start_chat">
+ <%= link_to "Start Chatting", rooms_path, :method => :post, :class => "btn btn-warning btn-huge"   %>
+</div>
+
+<div class="home_content">
+  <div class="row">
+    <div class="span6">
+      <div class="info">
+        <h1>Clean interface</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. </p>
+      </div>
+    </div>
+
+  <div class="span6">
+    <div class="info">
+    <h1>Rock-solid backend</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. </p>
+  </div></div>
+</div>
+</div>
+
+<div class="home_content">
+<div class="row">
+  <div class="span6"><div class="info">
+    <h1>Agent queue</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. </p>
+  </div></div>
+
+  <div class="span6"><div class="info">
+    <h1>Embedable widget</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. </p>
+  </div></div>
+</div>
+</div>
+</div>
+
+  <%= render 'layouts/footer' %>
