@@ -1,6 +1,6 @@
 <div id="room">
-  <div class="row">
-    <div class="span8">
+  <div class="row-fluid">
+    <div class="span8 offset4">
       <%= content_tag "div", id: "messages", class: "info", data: {room_name: @room.name, channel: @room.channel } do %>
       <% end %>
     </div>
@@ -15,7 +15,7 @@
     </div>
   </div><!-- end row -->
 
-  <div class="row" id="chat_input_row">
+  <div class="row-fluid" id="chat_input_row">
     <div class="span8" id="chat_input">
       <%= render "form", :locals => { :room => @room } %>
     </div>

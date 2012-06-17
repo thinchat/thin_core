@@ -18,7 +18,7 @@ ul.meta {
 #room_meta {
   position: fixed;
   padding: 20px;
-  margin-left: 60%;
+  margin-left: 64.7%;
   background: white;
   border-top: 1px solid #d0d0d0;
   -moz-box-shadow: 0 2px 5px rgba(104, 104, 104, 0.62);
@@ -88,9 +88,10 @@ ul.meta {
 #chat_input {
   position: fixed;
   padding: 0 25px 10px 0;
-  padding-top: 10px;
+  padding-top: 25px;
   bottom: 0px;
   background: #F4F4F4;
+  background: -webkit-linear-gradient(top, rgba(244,244,244,0.21) 0%,rgba(244,244,244,1) 15%,rgba(244,244,244,1) 100%);
 }
 
 #message_body {
