@@ -1,6 +1,8 @@
 // Place all the styles related to the rooms controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$blue: #305b6d;
+$orange: #f2884c;
 
 div.fileinputs {
   position: relative;
@@ -41,22 +43,22 @@ ul.meta {
 
 #drop_zone {
   height: 300px;
-  display: none;
   text-align: center;
-  color: white;
+  display: none;
 
   h1 {
     font-size: 40px;
+    margin-top: 30px;
   }
 }
 
 .overlay {  
-  background-color:#f2884c;   
-  z-index:99997;  
+  z-index:99997; 
+  border: 3px dashed grey; 
 } 
 
 .overlay-drop {  
-  background-color: green;   
+  border: 3px dashed green;   
   z-index:99997;  
 }
 
