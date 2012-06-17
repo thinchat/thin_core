@@ -4,8 +4,9 @@ ThinCore::Application.routes.draw do
       resources :messages, :only => [:index, :create]
       resources :users, :only => [:index]
       resources :agents, :only => [:index]
-      resources :rooms, :only => [:index, :update]
+      resources :rooms, :only => [:index]
       resources :alerts, :only => [:create]
+      match '/rooms/:name' => 'rooms#update', via: "PUT"
     end
   end
 
@@ -15,6 +16,7 @@ ThinCore::Application.routes.draw do
   resources :logs, :only => [:create]
   match '/rooms/:name/closed' => 'rooms#closed', :as => :closed_room
   match '/rooms/:name' => 'rooms#show', :as => :room
+
   match '/lobby' => 'rooms#index'
   match '/widget_create' => 'rooms#create'
 

@@ -13,6 +13,11 @@ describe Guest do
     end
   end
 
+  it "returns the email on guest_email" do
+    guest = Guest.new(name: "Test User", email: "test@test.com")
+    guest.guest_email.class.should == String
+  end
+
   describe ".find_or_create_by_cookie(cookie)" do
     let(:temp_guest) { double }
     let(:cookie) { '{ "id":"3" }' }
@@ -52,4 +57,5 @@ describe Guest do
       hash[:user_name].should == "Test User"
     end
   end
+
 end

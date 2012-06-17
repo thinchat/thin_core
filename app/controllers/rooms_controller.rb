@@ -22,12 +22,12 @@ class RoomsController < ApplicationController
       @room = Room.find_by_name(params[:name])
     end
 
-    if @room
-      @location = @room.name
+    @location = @room.name if @room
+
+    if @room.closed? 
+      redirect_to closed_room_path(@room.name, params)
     elsif @room.nil?
       redirect_to not_found_path
-    elsif @room.closed?      
-      redirect_to closed_room_path(@room.name, params)
     end
   end
 

@@ -13,6 +13,7 @@ class Api::V1::RoomsController < ApplicationController
   end
 
   def update
-    respond_with Room.update(params[:id], params[:room])
+    @room = Room.find_by_name(params[:name])
+    respond_with @room.update_attributes(params[:room])
   end
 end
