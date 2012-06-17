@@ -1,6 +1,7 @@
-  <%= form_for Message.new, :remote => true, :class => "new_message" do |f|  %>
+<!--<%= form_for Message.new, :remote => true do |f|  %>
     <%= f.hidden_field :body, :value => "BODY"  %>
     <%= f.hidden_field :room_id, :value => @room.id %>
     <%= f.hidden_field :message_type, :value =>"Agent_close" %>
     <%= f.submit 'Prompt User to Close Room', :id => 'message_submit', :class => 'btn btn-primary'  %>
   <% end %>
+-->

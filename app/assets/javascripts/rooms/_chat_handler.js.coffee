@@ -36,7 +36,8 @@ class @ChatHandler
       content = content.replace image, ""
     content = $(linkify(content))
     for image in images
-      content.append "<a href='#{image}' class='fancybox' target='_blank'><img src='#{image}' height=200 ></img></a>"
+      console.log content
+      content.find('.chat_date').after "<div class='chat_image'><a href='#{image}' class='fancybox' target='_blank'><img src='#{image}'></img></a></div>"
     content
 
   @showModalHandler: =>
