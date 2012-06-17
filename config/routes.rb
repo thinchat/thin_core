@@ -27,4 +27,6 @@ ThinCore::Application.routes.draw do
   match '/support' => 'legal#support'
   match '/not_found' => 'errors#not_found', :as => :not_found
   root :to => 'pages#index'
+
+  match '/dashboard' => 'dashboard#index'
 end
