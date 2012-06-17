@@ -5,12 +5,13 @@
       <%= content_tag "div", id: "messages", class: "info", data: {room_name: @room.name, channel: @room.channel } do %>
       <% end %>
     </div>
-
+    
     <div class="span4" id="room_meta">
       <% if current_user.agent? %>
         <%= render "agent_meta" %>
       <% else %>
         <%= render "guest_meta" %>
+        <%= render "user_name_modal" %>
       <% end %>
       
       <div id="drop_zone" class="well">
@@ -59,11 +60,14 @@
 
 <%= coffee_script_tag do %>
   jQuery ->
+    user_hash = $.namespace.getUser(location)
+    if user_hash.user_type == "Guest"
+      $('#userModal').modal('show')
+
     location = $(".info").data("location")
     channel = $('#messages').data('channel')
     ChatInitializer.initialize()
     ChatHandler.getMessages("<%= api_v1_messages_url(room_name: @room.name) %>", ChatHandler.renderMessages)
-    user_hash = $.namespace.getUser(location)
     ChatHandler.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
 
     room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
@@ -71,6 +75,9 @@
       room.joinRoomAndPulse(ChatHandler.handleMessage)
     else
       room.joinRoom(ChatHandler.handleMessage)
+
+    $("#user_info_update").click ->
+      $('#userModal').modal('hide')
 
     UserHandler.getUsers("<%= api_v1_agents_url %>", RoomsShowUserPresenter.renderUsers)
     user_hash = $.namespace.getUser(null)
