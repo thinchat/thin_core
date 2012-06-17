@@ -6,7 +6,8 @@ class ApplicationController < ActionController::Base
   private
 
   def set_access
-    response.headers["Access-Control-Allow-Origin"] = "*"
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Request-Method'] = '*'
   end
 
   def current_user

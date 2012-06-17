@@ -46,7 +46,8 @@
 </script>
 
 <script type="text/html" id="user_template">
-  <div class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite user!</a></span></div>
+
+  <li class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite</a></span></li>
 </script>
 
 <script type="text/html" id="agent_close_template">
@@ -82,6 +83,19 @@
         user_hash: user_hash
       ))
 
+    $(".new_message").live("ajax:complete", (event,xhr,status) ->
+      $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+      $(this)[0].reset())
+
+    $(document).ready ->
+      $("a.fancybox").fancybox()
+
+    $('body').get(0).addEventListener("dragenter", onDragBody, false)
+    $('#drop_zone').get(0).addEventListener("dragenter", onDragEnter, false)
+    $('#drop_zone').get(0).addEventListener("dragleave", onDragLeave, false)
+    $('#drop_zone').get(0).addEventListener("dragover", noopHandler, false)
+    $('#drop_zone').get(0).addEventListener("drop", onDrop, false)
+
     uploadHandler()
     $(':file').change ->
       file = this.files[0]
@@ -89,10 +103,75 @@
       size = file.size
       type = file.type
 
+  onDragBody = (evt) ->
+    $("#drop_zone").addClass('overlay')
+    $('#drop_zone').html "<h1>Drag your file over here!</h1>"
+    $("#drop_zone").show()
+
+  onDragEnter = (evt) ->
+    evt.stopPropagation();
+    $("#drop_zone").addClass('overlay-drop')
+    $('#drop_zone').html "<h1>Drop your file!</h1>"
+
+  onDragLeave = (evt) ->
+    noopHandler(evt)
+    $("#drop_zone").removeClass('overlay-drop')
+    $("#drop_zone").addClass('overlay')
+
+  onDrop = (evt) -> 
+    noopHandler(evt)
+    files = evt.dataTransfer.files
+    $('#drop_zone').hide()
+    uploadDraggedFile(files[0], files.length)
+
+  noopHandler = (evt) ->
+    evt.stopPropagation()
+    evt.preventDefault()
+
+  uploadDraggedFile = (file, length) ->
+    console.log file
+    console.log length
+    reader = new FileReader()
+    reader.onerror = (evt) ->
+      message
+      switch evt.target.error.code
+        when 1
+          console.log file.name + " not found."
+        when 2
+          console.log file.name + " has changed on disk, please re-try."
+        when 3
+          console.log "Upload cancelled."
+        when 4
+          console.log "Cannot read " + file.name + "."
+        when 5
+          console.log "File too large for browser to upload."
+    reader.onloadend = (evt) ->
+      console.log "getting here?"
+      data = evt.target.result
+      form = $('.file_form')[0]
+      form_data = new FormData form
+      form_data.append( 'document[file]', file )
+      $.ajax({
+        type: 'POST',
+        url: '<%= root_url %>file/api/v1/documents.json',
+        data: form_data,
+        cache: false,
+        contentType: false,
+        crossDomain: true,
+        processData: false,
+        success: (response) ->
+          console.log form_data   
+        error: (response) ->
+          console.log "error form" + form_data   
+        })
+    reader.readAsDataURL(file)
+
   uploadHandler = () ->
     $('.file_upload').click ->
       form = $('.file_form')[0]
       data = new FormData form
+      console.log data
+      console.log form
       $.ajax({
         type: 'POST',
         url: '<%= root_url %>file/api/v1/documents.json',
@@ -102,7 +181,9 @@
         crossDomain: true,
         processData: false,
         success: (response) ->
-          console.log response   
+          "succeeded" 
+        error: (response) ->
+          console.log 'file is ' + data   
         })
       $('.file').attr({ value: '' })
 
