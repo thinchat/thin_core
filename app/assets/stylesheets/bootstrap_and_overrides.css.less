@@ -1,11 +1,4 @@
 @import "twitter/bootstrap/bootstrap";
-/*body { 
-	padding-top: 70px;
-  background-image:url('image.png');
-  background-color: #f7f7f7;
-  background-position: 0% 28%;
-  background-repeat: x;
-}*/
 
 body {
   background:#F4F4F4;
@@ -21,17 +14,6 @@ body {
 @iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
 @iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
 
-// Your custom LESS stylesheets goes here
-//
-// Since bootstrap was imported above you have access to its mixins which
-// you may use and inherit here
-//
-// If you'd like to override bootstrap's own variables, you can do so here as well
-// See http://twitter.github.com/bootstrap/less.html for their names and documentation
-//
-// Example:
-// @linkColor: #ff0000;
-
 @baseFontSize: 16px;
 @linkColor: #305b6d;
 @btnPrimaryBackground: #437d95;
@@ -46,12 +28,33 @@ body {
 @navbarLinkColor: white;
 @navbarHeight: 50px;
 
+a:hover {
+  text-decoration: none;
+  background-color: #305b6d;
+  color: white; 
+}
+
+#nav-login {
+  float: right;
+}
+
 .navbar {
   font-size: 20px;
+  -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
 }
 
 .navbar .nav > li > a {
  padding: 19px 10px 11px;
+}
+
+.btn-huge {
+  padding: 9px 14px;
+  font-size: 35px;
+  font-weight: 600;
+  line-height: normal;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
 }
 
 .navbar .brand {
@@ -60,4 +63,8 @@ body {
 
 .navbar .brand span {
   font-weight: 700;
+}
+
+footer {
+  margin-top: 20px;
 }
