@@ -7,11 +7,13 @@ class @FayeHandler
   joinRoomAndPulse: (callback) =>
     @subscribe(callback)
     @addSubscribeExtension()
+    @addCloseExtension() if @user_hash.user_type == "Guest"
     @addPulse()
 
   joinRoom: (callback) =>
     @subscribe(callback)
     @addSubscribeExtension()
+    @addCloseExtension() if @user_hash.user_type == "Guest"
 
   subscribe: (callback) =>
     @client.subscribe(@channel, (data) =>
@@ -25,6 +27,12 @@ class @FayeHandler
     @client.addExtension outgoing: (message, callback) =>
       if message.channel is "/meta/subscribe"
         message.data = message.data or @user_hash
+      callback message
+
+  addCloseExtension: =>
+    @client.addExtension incoming: (message, callback) =>
+      if message.channel is "#{@channel}"
+        $('#logModal').modal('show') if message.data.chat_message.message_type == "CloseRequest"
       callback message
 
   addPulse: =>

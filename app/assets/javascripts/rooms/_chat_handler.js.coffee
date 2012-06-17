@@ -39,11 +39,16 @@ class @ChatHandler
       content.append "<a href='#{image}' class='fancybox' target='_blank'><img src='#{image}' height=200 ></img></a>"
     content
 
-  @showModalHandler: =>
+  @showModalHandler:(api_v1_messages_url, user_hash) =>
     $('.close_room').click ->
-      ChatHandler.closeRoom($(this).attr("id"))
-      $('#logModal').modal('show')
-
+      name = $(this).data("room-name")
+      $.ajax({
+          type: 'POST',
+          url: "#{api_v1_messages_url}",
+          data: {"message": $.extend({"message_type":"CloseRequest", "body":"An agent has requested that this room be closed."}, user_hash)},
+          success: (response) ->
+          })
+  
   @closeRoom = (id) ->
     $.ajax({
         type: 'PUT',

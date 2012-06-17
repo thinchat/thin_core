@@ -133,6 +133,7 @@ GEM
     kgio (2.7.4)
     launchy (2.1.0)
       addressable (~> 2.2.6)
+    lazy_susan (0.7.0)
     less (2.2.1)
       commonjs (~> 0.2.6)
     less-rails (2.2.3)
@@ -302,6 +303,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   launchy
+  lazy_susan
   mustache
   mysql2
   rack-test

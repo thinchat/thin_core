@@ -7,7 +7,6 @@
 
     <div class="span4" id="room_meta">
       <div id="online_agents"></div>
-      <a class="close_room" id="<%= @room.id %>">Close the room</a>
       <%= render "messages/file", :locals =>  { :user => @user} %>
       <%= render "rooms/log_form" %>
       <%= render "user_name", :locals =>  { :user => @user, :session => @session } %>
@@ -57,9 +56,9 @@
     location = $(".info").data("location")
     channel = $('#messages').data('channel')
     ChatInitializer.initialize()
-    ChatHandler.showModalHandler()
     ChatHandler.getMessages("<%= api_v1_messages_url(room_name: @room.name) %>", ChatHandler.renderMessages)
     user_hash = $.namespace.getUser(location)
+    ChatHandler.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
 
     room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
     if user_hash.user_type == "Guest"

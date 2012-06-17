@@ -24,7 +24,7 @@ class Message < ActiveRecord::Base
   end
 
   def self.build_params_hash(params)
-    params = JSON.parse(params)
+    params = JSON.parse(params) if params.class == String
     hash = {}
     MESSAGE_ATTRS.each do |attribute|
       hash[attribute] = params[attribute.to_s] if params.has_key? attribute.to_s

@@ -20,6 +20,7 @@ gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootst
 gem 'resque'
 gem 'resque_mailer'
 gem 'squeel'
+gem 'lazy_susan'
 
 # Gems used only for assets and not required
 # in production environments by default.
