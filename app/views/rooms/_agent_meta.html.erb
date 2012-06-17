@@ -5,7 +5,7 @@
 <ul class="meta">
   <li class="header">Room Actions</li>
   <li><%= render "agent_close" %></li>
-  <a class="close_room" id="<%= @room.id %>">Close the room</a>
+  <a class="close_room" data-room-name="<%= @room.name %>">Close the room</a>
 </ul>
       
 <%= render "messages/file", :locals =>  { :user => @user} %>

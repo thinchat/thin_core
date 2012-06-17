@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120616051236) do
+ActiveRecord::Schema.define(:version => 20120617002418) do
 
   create_table "guests", :force => true do |t|
     t.string   "name"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(:version => 20120616051236) do
     t.datetime "updated_at",           :null => false
     t.string   "authentication_token"
   end
+
+  add_index "guests", ["id"], :name => "index_guests_on_id"
 
   create_table "messages", :force => true do |t|
     t.text     "body"
@@ -33,6 +35,12 @@ ActiveRecord::Schema.define(:version => 20120616051236) do
     t.text     "metadata"
   end
 
+  add_index "messages", ["id"], :name => "index_messages_on_id"
+  add_index "messages", ["room_id", "user_id"], :name => "index_messages_on_room_id_and_user_id"
+  add_index "messages", ["room_id"], :name => "index_messages_on_room_id"
+  add_index "messages", ["user_id", "room_id"], :name => "index_messages_on_user_id_and_room_id"
+  add_index "messages", ["user_id"], :name => "index_messages_on_user_id"
+
   create_table "rooms", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -40,5 +48,8 @@ ActiveRecord::Schema.define(:version => 20120616051236) do
     t.string   "status"
     t.integer  "guest_id"
   end
+
+  add_index "rooms", ["guest_id"], :name => "index_rooms_on_guest_id"
+  add_index "rooms", ["id"], :name => "index_rooms_on_id"
 
 end
