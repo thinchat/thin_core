@@ -68,7 +68,7 @@
     channel = $('#messages').data('channel')
     ChatInitializer.initialize()
     ChatHandler.getMessages("<%= api_v1_messages_url(room_name: @room.name) %>", ChatHandler.renderMessages)
-    ChatHandler.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
+    ChatInitializer.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
 
     room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
     if user_hash.user_type == "Guest"

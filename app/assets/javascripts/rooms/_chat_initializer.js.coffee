@@ -12,7 +12,7 @@ class @ChatInitializer
 
   @showModalHandler: =>
     $(document).on 'click','.close_room', (e) ->
-      ChatHandler.closeRoom($(this).data("room_name"))
+      ChatInitializer.closeRoom($(this).data("roomName"))
       $('#logModal').modal('show')
 
   @closeRoom = (room_name) ->
