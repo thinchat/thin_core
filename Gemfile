@@ -21,6 +21,7 @@ gem 'resque'
 gem 'resque_mailer'
 gem 'squeel'
 gem 'lazy_susan'
+gem 'i18n'
 
 # Gems used only for assets and not required
 # in production environments by default.
