@@ -20,7 +20,11 @@ class Message < ActiveRecord::Base
   end
 
   def pretty_time
-    created_at.strftime("%l:%M %p") if created_at
+    if created_at
+      created_at.strftime("%l:%M %p")
+    else
+      Time.now.strftime("%l:%M %p")
+    end
   end
 
   def self.build_params_hash(params)
