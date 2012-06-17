@@ -1,11 +1,11 @@
-<%= form_tag "file_upload", :class => "file_form", :multipart => true, :remote => true do %>
+<%= form_tag "file_upload", :class => "file_form form-inline", :multipart => true, :remote => true do %>
 
 <%= hidden_field_tag 'document[user_id]', current_user.id %>
 <%= hidden_field_tag 'document[user_type]', current_user.class %>
 <%= hidden_field_tag 'document[room_id]', @room.id %>
 <%= hidden_field_tag 'document[user_display_name]', current_user.name %>
-<%= file_field_tag 'document[file]', :class=> "file" %>
+<label><%= file_field_tag 'document[file]', :size => "40" %></label>
 
-<a class="file_upload">Upload a file!</a>
+<li><a class="file_upload">Send file</a></li>
 
 <% end %>
