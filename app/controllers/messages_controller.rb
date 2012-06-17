@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
     { :body => params["body"],
       :room_id => params["room_id"],
       :message_type => params["message_type"],
-      :user_id => current_user.user_hash[:id],
+      :user_id => current_user.user_hash[:user_id],
       :user_type => current_user.user_hash[:user_type],
       :user_name => current_user.user_hash[:user_name] }
   end
