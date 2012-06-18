@@ -13,7 +13,7 @@ ThinCore::Application.routes.draw do
   resources :widget, :only => [:show]
   match '/widget' => 'widget#show'
   resources :messages
-  resources :rooms, :only => [:create, :index]
+  resources :rooms, :only => [:create, :new, :index]
   resources :logs, :only => [:create]
   match '/rooms/:name/closed' => 'rooms#closed', :as => :closed_room
   match '/rooms/:name' => 'rooms#show', :as => :room
