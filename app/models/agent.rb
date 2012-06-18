@@ -1,6 +1,6 @@
 class Agent
   # attr_accessible :name, :thin_auth_id
-  attr_accessor :name, :thin_auth_id, :email
+  attr_accessor :name, :thin_auth_id, :email, :client_ids
 
   def id
     thin_auth_id
