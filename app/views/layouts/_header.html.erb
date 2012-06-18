@@ -13,6 +13,7 @@
         <ul class="nav">
           <li><%= link_to "Lobby", rooms_path() %></li>
           <li><%= link_to "Analytics", "/dashboard" %></li>
+          <li><%= link_to "Create a room", rooms_path, :method => :post %></li>
           <li class="dropdown"><%= render "layouts/nav_login" %></li>
         </ul>
 

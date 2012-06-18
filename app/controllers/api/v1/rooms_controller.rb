@@ -4,7 +4,7 @@ class Api::V1::RoomsController < ApplicationController
   respond_to :json
 
   def index
-    @rooms = Room.in_queue
+    @rooms = Room.pending + Room.active + Room.closed
     if params[:users]
       @rooms = @rooms.each do |room|
         room.users = HEARTBEAT.get_users_in_room(room.name)
