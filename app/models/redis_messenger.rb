@@ -1,8 +1,8 @@
 class RedisMessenger
   attr_accessor :client
 
-  def initialize(host, port)
-    @client = Redis.new(:host => host, :port => port)
+  def initialize
+    @client = $redis
   end
 
   def publish(hash, channels = nil)

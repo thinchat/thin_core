@@ -100,7 +100,7 @@ class Message < ActiveRecord::Base
   end
 
   def publish_to_redis
-    messenger = RedisMessenger.new('localhost', 6379)
+    messenger = RedisMessenger.new
     messenger.publish(to_hash)
   end
 end
