@@ -5,7 +5,7 @@ class @FayeHandler
     @channel = channel
 
   joinRoomAndPulse: (callback) =>
-    @joinRoom
+    @joinRoom(callback)
     @addPulse()
 
   joinRoom: (callback) =>
