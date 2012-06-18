@@ -19,6 +19,13 @@ describe Message do
     end
   end
 
+  describe ".to_hash" do
+    it "successfully builds a params hash" do
+      params = {:message_type =>"Subscribe",:user_id =>1,:user_type => "Agent",:user_name =>"Andrew Glass",:client_id => "1i3jffrm3jiwojfz7v9l27zof",:location => "79036ea5cd",:channel =>"/messages/79036ea5cd",:body =>"Andrew Glass entered."}
+      Message.build_params_hash(params).class.should == Hash
+    end
+  end
+
   describe "#to_hash" do
     let(:message) { Message.new(room_id: 1) }
     it "should return a hash" do
@@ -91,4 +98,38 @@ describe Message do
       end
     end
   end
+
+  describe "#subscribe?" do
+    let(:message) { Message.new(:message_type => "Subscribe") }
+
+    context "A message is a subscribe message" do
+      it "should return true" do
+        message.subscribe?.should == true
+      end
+    end
+  end
+
+  describe "#disconnect?" do
+    let(:message) { Message.new(:message_type => "Disconnect") }
+
+    context "A message is a disconnect message" do
+      it "should return true" do
+        message.disconnect?.should == true
+      end
+    end
+  end
+
+  describe "#get_channels" do
+    let(:message) { Message.new(:user_type => "Guest", :message_type => "Disconnect") }
+
+    context "A message is a disconnect message" do
+      it "should return an array of channels to broadcast to" do
+        message.get_channels.class.should == Array
+      end
+    end
+  end
+
 end
+
+
+
