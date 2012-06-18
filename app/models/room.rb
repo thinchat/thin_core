@@ -20,6 +20,18 @@ class Room < ActiveRecord::Base
     Room.pending + Room.active
   end
 
+  def self.build_for_user(user)
+    user.agent? ? Room.new : user.rooms.build
+  end
+
+  def self.find_by_name_for_user(user, name)
+    if user.guest?
+      user.rooms.find_by_name(name)
+    else
+      Room.find_by_name(name)
+    end
+  end
+
   def self.get_rooms_and_close_empty
     rooms_with_users = ThinHeartbeat::Status.new($redis).get_rooms_with_users
     Room.open_rooms.each do |room|

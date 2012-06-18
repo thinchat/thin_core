@@ -1,34 +1,26 @@
 class RoomsController < ApplicationController
   # before_filter :require_login, :only => [:index]
 
+  def new
+    room = Room.build_for_user(current_user)
+    redirect_to room_path(room.name) if room.save
+  end
+
   def index
     @location = "Lobby"
   end
 
   def create
-    # redirect_to rooms_path and return if current_user.class == Agent
-    if current_user.agent?
-      room = Room.create()
-    else
-      room = current_user.rooms.create
-    end
-    redirect_to room_path(room.name)
+    room = Room.build_for_user(current_user)
+    redirect_to room_path(room.name) if room.save
   end
 
   def show
-    if current_user.guest?
-      @room = current_user.rooms.find_by_name(params[:name])
-    else
-      @room = Room.find_by_name(params[:name])
-    end
+    @room = Room.find_by_name_for_user(current_user, params[:name])
+    redirect_to not_found_path and return if @room.nil?
 
-    @location = @room.name if @room
-
-    if @room.closed? 
-      redirect_to closed_room_path(@room.name, params)
-    elsif @room.nil?
-      redirect_to not_found_path
-    end
+    @location = @room.name
+    redirect_to new_room_path if @room.closed?
   end
 
   def closed
