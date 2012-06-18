@@ -1,13 +1,13 @@
-require '/home/deployer/apps/thin_core/current/config/secret/campfire_token.rb'
-
 application = 'thin_core'
 rails_env = 'staging'
 
+require "/home/deployer/apps/#{application}/current/config/secret/campfire_token.rb"
 rails_root = "/home/deployer/apps/#{application}/current"
 
 God.watch do |w|
-  w.name = "thin_core"
-  w.log = "/var/log/god/thin_core.log"
+  w.name = "#{application}"
+  w.log = "/var/log/god/#{application}.log"
+  w.err_log = "/var/log/god/#{application}_error.log"
   w.uid = 'deployer'
   w.gid = 'admin'
   w.start_grace = 10.seconds
