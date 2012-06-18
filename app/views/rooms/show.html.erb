@@ -66,11 +66,11 @@
     ChatInitializer.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
 
     room = new FayeHandler(faye_client, user_hash, channel)
-
+    fayePartialHandler = (msg) -> ChatHandler.handleFayeMessage(user_hash, msg)
     if user_hash.user_type == "Guest"
-      room.joinRoomAndPulse(ChatHandler.handleMessage)
+      room.joinRoomAndPulse(fayePartialHandler)
     else
-      room.joinRoom(ChatHandler.handleMessage)
+      room.joinRoom(fayePartialHandler)
 
     $("#user_info_update").click ->
       $('#userModal').modal('hide')
