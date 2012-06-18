@@ -11,7 +11,7 @@ class @RoomsIndexUserPresenter
       RoomsIndexUserPresenter.removeUser(data.metadata.client_id)
 
   @addUser: (user) =>
-    $("#room-#{user.metadata.location}").append Mustache.to_html($('#user_template').html(), user)
+    $("#room-#{user.metadata.location}").find("#buddy_list").append Mustache.to_html($('#user_template').html(), user)
 
   @removeUser: (client_id) =>
     $(".#{client_id}").remove()
