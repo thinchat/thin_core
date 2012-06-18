@@ -10,6 +10,14 @@ class Room < ActiveRecord::Base
     Room.where{status.in statuses}
   end
 
+  def pretty_time
+    if created_at
+      created_at.strftime("%l:%M %p")
+    else
+      Time.now.strftime("%l:%M %p")
+    end
+  end
+
   def set_name
     self.name = rand(36**8).to_s(16)
   end
