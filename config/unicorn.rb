@@ -12,5 +12,5 @@ worker_processes 2
 timeout 30
 
 after_fork do |server, worker|
-  Resque.redis = 'localhost:6379'
+  Resque.redis = $redis
 end
