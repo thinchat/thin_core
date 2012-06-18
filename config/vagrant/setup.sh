@@ -11,6 +11,3 @@ gem install bundler
 gem install god
 git clone git://github.com/thinchat/thin_chef.git /var/chef
 chef-solo -c /var/chef/solo.rb
-mkdir /usr/local/var
-mkdir /usr/local/var/db
-mkdir /usr/local/var/db/redis

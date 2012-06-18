@@ -1,3 +1,6 @@
+require 'resque'
+require 'redis'
+
 root = "/home/deployer/apps/thin_core/current"
 working_directory root
 pid "#{root}/tmp/pids/unicorn.pid"
@@ -7,3 +10,7 @@ stdout_path "#{root}/log/unicorn.log"
 listen "/tmp/unicorn.thin_core.sock"
 worker_processes 2
 timeout 30
+
+after_fork do |server, worker|
+  Resque.redis = 'localhost:6379'
+end
