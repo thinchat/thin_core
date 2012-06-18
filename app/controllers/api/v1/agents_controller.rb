@@ -4,6 +4,11 @@ class Api::V1::AgentsController < ApplicationController
   respond_to :json
 
   def index
-    @users = ThinHeartbeat::Status.new('localhost').get_agents.uniq_by{ |agent| agent.user_id }
+    @users = HEARTBEAT.get_agents
+    if params[:rooms]
+      @users = @users.each do |user|
+        user.rooms = HEARTBEAT.get_users_in_room(room.name)
+      end
+    end
   end
 end

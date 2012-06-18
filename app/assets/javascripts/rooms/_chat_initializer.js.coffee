@@ -10,10 +10,16 @@ class @ChatInitializer
       if (e.which == 13 && e.shiftKey == false)
         $("#new_message").submit()
 
-  @showModalHandler: =>
-    $(document).on 'click','.close_room', (e) ->
+  @showModalHandler: (api_v1_messages_url, user_hash) =>
+    $('.close_room').click ->
+      name = $(this).data("room-name")
+      $.ajax({
+          type: 'POST',
+          url: "#{api_v1_messages_url}",
+          data: {"message": $.extend({"message_type":"CloseRequest", "body":"An agent has requested that this room be closed."}, user_hash)},
+          success: (response) ->
+          })
       ChatInitializer.closeRoom($(this).data("roomName"))
-      $('#logModal').modal('show')
 
   @closeRoom = (room_name) ->
     $.ajax({
