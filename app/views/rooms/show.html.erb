@@ -7,16 +7,15 @@
     </div>
     
     <div class="span4" id="room_meta">
+      <div id="drop_zone" class="well">
+        <h1>Drag your file here!</h1>
+      </div>
       <% if current_user.agent? %>
         <%= render "agent_meta" %>
       <% else %>
         <%= render "guest_meta" %>
         <%= render "user_name_modal" %>
       <% end %>
-      
-      <div id="drop_zone" class="well">
-        <h1>DROP HERE</h1>
-      </div>
     </div>
   </div><!-- end row -->
 
@@ -27,32 +26,8 @@
   </div>
 </div>
 
-<script type="text/html" id="message_template">
-  <div class="message">
-    <div class="user_name">{{user_name}}</div><div class="chat_date">{{pretty_time}}</div>
-    <div class="message_body">{{message_body}}</div>
-  </div>
-</script>
-
-<script type="text/html" id="document_template">
-  <div class="message">
-    {{user_name}}: <a href={{message_body}} target="_blank"><img class="download_image" src ={{metadata.icon}} height=50> {{metadata.filename}}</a>
-  </div>
-</script>
-
-<script type="text/html" id="event_template">
-  <div class="message event">
-    {{message_body}}
-  </div>
-</script>
-
-<script type="text/html" id="user_template">
-  <li class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite</a></span></li>
-</script>
-
-<script type="text/html" id="user_with_client_ids_template">
-  <li class="user user-{{user_id}}" data-user-id="{{user_id}}" data-client-ids="{{client_ids}}">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite</a></span></li>
-</script>
+<!-- MUSTACHE TEMPLATES -->
+<%= render "rooms/mustache_templates/show" %>
 
 <%= coffee_script_tag do %>
   jQuery ->
@@ -68,16 +43,24 @@
     ChatInitializer.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
 
     room = new FayeHandler(faye_client, user_hash, channel)
-
+    fayePartialHandler = (msg) -> ChatHandler.handleFayeMessage(user_hash, msg)
     if user_hash.user_type == "Guest"
-      room.joinRoomAndPulse(ChatHandler.handleMessage)
+      room.joinRoomAndPulse(fayePartialHandler)
     else
-      room.joinRoom(ChatHandler.handleMessage)
+      room.joinRoom(fayePartialHandler)
 
     $("#user_info_update").click ->
       $('#userModal').modal('hide')
     
     agentPoller = new RoomsShowUsersPoller("<%= api_v1_agents_url %>?rooms=true")
+
+    $(':file').change ->
+      file = this.files[0]
+      name = file.name
+      size = file.size
+      type = file.type
+
+    UploadHandler.initialize()
 
     # online_agents = new FayeHandler(faye_client, user_hash, '/online/agent')
     # callbackFunction = (msg) -> RoomsShowUserPresenter.handleUser(msg, agentPoller.refreshList)
@@ -89,101 +72,37 @@
         user_hash: user_hash
       ))
 
-    $('body').get(0).addEventListener("dragenter", onDragBody, false)
-    $('#drop_zone').get(0).addEventListener("dragenter", onDragEnter, false)
-    $('#drop_zone').get(0).addEventListener("dragleave", onDragLeave, false)
-    $('#drop_zone').get(0).addEventListener("dragover", noopHandler, false)
-    $('#drop_zone').get(0).addEventListener("drop", onDrop, false)
+    dropzone = $("#drop_zone")
+    $('body').on "dragover", ->
+      dropzone.show()
+      dropzone.addClass "overlay"
+      false
 
-    uploadHandler()
-    $(':file').change ->
-      file = this.files[0]
-      name = file.name
-      size = file.size
-      type = file.type
+    $('body').on "drop", (e)->
+      e.originalEvent.stopPropagation()
+      e.originalEvent.preventDefault()
+      dropzone.hide()
+      dropzone.addClass "overlay"
+      false
 
-  onDragBody = (evt) ->
-    $("#drop_zone").addClass('overlay')
-    $('#drop_zone').html "<h1>Drag your file over here!</h1>"
-    $("#drop_zone").show()
+    dropzone.on "dragover", ->
+      dropzone.addClass "overlay-drop"
+      dropzone.html "<h1>Now drop that file!</h1>"
+      false
 
-  onDragEnter = (evt) ->
-    evt.stopPropagation();
-    $("#drop_zone").addClass('overlay-drop')
-    $('#drop_zone').html "<h1>Drop your file!</h1>"
+    dropzone.on "dragleave", ->
+      dropzone.removeClass "overlay-drop"
+      dropzone.addClass "overlay"
+      dropzone.html "<h1>Drag your file here!</h1>"
+      false
 
-  onDragLeave = (evt) ->
-    noopHandler(evt)
-    $("#drop_zone").removeClass('overlay-drop')
-    $("#drop_zone").addClass('overlay')
-
-  onDrop = (evt) -> 
-    noopHandler(evt)
-    files = evt.dataTransfer.files
-    $('#drop_zone').hide()
-    uploadDraggedFile(files[0], files.length)
-
-  noopHandler = (evt) ->
-    evt.stopPropagation()
-    evt.preventDefault()
-
-  uploadDraggedFile = (file, length) ->
-    console.log file
-    console.log length
-    reader = new FileReader()
-    reader.onerror = (evt) ->
-      message
-      switch evt.target.error.code
-        when 1
-          console.log file.name + " not found."
-        when 2
-          console.log file.name + " has changed on disk, please re-try."
-        when 3
-          console.log "Upload cancelled."
-        when 4
-          console.log "Cannot read " + file.name + "."
-        when 5
-          console.log "File too large for browser to upload."
-    reader.onloadend = (evt) ->
-      console.log "getting here?"
-      data = evt.target.result
-      form = $('.file_form')[0]
-      form_data = new FormData form
-      form_data.append( 'document[file]', file )
-      $.ajax({
-        type: 'POST',
-        url: '<%= root_url %>file/api/v1/documents.json',
-        data: form_data,
-        cache: false,
-        contentType: false,
-        crossDomain: true,
-        processData: false,
-        success: (response) ->
-          console.log form_data   
-        error: (response) ->
-          console.log "error form" + form_data   
-        })
-    reader.readAsDataURL(file)
-
-  uploadHandler = () ->
-    $('.file_upload').click ->
-      form = $('.file_form')[0]
-      data = new FormData form
-      console.log data
-      console.log form
-      $.ajax({
-        type: 'POST',
-        url: '<%= root_url %>file/api/v1/documents.json',
-        data: data,
-        cache: false,
-        contentType: false,
-        crossDomain: true,
-        processData: false,
-        success: (response) ->
-          "succeeded" 
-        error: (response) ->
-          console.log 'file is ' + data   
-        })
-      $('.file').attr({ value: '' })
+    dropzone.on "drop", (e) ->
+      e.stopPropagation()
+      e.preventDefault()
+      dropzone.removeClass "overlay-drop"
+      dropzone.hide()
+      files = e.originalEvent.dataTransfer.files
+      DragDropHandler.uploadDraggedFile(files[0], files.length)
+      false
 
 <% end %>

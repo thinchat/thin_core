@@ -4,7 +4,6 @@ class @RoomsIndexRoomPoller
     @refreshList()
 
   refreshList: =>
-    console.log("Mr. Anderson, I'm polling...")
     rooms = $.getJSON(@rooms_url, @renderRooms)
     setTimeout((=> @refreshList()), 5000)
 

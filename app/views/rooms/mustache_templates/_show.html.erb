@@ -1,0 +1,26 @@
+<script type="text/html" id="message_template">
+  <div class="message">
+    <div class="user_name">{{user_name}}</div><div class="chat_date">{{pretty_time}}</div>
+    <div class="message_body">{{message_body}}</div>
+  </div>
+</script>
+
+<script type="text/html" id="document_template">
+  <div class="message">
+    {{user_name}}: <a href={{message_body}} target="_blank"><img class="download_image" src ={{metadata.icon}} height=50> {{metadata.filename}}</a>
+  </div>
+</script>
+
+<script type="text/html" id="event_template">
+  <div class="message event">
+    {{message_body}}
+  </div>
+</script>
+
+<script type="text/html" id="user_template">
+  <li class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite</a></span></li>
+</script>
+
+<script type="text/html" id="user_with_client_ids_template">
+  <li class="user user-{{user_id}}" data-user-id="{{user_id}}" data-client-ids="{{client_ids}}">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite</a></span></li>
+</script>

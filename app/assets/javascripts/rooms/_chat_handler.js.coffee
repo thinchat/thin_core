@@ -6,6 +6,11 @@ class @ChatHandler
     for message in messages
       ChatHandler.handleMessage(message)
 
+  @handleFayeMessage: (user_hash, message) =>
+    if ("#{message.user_id}" != user_hash.user_id)
+      $('html, body').animate({scrollTop:window.pageYOffset + 20}, 'fast');
+    ChatHandler.handleMessage(message)
+
   @handleMessage: (message) =>
     if (message.message_type == "Message")
       ChatHandler.addMessage(message)
