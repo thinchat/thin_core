@@ -1,3 +1,5 @@
+require 'heartbeat.rb'
+
 class Room < ActiveRecord::Base
   attr_accessible :name, :status, :guest_id
   attr_accessor :users
@@ -14,9 +16,19 @@ class Room < ActiveRecord::Base
     end
   end
 
-  def self.close_empty_rooms
-    all_users = ThinHeartbeat::Status.new($redis).get_users
-    true
+  def self.open_rooms
+    Room.pending + Room.active
+  end
+
+  def self.get_rooms_and_close_empty
+    rooms_with_users = ThinHeartbeat::Status.new($redis).get_rooms_with_users
+    Room.open_rooms.each do |room|
+      unless rooms_with_users.include? room.name
+        room.update_attribute(:status, "Closed")
+        open_rooms.delete
+      end
+    end
+    open_rooms
   end
 
   def pretty_time

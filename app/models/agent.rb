@@ -1,5 +1,4 @@
 class Agent
-  # attr_accessible :name, :thin_auth_id
   attr_accessor :name, :thin_auth_id, :email, :client_ids
 
   def id
@@ -22,7 +21,6 @@ class Agent
   end
 
   def user_hash(location = nil)
-    # hash = { user_id: id.to_s, user_type: 'Agent', user_name: name}
     hash = { user_id: id.to_s, user_type: 'Agent', user_name: name, private_channel: channel}
     location ? hash[:room_id] = location : hash
   end

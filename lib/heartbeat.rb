@@ -16,6 +16,10 @@ module ThinHeartbeat
       get_hashies_from_keys(keys)
     end
 
+    def get_unique_agents
+      get_agents.uniq_by{ |user| user.user_id }
+    end
+
     def get_guests
       keys = redis.keys "hb:*Guest:*"
       get_hashies_from_keys(keys)      
@@ -26,9 +30,18 @@ module ThinHeartbeat
       get_hashies_from_keys(keys)
     end
 
+    def get_rooms_with_users
+      #returns an array of room names
+      get_users.collect{ |user| user.location }.uniq
+    end
+
     def get_rooms_for_user(user)
       keys = redis.keys "hb:*#{user.user_type}:#{user.user_id}*"
       get_hashies_from_keys(keys)
+    end
+
+    def get_client_ids_for_user(user)
+      get_rooms_for_user(user).collect{ |room| room.client_id }
     end
 
     def get_hashies_from_keys(keys)

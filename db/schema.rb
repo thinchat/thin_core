@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120617002418) do
+ActiveRecord::Schema.define(:version => 20120618190659) do
 
   create_table "guests", :force => true do |t|
     t.string   "name"
@@ -51,5 +51,6 @@ ActiveRecord::Schema.define(:version => 20120617002418) do
 
   add_index "rooms", ["guest_id"], :name => "index_rooms_on_guest_id"
   add_index "rooms", ["id"], :name => "index_rooms_on_id"
+  add_index "rooms", ["status"], :name => "index_rooms_on_status"
 
 end
