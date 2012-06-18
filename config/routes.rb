@@ -11,6 +11,7 @@ ThinCore::Application.routes.draw do
   end
 
   resources :widget, :only => [:show]
+  match '/widget' => 'widget#show'
   resources :messages
   resources :rooms, :only => [:create, :index]
   resources :logs, :only => [:create]
