@@ -7,16 +7,15 @@
     </div>
     
     <div class="span4" id="room_meta">
+      <div id="drop_zone" class="well">
+        <h1>Drag your file here!</h1>
+      </div>
       <% if current_user.agent? %>
         <%= render "agent_meta" %>
       <% else %>
         <%= render "guest_meta" %>
         <%= render "user_name_modal" %>
       <% end %>
-      
-      <div id="drop_zone" class="well">
-        <h1>DROP HERE</h1>
-      </div>
     </div>
   </div><!-- end row -->
 
@@ -90,11 +89,38 @@
     $(document).ready ->
       $("a.fancybox").fancybox()
 
-    $('body').get(0).addEventListener("dragenter", onDragBody, false)
-    $('#drop_zone').get(0).addEventListener("dragenter", onDragEnter, false)
-    $('#drop_zone').get(0).addEventListener("dragleave", onDragLeave, false)
-    $('#drop_zone').get(0).addEventListener("dragover", noopHandler, false)
-    $('#drop_zone').get(0).addEventListener("drop", onDrop, false)
+    dropzone = $("#drop_zone")
+    $('body').on "dragover", ->
+      dropzone.show()
+      dropzone.addClass "overlay"
+      false
+
+    $('body').on "drop", (e)->
+      e.originalEvent.stopPropagation()
+      e.originalEvent.preventDefault()
+      dropzone.hide()
+      dropzone.addClass "overlay"
+      false
+
+    dropzone.on "dragover", ->
+      dropzone.addClass "overlay-drop"
+      dropzone.html "<h1>Now drop that file!</h1>"
+      false
+
+    dropzone.on "dragleave", ->
+      dropzone.removeClass "overlay-drop"
+      dropzone.addClass "overlay"
+      dropzone.html "<h1>Drag your file here!</h1>"
+      false
+
+    dropzone.on "drop", (e) ->
+      e.stopPropagation()
+      e.preventDefault()
+      dropzone.removeClass "overlay-drop"
+      dropzone.hide()
+      files = e.originalEvent.dataTransfer.files
+      uploadDraggedFile(files[0], files.length)
+      false
 
     uploadHandler()
     $(':file').change ->
@@ -103,34 +129,16 @@
       size = file.size
       type = file.type
 
-  onDragBody = (evt) ->
-    $("#drop_zone").addClass('overlay')
-    $('#drop_zone').html "<h1>Drag your file over here!</h1>"
-    $("#drop_zone").show()
-
   onDragEnter = (evt) ->
     evt.stopPropagation();
     $("#drop_zone").addClass('overlay-drop')
     $('#drop_zone').html "<h1>Drop your file!</h1>"
-
-  onDragLeave = (evt) ->
-    noopHandler(evt)
-    $("#drop_zone").removeClass('overlay-drop')
-    $("#drop_zone").addClass('overlay')
-
-  onDrop = (evt) -> 
-    noopHandler(evt)
-    files = evt.dataTransfer.files
-    $('#drop_zone').hide()
-    uploadDraggedFile(files[0], files.length)
 
   noopHandler = (evt) ->
     evt.stopPropagation()
     evt.preventDefault()
 
   uploadDraggedFile = (file, length) ->
-    console.log file
-    console.log length
     reader = new FileReader()
     reader.onerror = (evt) ->
       message

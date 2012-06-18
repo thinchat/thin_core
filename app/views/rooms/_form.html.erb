@@ -1,5 +1,5 @@
 <%= form_for Message.new, :remote => true, :class => "new_message" do |f|  %>
-  <%= f.text_area :body  %>
+  <%= f.text_area :body, :autofocus => true, :placeholder => "Enter your message here"  %>
   <%= f.hidden_field :room_id, :value => @room.id %>
   <%= f.hidden_field :message_type, :value =>"Message" %>
   <%= f.submit 'Send Message', :id => 'message_submit', :class => 'btn btn-warning btn-large'  %>
