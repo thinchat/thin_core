@@ -18,7 +18,7 @@ end
 before_fork do |server, worker|
   # a .oldbin file exists if unicorn was gracefully restarted with a USR2 signal
   # we should terminate the old process now that we're up and running
-  old_pid = "#{pids_dir}/unicorn.pid.oldbin"
+  old_pid = "#{root}/tmp/pids/unicorn.pid.oldbin"
   if File.exists?(old_pid)
     begin
       Process.kill("QUIT", File.read(old_pid).to_i)
