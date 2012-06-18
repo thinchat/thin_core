@@ -40,4 +40,4 @@ class @FayeHandler
 
   addPulse: =>
     @client.publish('/heart_beat', @user_hash)
-    setTimeout((=> @addPulse()), 10000)
+    setTimeout((=> @addPulse()), 2500)
