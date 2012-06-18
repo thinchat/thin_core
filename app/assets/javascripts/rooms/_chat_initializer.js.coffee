@@ -5,7 +5,7 @@ class @ChatInitializer
       $(this)[0].reset())
 
     $("a.fancybox").fancybox()
-    
+
     $("#message_body").keypress (e) ->
       if (e.which == 13 && e.shiftKey == false)
         e.preventDefault()
