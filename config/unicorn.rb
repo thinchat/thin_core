@@ -12,5 +12,5 @@ worker_processes 2
 timeout 30
 
 after_fork do |server, worker|
-  Resque.redis = $redis
+  Resque.redis = Redis.new(:host => 'localhost', :port => 6379)
 end
