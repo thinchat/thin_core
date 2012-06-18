@@ -5,9 +5,7 @@ class @FayeHandler
     @channel = channel
 
   joinRoomAndPulse: (callback) =>
-    @subscribe(callback)
-    @addSubscribeExtension()
-    @addCloseExtension() if @user_hash.user_type == "Guest"
+    @joinRoom
     @addPulse()
 
   joinRoom: (callback) =>
