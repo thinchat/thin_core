@@ -4,7 +4,7 @@ class Api::V1::AgentsController < ApplicationController
   respond_to :json
 
   def index
-    heartbeat_client = ThinHeartbeat::Status.new(REDIS)
+    heartbeat_client = ThinHeartbeat::Status.new($redis)
     @users = heartbeat_client.get_agents.uniq_by{ |user| user.user_id }
     if params[:rooms]
       @users = @users.each do |user|

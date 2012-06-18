@@ -4,7 +4,7 @@ class Api::V1::RoomsController < ApplicationController
   respond_to :json
 
   def index
-    heartbeat_client = ThinHeartbeat::Status.new(REDIS)
+    heartbeat_client = ThinHeartbeat::Status.new($redis)
     @rooms = Room.pending + Room.active
     if params[:users]
       @rooms = @rooms.each do |room|

@@ -1,4 +1,5 @@
 require 'resque'
 require 'resque/server'
+require 'config/initializers/redis'
 
-Resque.redis = 'localhost:6379'
+Resque.redis = $redis
