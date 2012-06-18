@@ -4,6 +4,8 @@ God.watch do |w|
   w.name = 'thin_core'
   w.dir = '/home/deployer/apps/thin_core/current'
   w.start = "/etc/init.d/unicorn_thin_core start"
+  w.stop = "/etc/init.d/unicorn_thin_core stop"
+  w.restart = "/etc/init.d/unicorn_thin_core restart"
   w.log = '/var/log/god/thin_core.log'
   w.env = { 'RAILS_ENV' => 'staging' }
   w.uid = 'deployer'
