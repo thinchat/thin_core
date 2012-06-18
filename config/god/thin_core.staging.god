@@ -1,19 +1,29 @@
 require '/home/deployer/apps/thin_core/current/config/secret/campfire_token.rb'
 
+application = 'thin_core'
+rails_env = 'staging'
+
+rails_root = "/home/deployer/apps/#{application}/current"
+
 God.watch do |w|
-  w.name = 'thin_core'
-  w.dir = '/home/deployer/apps/thin_core/current'
-  w.start = "/etc/init.d/unicorn_thin_core start"
-  w.stop = "/etc/init.d/unicorn_thin_core stop"
-  w.restart = "/etc/init.d/unicorn_thin_core restart"
-  w.log = '/var/log/god/thin_core.log'
-  w.env = { 'RAILS_ENV' => 'staging' }
+  w.name = "thin_core"
+  w.log = "/var/log/god/thin_core.log"
   w.uid = 'deployer'
   w.gid = 'admin'
   w.start_grace = 10.seconds
   w.restart_grace = 10.seconds
   w.interval = 30.seconds
   w.behavior(:clean_pid_file)
+  w.pid_file = "#{rails_root}/tmp/pids/unicorn.pid"
+
+  # unicorn needs to be run from the rails root
+  w.start = "cd #{rails_root} && /usr/local/bin/unicorn_rails -c #{rails_root}/config/unicorn.rb -E #{rails_env} -D"
+
+  # QUIT gracefully shuts down workers
+  w.stop = "kill -QUIT `cat #{rails_root}/tmp/pids/unicorn.pid`"
+
+  # USR2 causes the master to re-create itself and spawn a new worker pool
+  w.restart = "kill -USR2 `cat #{rails_root}/tmp/pids/unicorn.pid`"
 
   w.start_if do |start|
     start.condition(:process_running) do |c|
