@@ -17,3 +17,4 @@
 //= require_tree .
 //= require linkify
 //= require mustache
+//= require jquery.quicksand.js

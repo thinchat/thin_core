@@ -22,12 +22,14 @@
         <%= content_tag "div", class: "info", data: {location: @location} do %><% end %>
 
         <%= coffee_script_tag do %>
+
           jQuery ->
             location = $(".info").data("location")
             user_hash = $.namespace.getUser(location)
             if user_hash.user_type == "Agent"
               agent_channel = new FayeHandler("<%= FAYE_URL %>", user_hash, user_hash.private_channel)
               agent_channel.joinRoomAndPulse(PrivateMessageHandler.handleMessage)
+            $('.carousel').carousel()
         <% end %>
 
         <%= yield %>

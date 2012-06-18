@@ -54,13 +54,6 @@
   <li class="user user-{{user_id}}" data-user-id="{{user_id}}" data-client-ids="{{client_ids}}">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite</a></span></li>
 </script>
 
-<script type="text/html" id="agent_close_template">
-  <div class="message event">
-  <div class="user_name">{{user_name}}</div>
-    Is your issue resolved?  If so, <a class="close_room" data-room-name="<%= @room.name %>">click here to close the room</a>
-  </div>
-</script>
-
 <%= coffee_script_tag do %>
   jQuery ->
     user_hash = $.namespace.getUser(location)

@@ -45,6 +45,7 @@ group :development, :test do
   gem 'faker'
   gem 'growl'
   gem 'vagrant', '~> 1.0.3'
+  gem 'rack-test'
 end
 
 group :test do
