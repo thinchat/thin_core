@@ -1,5 +1,5 @@
 class @DragDropHandler
-  @uploadDraggedFile = (file, length) ->
+  @uploadDraggedFile = (url, file, length) ->
     reader = new FileReader()
     reader.onerror = (evt) ->
       message
@@ -21,7 +21,7 @@ class @DragDropHandler
       form_data.append( 'document[file]', file )
       $.ajax({
         type: 'POST',
-        url: '<%= root_url %>file/api/v1/documents.json',
+        url: '#{url}file/api/v1/documents.json',
         data: form_data,
         cache: false,
         contentType: false,

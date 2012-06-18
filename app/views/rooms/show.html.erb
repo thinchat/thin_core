@@ -60,7 +60,7 @@
       size = file.size
       type = file.type
 
-    UploadHandler.initialize()
+    UploadHandler.initialize("<%= root_url %>")
 
     # online_agents = new FayeHandler(faye_client, user_hash, '/online/agent')
     # callbackFunction = (msg) -> RoomsShowUserPresenter.handleUser(msg, agentPoller.refreshList)
@@ -102,7 +102,7 @@
       dropzone.removeClass "overlay-drop"
       dropzone.hide()
       files = e.originalEvent.dataTransfer.files
-      DragDropHandler.uploadDraggedFile(files[0], files.length)
+      DragDropHandler.uploadDraggedFile("<%= root_url %>", files[0], files.length)
       false
 
 <% end %>
