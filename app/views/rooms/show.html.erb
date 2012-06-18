@@ -59,6 +59,7 @@
     user_hash = $.namespace.getUser(location)
     if user_hash.user_type == "Guest"
       $('#userModal').modal('show')
+      window.onbeforeunload = -> "Are you sure you want to navigate away from this chat?"
 
     location = $(".info").data("location")
     channel = $('#messages').data('channel')
