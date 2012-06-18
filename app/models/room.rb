@@ -4,20 +4,19 @@ class Room < ActiveRecord::Base
   has_many :messages
   before_create :set_name
   belongs_to :guest
+  scope :oldest_first, order("created_at ASC")
 
-  def self.pending
-    statuses = [ "Pending" ]
-    Room.where{status.in statuses}.order("created_at ASC")
+  STATUSES = ["Pending", "Active", "Closed"]
+
+  STATUSES.each do |selected_status|
+    define_singleton_method "#{selected_status.downcase}".to_sym do
+      Room.where{status.matches selected_status}.oldest_first
+    end
   end
 
-  def self.active
-    statuses = [ "Active" ]
-    Room.where{status.in statuses}.order("created_at ASC")
-  end
-
-  def self.closed
-    statuses = [ "Closed" ]
-    Room.where{status.in statuses}.order("created_at ASC")
+  def self.close_empty_rooms
+    all_users = ThinHeartbeat::Status.new($redis).get_users
+    true
   end
 
   def pretty_time

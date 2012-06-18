@@ -5,6 +5,7 @@ class Api::V1::RoomsController < ApplicationController
 
   def index
     heartbeat_client = ThinHeartbeat::Status.new($redis)
+    Room.close_empty_rooms
     @rooms = Room.pending + Room.active
     if params[:users]
       @rooms = @rooms.each do |room|
