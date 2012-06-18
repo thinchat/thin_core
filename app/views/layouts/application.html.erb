@@ -26,10 +26,11 @@
           jQuery ->
             location = $(".info").data("location")
             user_hash = $.namespace.getUser(location)
+            window.faye_client = new FayeInitializer("<%= FAYE_URL %>")
+
             if user_hash.user_type == "Agent"
-              agent_channel = new FayeHandler("<%= FAYE_URL %>", user_hash, user_hash.private_channel)
+              agent_channel = new FayeHandler(faye_client, user_hash, user_hash.private_channel)
               agent_channel.joinRoomAndPulse(PrivateMessageHandler.handleMessage)
-            $('.carousel').carousel()
         <% end %>
 
         <%= yield %>

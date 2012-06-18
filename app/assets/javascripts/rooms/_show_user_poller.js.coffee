@@ -5,7 +5,7 @@ class @RoomsShowUsersPoller
 
   refreshList: =>
     $.getJSON(@users_url, @renderUsers)
-    setTimeout((=> @refreshList()), 5000)
+    setTimeout((=> @refreshList()), 10000)
 
   renderUsers: (users) =>
     @cleanUsers(users)

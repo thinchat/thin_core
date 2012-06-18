@@ -66,7 +66,7 @@
     ChatHandler.getMessages("<%= api_v1_messages_url(room_name: @room.name) %>", ChatHandler.renderMessages)
     ChatInitializer.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
 
-    room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
+    room = new FayeHandler(faye_client, user_hash, channel)
 
     if user_hash.user_type == "Guest"
       room.joinRoomAndPulse(ChatHandler.handleMessage)
@@ -76,8 +76,9 @@
     $("#user_info_update").click ->
       $('#userModal').modal('hide')
 
-    online_agents = new FayeHandler("<%= FAYE_URL %>", user_hash, '/online/agent')
+    online_agents = new FayeHandler(faye_client, user_hash, '/online/agent')
     online_agents.joinRoom(RoomsShowUserPresenter.handleUser)
+    agentPoller = new RoomsShowUsersPoller("<%= api_v1_agents_url %>?rooms=true")
 
     $(".invite").live("click", ->
       $.post(

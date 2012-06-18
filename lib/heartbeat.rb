@@ -2,9 +2,8 @@ module ThinHeartbeat
   class Status
     attr_accessor :redis
 
-    def initialize(host, password = nil)
-      @redis = Redis.new(:host => host, :port => 6379)
-      @redis.auth(password) if password
+    def initialize(redis_client)
+      @redis = redis_client
     end
 
     def get_users

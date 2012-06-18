@@ -9,7 +9,7 @@
     location = 'OnlineAgents'
     UserHandler.getUsers("<%= api_v1_agents_url %>", AgentsIndexUserPresenter.renderUsers)    
     user_hash = $.namespace.getUser(location)
-    online_agents = new FayeHandler("<%= FAYE_URL %>", user_hash, '/online/agent')
+    online_agents = new FayeHandler(faye_client, user_hash, '/online/agent')
     online_agents.joinRoomAndPulse(AgentsIndexUserPresenter.handleUser)
 
     $('.invite').live("click", ->

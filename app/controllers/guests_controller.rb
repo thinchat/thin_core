@@ -1,5 +1,3 @@
-require 'heartbeat.rb'
-
 class GuestsController < ApplicationController
 
   def update
