@@ -1,5 +1,5 @@
 require 'resque'
 require 'resque/server'
-require 'config/initializers/redis'
+require 'redis.rb'
 
 Resque.redis = $redis
