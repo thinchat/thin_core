@@ -17,7 +17,7 @@ God.watch do |w|
   w.pid_file = "#{rails_root}/tmp/pids/unicorn.pid"
 
   # unicorn needs to be run from the rails root
-  w.start = "cd #{rails_root} && /usr/local/bin/unicorn_rails -c #{rails_root}/config/unicorn.rb -E #{rails_env} -D"
+  w.start = "cd #{rails_root} && bundle exec unicorn -c #{rails_root}/config/unicorn.rb -E #{rails_env} -D"
 
   # QUIT gracefully shuts down workers
   w.stop = "kill -QUIT `cat #{rails_root}/tmp/pids/unicorn.pid`"
