@@ -75,10 +75,12 @@
 
     $("#user_info_update").click ->
       $('#userModal').modal('hide')
-
-    online_agents = new FayeHandler(faye_client, user_hash, '/online/agent')
-    online_agents.joinRoom(RoomsShowUserPresenter.handleUser)
+    
     agentPoller = new RoomsShowUsersPoller("<%= api_v1_agents_url %>?rooms=true")
+
+    # online_agents = new FayeHandler(faye_client, user_hash, '/online/agent')
+    # callbackFunction = (msg) -> RoomsShowUserPresenter.handleUser(msg, agentPoller.refreshList)
+    # online_agents.joinRoom(callbackFunction)
 
     $(".invite").live("click", ->
       $.post(

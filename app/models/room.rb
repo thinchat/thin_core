@@ -25,7 +25,7 @@ class Room < ActiveRecord::Base
     Room.open_rooms.each do |room|
       unless rooms_with_users.include? room.name
         room.update_attribute(:status, "Closed")
-        open_rooms.delete
+        open_rooms.delete(room.name)
       end
     end
     open_rooms

@@ -1,11 +1,14 @@
 class @RoomsShowUsersPoller
   constructor: (users_url) ->
     @users_url = users_url
+    @runRefreshLoop()
+
+  runRefreshLoop: =>
     @refreshList()
+    setTimeout((=> @runRefreshLoop()), 5000)
 
   refreshList: =>
     $.getJSON(@users_url, @renderUsers)
-    setTimeout((=> @refreshList()), 10000)
 
   renderUsers: (users) =>
     @cleanUsers(users)
