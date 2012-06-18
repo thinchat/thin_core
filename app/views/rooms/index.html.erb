@@ -33,7 +33,5 @@
   jQuery ->
     location = $(".info").data("location")   
     user_hash = $.namespace.getUser(location)
-    online_users = new FayeHandler(faye_client, user_hash, '/online/*')
-    online_users.joinRoom(RoomsIndexUserPresenter.handleUser)
     poller = new RoomsIndexRoomPoller("<%= api_v1_rooms_url %>?users=true")
 <% end %>
