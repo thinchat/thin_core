@@ -1,5 +1,5 @@
 class @UploadHandler
-  @initialize(url): ->
+  @initialize: (url) ->
     $('.file_upload').click ->
       form = $('.file_form')[0]
       data = new FormData form
@@ -7,7 +7,7 @@ class @UploadHandler
       console.log form
       $.ajax({
         type: 'POST',
-        url: '#{url}file/api/v1/documents.json',
+        url: "#{url}file/api/v1/documents.json",
         data: data,
         cache: false,
         contentType: false,

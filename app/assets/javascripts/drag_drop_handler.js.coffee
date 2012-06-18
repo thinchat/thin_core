@@ -21,7 +21,7 @@ class @DragDropHandler
       form_data.append( 'document[file]', file )
       $.ajax({
         type: 'POST',
-        url: '#{url}file/api/v1/documents.json',
+        url: "#{url}file/api/v1/documents.json",
         data: form_data,
         cache: false,
         contentType: false,
