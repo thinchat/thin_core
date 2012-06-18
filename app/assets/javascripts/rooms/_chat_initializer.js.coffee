@@ -8,6 +8,7 @@ class @ChatInitializer
     
     $("#message_body").keypress (e) ->
       if (e.which == 13 && e.shiftKey == false)
+        e.preventDefault()
         $("#new_message").submit()
 
   @showModalHandler: (api_v1_messages_url, user_hash) =>
