@@ -1,3 +1,6 @@
+<%= content_tag "div", id: "user", data: {user: current_user.user_hash} do %>
+<% end %>
+
 <div class="container">
 <div class="hero-unit">
   <div class="row">
@@ -12,7 +15,6 @@
  <%= link_to "Start Chatting", rooms_path, :method => :post, :class => "btn btn-warning btn-huge"   %>
 </div>
 </div>
-
 
 <div class="home_content">
   <div class="row">

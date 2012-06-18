@@ -47,15 +47,11 @@
 </script>
 
 <script type="text/html" id="user_template">
-
   <li class="user user-{{user_id}}" data-client-ids="[]">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite</a></span></li>
 </script>
 
-<script type="text/html" id="agent_close_template">
-  <div class="message event">
-  <div class="user_name">{{user_name}}</div>
-    Is your issue resolved?  If so, <a class="close_room" data-room-name="<%= @room.name %>">click here to close the room</a>
-  </div>
+<script type="text/html" id="user_with_client_ids_template">
+  <li class="user user-{{user_id}}" data-user-id="{{user_id}}" data-client-ids="{{client_ids}}">{{user_name}}<span style="padding-left:20px"><a class="invite" data-id="{{user_id}}">Invite</a></span></li>
 </script>
 
 <%= coffee_script_tag do %>
@@ -71,6 +67,7 @@
     ChatInitializer.showModalHandler("<%= api_v1_messages_url() %>", user_hash)
 
     room = new FayeHandler("<%= FAYE_URL %>", user_hash, channel)
+
     if user_hash.user_type == "Guest"
       room.joinRoomAndPulse(ChatHandler.handleMessage)
     else
@@ -79,10 +76,9 @@
     $("#user_info_update").click ->
       $('#userModal').modal('hide')
 
-    UserHandler.getUsers("<%= api_v1_agents_url %>", RoomsShowUserPresenter.renderUsers)
-    user_hash = $.namespace.getUser(null)
     online_agents = new FayeHandler("<%= FAYE_URL %>", user_hash, '/online/agent')
     online_agents.joinRoom(RoomsShowUserPresenter.handleUser)
+    agentPoller = new RoomsShowUsersPoller("<%= api_v1_agents_url %>?rooms=true")
 
     $(".invite").live("click", ->
       $.post(

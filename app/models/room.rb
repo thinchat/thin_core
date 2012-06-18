@@ -5,9 +5,19 @@ class Room < ActiveRecord::Base
   before_create :set_name
   belongs_to :guest
 
-  def self.in_queue
-    statuses = [ "Pending", "Active" ]
-    Room.where{status.in statuses}
+  def self.pending
+    statuses = [ "Pending" ]
+    Room.where{status.in statuses}.order("created_at ASC")
+  end
+
+  def self.active
+    statuses = [ "Active" ]
+    Room.where{status.in statuses}.order("created_at ASC")
+  end
+
+  def self.closed
+    statuses = [ "Closed" ]
+    Room.where{status.in statuses}.order("created_at ASC")
   end
 
   def pretty_time

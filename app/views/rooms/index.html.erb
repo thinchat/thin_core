@@ -1,7 +1,6 @@
 <div class="page-header">
-  <h1>Room list</h1>
+  <h1>Lobby</h1>
 </div>
-<%= link_to "Create a room", rooms_path, :method => :post %>
 
 <ul id="rooms" class="thumbnails pending"></ul>
 <ul id="rooms" class="thumbnails active"></ul>
@@ -10,10 +9,6 @@
 <script type="text/html" id="user_template">
   <p class="{{metadata.client_id}}">{{user_name}}</p>
 </script>
-
-<!--<script type="text/html" id="room_template">
-  <div id="room-{{name}}"><a href={{room_url}}>{{name}}</a></div>
-</script>-->
 
 <script type="text/html" id="room_user_template">
   <li data-id="{{name}}" class="span3 room_li {{status}}" id="room-{{name}}">
@@ -34,10 +29,9 @@
   </li>
 </script>
 
-
 <%= coffee_script_tag do %>
   jQuery ->
-    location = $(".info").data("location")
+    location = $(".info").data("location")   
     user_hash = $.namespace.getUser(location)
     online_users = new FayeHandler("<%= FAYE_URL %>", user_hash, '/online/*')
     online_users.joinRoom(RoomsIndexUserPresenter.handleUser)
