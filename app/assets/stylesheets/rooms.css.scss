@@ -71,6 +71,15 @@ div.fileinputs {
     }
   }
 
+  #Closed {
+    h2 {
+      background: -webkit-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);  /* Chrome10+,Safari5.1+ */
+      padding-left: 10px;
+      -webkit-border-radius: 4px;
+      border-radius: 4px;
+    }
+  }
+
   #Active {
     h2 {
       background-image: -webkit-linear-gradient(bottom, rgb(48,91,109) 15%, rgb(67,124,149) 50%);
