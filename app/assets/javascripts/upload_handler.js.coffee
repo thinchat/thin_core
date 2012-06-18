@@ -16,6 +16,6 @@ class @UploadHandler
         success: (response) ->
           "succeeded" 
         error: (response) ->
-          console.log 'file is ' + data   
+          console.log 'File data: ' + data   
         })
       $('.file').attr({ value: '' })
