@@ -86,7 +86,7 @@ end
     w.group    = 'resque'
     w.interval = 30.seconds
     w.pid_file = "#{rails_root}/tmp/pids/#{w.name}.pid"
-    w.env      = {"QUEUE"=>"messages", "RAILS_ENV"=>rails_env, 'PID_FILE' => w.pid_file}
+    w.env      = {"QUEUE"=>"messages", "RAILS_ENV"=>rails_env, 'PIDFILE' => w.pid_file}
     w.start    = "/usr/local/bin/rake -f #{rails_root}/Rakefile environment resque:work"
     w.log = "/var/log/god/#{w.name}.log"
     w.err_log = "/var/log/god/#{w.name}_error.log"
