@@ -35,7 +35,7 @@ class Room < ActiveRecord::Base
   def self.get_rooms_and_close_empty
     rooms_with_users = ThinHeartbeat::Status.new($redis).get_rooms_with_users
     Room.open_rooms.each do |room|
-      unless rooms_with_users.include? room.name
+      unless rooms_with_users.include?(room.name) || (room.created_at > (Time.now - 20))
         room.update_attribute(:status, "Closed")
         open_rooms.delete(room.name)
       end
