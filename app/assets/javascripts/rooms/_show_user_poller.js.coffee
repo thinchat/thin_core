@@ -1,7 +1,8 @@
 class @RoomsShowUsersPoller
   constructor: (users_url) ->
     @users_url = users_url
-    @runRefreshLoop()
+    setTimeout((=> @refreshList()), 300)
+    setTimeout((=> @runRefreshLoop()), 5000)
 
   runRefreshLoop: =>
     @refreshList()
