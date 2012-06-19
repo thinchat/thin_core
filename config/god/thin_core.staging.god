@@ -25,6 +25,23 @@ God.watch do |w|
   # USR2 causes the master to re-create itself and spawn a new worker pool
   w.restart = "kill -USR2 `cat #{rails_root}/tmp/pids/unicorn.pid`"
 
+  # determine when process has finished starting
+  w.transition([:start, :restart], :up) do |on|
+    on.condition(:process_running) do |c|
+      c.running = true
+      c.interval = 5.seconds
+      c.notify = 'ha_campfire'
+    end
+
+    # failsafe
+    on.condition(:tries) do |c|
+      c.times = 5
+      c.transition = :start
+      c.interval = 5.seconds
+      c.notify = 'ha_campfire'
+    end
+  end
+
   w.start_if do |start|
     start.condition(:process_running) do |c|
       c.interval = 5.seconds
