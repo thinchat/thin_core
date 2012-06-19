@@ -9,7 +9,7 @@
       <a class="brand" href="/">thin<span>Chat</span></a>
       <div class="container nav-collapse">
         
-        <% if current_user.agent? %>
+        <!-- <% if current_user.agent? %> -->
         <ul class="nav">
           <li><%= link_to "Lobby", rooms_path() %></li>
           <li><%= link_to "Analytics", "/dashboard" %></li>
@@ -21,11 +21,11 @@
             <input type="text" name="query" class="search-query" placeholder="Search">
           </form>
 
-        <% else %>
+        <!-- <% else %>
         <ul class="nav pull-right">
           <li><%= link_to "Agent login", "/auth" %></li>
         </ul>
-        <% end %>
+        <% end %> -->
 
       <%= content_tag "div", id: "user", data: {user: current_user.user_hash} do %>
       <% end %>
